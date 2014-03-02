@@ -1,0 +1,324 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0D48FEC0-D3CD-4551-8C83-EB2F0B9B8D94}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>UniTimetable</RootNamespace>
+    <AssemblyName>CanterburyTimetable</AssemblyName>
+    <ApplicationIcon>TimeTable.ico</ApplicationIcon>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AboutBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutBox.Designer.cs">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CanterburyData\CanterburyData.cs" />
+    <Compile Include="CanterburyData\CanterburyLoader.cs" />
+    <Compile Include="EtchedLine.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="EtchedLine.Designer.cs">
+      <DependentUpon>EtchedLine.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormLogin.Designer.cs">
+      <DependentUpon>FormLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormModel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormModel.Designer.cs">
+      <DependentUpon>FormModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSetStreams.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSetStreams.Designer.cs">
+      <DependentUpon>FormSetStreams.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Solver.Filter.cs" />
+    <Compile Include="FormImport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormImport.Designer.cs">
+      <DependentUpon>FormImport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormFilterDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormFilterDetails.Designer.cs">
+      <DependentUpon>FormFilterDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormProgress.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormProgress.Designer.cs">
+      <DependentUpon>FormProgress.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSolution.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSolution.Designer.cs">
+      <DependentUpon>FormSolution.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormStyle.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormStyle.Designer.cs">
+      <DependentUpon>FormStyle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormUnavailability.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormUnavailability.Designer.cs">
+      <DependentUpon>FormUnavailability.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Heap.cs" />
+    <Compile Include="Importer.cs" />
+    <Compile Include="ListViewColumnSorter.cs" />
+    <Compile Include="OrderedList.cs" />
+    <Compile Include="Solver.Criteria.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AboutBox.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EtchedLine.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>EtchedLine.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormCriteria.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FormCriteria.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormCriteriaDetails.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FormCriteriaDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormImport.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FormImport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormMain.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormFilterDetails.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FormFilterDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormModel.resx">
+      <DependentUpon>FormModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormProgress.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FormProgress.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSetStreams.resx">
+      <DependentUpon>FormSetStreams.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSettings.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FormSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSolution.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FormSolution.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormStyle.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FormStyle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormUnavailability.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FormUnavailability.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormLogin.resx">
+      <DependentUpon>FormLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TimetableControl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>TimetableControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Solver.Solution.cs" />
+    <Compile Include="Solver.SolutionComparer.cs" />
+    <Compile Include="Stream.cs" />
+    <Compile Include="Session.cs" />
+    <Compile Include="Subject.cs" />
+    <Compile Include="TimeLength.cs" />
+    <Compile Include="TimeOfDay.cs" />
+    <Compile Include="Timeslot.cs" />
+    <Compile Include="Timetable.cs" />
+    <Compile Include="Solver.cs" />
+    <Compile Include="Type.cs" />
+    <Compile Include="Unavailability.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Resources\Alarm.png" />
+    <None Include="Resources\Redo.png" />
+    <None Include="Resources\Config-Tools.png" />
+    <None Include="Resources\Find.png" />
+    <None Include="Resources\Document.png" />
+    <None Include="Resources\Download.png" />
+    <None Include="Resources\Favorites.png" />
+    <None Include="Resources\Symbol-Add.png" />
+    <None Include="Resources\Symbol-Add-Stream.png" />
+    <None Include="Resources\Symbol-Add-Time.png" />
+    <None Include="Resources\Trashcan_empty.png" />
+    <None Include="Resources\Trashcan_full.png" />
+    <None Include="Resources\Dice.png" />
+    <None Include="Resources\TimeTable.ico" />
+    <None Include="Resources\Symbol-Check.png" />
+    <None Include="Resources\Symbol-Delete.png" />
+    <None Include="Resources\DeStar.png" />
+    <Compile Include="FormCriteria.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormCriteria.Designer.cs">
+      <DependentUpon>FormCriteria.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormCriteriaDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormCriteriaDetails.Designer.cs">
+      <DependentUpon>FormCriteriaDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSettings.Designer.cs">
+      <DependentUpon>FormSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="History.cs" />
+    <Compile Include="ListBoxBuffered.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Settings.cs" />
+    <Compile Include="Solver.Field.cs" />
+    <Compile Include="Solver.Preset.cs" />
+    <Compile Include="TimeOfWeek.cs" />
+    <Compile Include="TimetableControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TimetableControl.Designer.cs">
+      <DependentUpon>TimetableControl.cs</DependentUpon>
+    </Compile>
+    <None Include="Resources\UQ.png" />
+    <None Include="Resources\QUT.png" />
+    <None Include="Resources\UNSW.png" />
+    <None Include="Resources\Unknown.png" />
+    <None Include="Resources\Undo.png" />
+    <None Include="Resources\Copy.png" />
+    <None Include="Resources\Folder.png" />
+    <None Include="Resources\My-Documents.png" />
+    <None Include="Resources\Save.png" />
+    <None Include="Resources\Printer.png" />
+    <None Include="Resources\Printer16.png" />
+    <None Include="Resources\Redo16.png" />
+    <None Include="Resources\Save16.png" />
+    <None Include="Resources\Symbol-Add-Stream16.png" />
+    <None Include="Resources\Symbol-Add-Time16.png" />
+    <None Include="Resources\Symbol-Add16.png" />
+    <None Include="Resources\Symbol-Check16.png" />
+    <None Include="Resources\Symbol-Delete16.png" />
+    <None Include="Resources\Trashcan_full16.png" />
+    <None Include="Resources\Undo16.png" />
+    <None Include="Resources\Config-Tools16.png" />
+    <None Include="Resources\Copy16.png" />
+    <None Include="Resources\Dice16.png" />
+    <None Include="Resources\Document16.png" />
+    <None Include="Resources\Download16.png" />
+    <None Include="Resources\Find16.png" />
+    <None Include="Resources\My-Documents16.png" />
+    <None Include="Resources\Help.png" />
+    <None Include="Resources\Help16.png" />
+    <None Include="Resources\Color-palette.png" />
+    <None Include="Resources\Color-picker.png" />
+    <None Include="Resources\Colors.png" />
+    <None Include="Resources\Color-Settings.png" />
+    <None Include="Resources\Color-picker16.png" />
+    <Content Include="Resources\UNOC.png" />
+    <None Include="Resources\WhiteLogo.png" />
+    <Content Include="TimeTable.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

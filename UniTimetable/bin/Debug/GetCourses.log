@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+
+
+
+
+<html>
+<head>
+<meta http-equiv="x-ua-compatible" content="IE=Edge"/> 
+<title>Allocate+ Student</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/aplus/combined.css?id=3c7f6bd91442aea" >
+
+
+
+
+<script>
+var mobile_licensed=true;
+</script>
+
+
+
+
+
+
+<script src="/aplus/combined.js?id=d78b72b21442aea"></script>
+
+
+
+<div id="homeEJS" style="display: none">
+<div class="upper_sec">
+	Home
+</div>
+<div class="lower_sec">
+	<div class="profile-holder"></div>
+	<br>
+	[%= student_welcome_html %]
+	
+	[% if(iCalURL!=null){ %]
+	<h2 class="icon-calendar-title"><div class="icon-calendar sprite icon_calendar"></div>Export your timetable to iCal</h2>
+	<p><strong>Click:</strong> <a href="[%= iCalURL %]">iCal URL</a></p>
+	<p>You can use this service to import subscribe from your iPhone, Google Calendar, MS Outlook etc. The help pages on those products will guide you on how.</p>
+	[% } %]
+</div>
+</div>
+<div id="profileEJS" style="display:none">
+[%
+	var summary = {allocated:0, pending:0, unallocated:0};
+	$.each(data.student.student_enrolment, function(i, subject) {
+		if(subject.section_status!=undefined){
+			summary[getSectionAllocation(subject.subject_code)]++;
+		}else{
+			$.each(subject.groups, function(j, group) {
+				summary[getGroupAllocation(subject.subject_code, group.activity_group_code)]++;
+			});
+		}
+	});
+%]
+<div class="module">
+	<div  class="profile-pic">
+		<img src="studentUI/img/user.gif">
+	</div>
+	<div class="profile-info">
+		<p class="student-name">[%= data.student.first_name + ' ' + data.student.last_name %]</p>
+		<div>
+		[%= data.student.email_address %]<br>
+		[%= data.student.course %]<br>
+		[%= data.student.course_type %]
+		</div>
+	</div>
+	<div class="clear"></div>
+	<div class="profile-summary">
+		<div class="icon-container">
+			<span class="allocated icon">[%=summary.allocated%]</span> <span>Allocated</span>
+		</div>
+		<div class="icon-container">
+			<span class="pending icon">[%=summary.pending%]</span> <span>Pending</span>
+		</div>
+		<div class="icon-container">
+			<!--<span class="unconfirmed icon">[%=summary.unallocated%]</span> <small>Unconfirmed</small>-->
+			<span class="unconfirmed icon">[%=summary.unallocated%]</span> <span>Unconfirmed</span>
+		</div>
+	</div>
+</div>
+</div>
+<style src="studentUI/css/student.css"></style>
+</head>
+
+<body>
+
+
+	<div id="outer-header" class="desktop-only">
+		<div id="uc">
+
+<link href="/uc/mt/header.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/uc/mt/header.js"></script>
+
+<div id="bannersection"><div id="banner"><div id="sitetitle"><div id="top"><h2>My Timetable</h2></div></div></div></div>
+
+<div id="breadcrumbs">
+<a href="http://www.canterbury.ac.nz/"><acronym title="University of Canterbury">UC</acronym> Home</a> > 
+<a href="http://www.canterbury.ac.nz/theuni/">The University</a> > 
+<a href="http://www.canterbury.ac.nz/theuni/timetable/">Timetable</a> > 
+<a href="https://mytimetable.canterbury.ac.nz/">My Timetable</a>
+</div>
+
+</div>
+	</div>
+	<div id="outer-container">
+			
+	<div class="aplus-container">
+		
+		<div class="top-bar">
+			<div class="logo-left"><div><img class="aplus-logo" src="./images/apLogo_reversed.png"></div></div>
+			<!-- mobile -->
+			<div class="left mobile-only">
+				<a class="top-menu-btn top-menu-btn-left">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</a>
+			</div>
+			<div class="right mobile-only"></div>
+			<div class="mid mobile-only"><div class="valign"></div></div>
+			<!-- /mobile -->
+			
+			<!-- desktop -->
+			<ul class="top-menu desktop-only">
+				<li><a href="#home">Home</a></li>
+				<!--<li><a href="#calendar">Calendar</a></li>-->
+				<li><a href="#timetable">Timetable</a></li>
+				
+				
+				<li><a href="http://www.canterbury.ac.nz/theuni/timetable/MyTimetableHelp.shtml" target="_blank">Help</a></li>
+				
+				<li><a href="#logout">Logout</a></li>
+			</ul>
+			<!-- /desktop -->
+		</div>
+
+		<div class="left-col">
+			<ul id="mobile-left-menu" class="mobile-only">
+				<li><a  href="#home">Home</a></li>
+				<li><a  href="#enrolment">Enrolment</a></li>
+				<!--<li><a  href="#calendar">Calendar</a></li>-->
+				<li><a  href="#timetable">Timetable</a></li>
+				<li><a  href="#search">Search</a></li>
+				
+				
+				<li><a href="http://www.canterbury.ac.nz/theuni/timetable/MyTimetableHelp.shtml" target="_blank">Help</a></li>
+				
+				<li><a  href="#logout">Logout</a></li>
+			</ul>
+			<div class="profile" id="profile"><div class="module"></div></div>
+			<div class="enrolment" id="enrolment"><div class="module"></div></div>
+			<div class="search-div" id="search">
+				<div class="module">
+					<div class="upper_sec">
+						Search
+					</div>
+					<div class="lower_sec">
+						<form onsubmit="return prepareSubjectSearch();">
+							<div id="search-text-div">
+								<input type="text" value="Search subject code or description" class="search text" id="search_box"
+								onfocus="if (this.value=='Search subject code or description') this.value='';"
+								onblur="/*if (this.value=='') this.value='Search subject code or description';*/"
+								>
+							</div>
+							<div id="search-submit-div">
+								<!--<input type="submit" class="search submit sprite search_icon" value="">-->
+								<div class="search submit sprite search_icon" onclick="$(this).closest('form').submit()"></div>
+							</div>
+						</form>
+						<div class="clear"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="right-col">
+
+			<div id="home-tpl" class="module" style="display:block">
+			</div>
+
+			<!--
+ 			<div id="calendar-tpl" class="dhx_cal_container module">
+				<div class="dhx_cal_navline">
+				 	<div class="dhx_cal_prev_button">&nbsp;</div>
+					<div class="dhx_cal_next_button">&nbsp;</div>
+					<div class="dhx_cal_today_button desktop-only"></div>
+					<div class="dhx_cal_date"></div>
+					<div class="dhx_cal_tab desktop-only" name="day_tab" style="right: 204px;"></div>
+					<div class="dhx_cal_tab desktop-only" name="week_tab" style="right: 140px;"></div>
+					<div class="dhx_cal_tab desktop-only" name="month_tab" style="right: 76px;"></div>
+					<div class="cal_view_dropdown dropdown mobile-only" style="left: 14px;width:96px">
+						<button>
+							<span class="btn-text">Week</span>
+							<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu right">
+		                  <li data-view="day" onclick="calendar1.updateView(null,'day');">Day</li>
+		                  <li data-view="week" onclick="calendar1.updateView(null,'week');">Week</li>
+		                  <li data-view="month" onclick="calendar1.updateView(null,'month');">Month</li>
+		                  <li data-view="today" onclick="calendar1.updateView(new Date());">Today</li>
+		                </ul>
+					</div>
+				</div>
+				<div class="dhx_cal_header"></div>
+				<div class="dhx_cal_data"></div>
+			</div>
+			-->
+ 			
+ 			<div id="timetable-tpl" class="module">
+ 				<div class="upper_sec upper_button_sec">
+ 					<div class="left mobile-only"><button class="prev">&lt;&lt;</button></div>
+ 					<div class="right mobile-only"><button class="next">&gt;&gt;</button></div>
+ 					<div class="mid mobile-only"><p></p></div>
+ 					<a class="flat-btn sprite desktop-only" title="Show as list"></a>
+ 					<a class="grid-btn sprite desktop-only" title="Show as grid"></a>
+ 					<!--<a class ="print-btn sprite desktop-only" onclick="timetablePDF()"></a>-->
+ 					<div id="pdf_dropdown" class="dropdown desktop-only">
+						<button class="print-btn sprite" title="Print your timetable"></button>
+						<ul class="dropdown-menu left">
+							<li class="no-highlight">Print:</li>
+							<li onclick="timetablePDF('portrait')"><span class="sprite pdf-icon" style="display:inline-block;"></span><label>Portrait</label></li>
+							<li onclick="timetablePDF('landscape')"><span class="sprite pdf-icon" style="display:inline-block;"></span><label>Landscape</label></li>
+		                </ul>
+					</div>
+ 					<!--<a class ="download-btn sprite desktop-only" onclick="timetableFlatEXCEL()"></a>-->
+ 					<div id="download_dropdown" class="dropdown desktop-only">
+ 						<button class="download-btn sprite" title="Download your timetable"></button>
+						<ul class="dropdown-menu left">
+							<li class="no-highlight">Export:</li>
+ 							<li onclick="timetableFlatEXCEL()"><span class="sprite excel-icon" style="display:inline-block;"></span><label>Excel</label></li>
+ 							<li onclick="timetableFlatText()"><span class="sprite text-icon" style="display:inline-block;"></span><label>Text</label></li>
+ 							
+ 							<li onclick="if(iCalURL!='null'){window.location=iCalURL;}"><span class="sprite ical-icon" style="display:inline-block;"></span><label>iCal</label></li>
+ 							
+ 						</ul>
+ 					</div>
+					<div id="semester_dropdown" class="dropdown desktop-only">
+						<button class="filter-btn sprite" title="Filter classes"></button>
+						<ul class="dropdown-menu left">
+							<!-- <li ><input type="checkbox"checked="checked" value="sem name"><label>sem name</label></li>
+							<li class="no-highlight"><button class="btn btn-primary apply-btn">Apply</button></li>-->
+		                </ul>
+					</div>
+					<div class="slider-title desktop-only">Timetable Weeks</div>
+ 					<div class="slider desktop-only"></div>
+				</div>
+				<div class="lower_sec lower_grid_sec">
+	 				<div id="timetable-flat" class="flat hidden">timetable-flat</div>
+					<div id="timetable-grid" class="dhx_cal_container grid">
+						<div class="dhx_cal_navline">
+							<div class="dhx_cal_date"></div>
+						 	<div class="dhx_cal_prev_button">&nbsp;</div>
+							<div class="dhx_cal_next_button">&nbsp;</div>
+						</div>
+						<div class="dhx_cal_header"></div>
+						<div class="dhx_cal_data"></div>
+					</div>
+				</div>
+			</div>
+			
+			<div id="connection-tpl" class="module"></div>
+			<div id="connection-timetable-tpl" class="module">
+ 				<div class="upper_sec upper_button_sec">
+ 					<div class="legend">
+	 					<div style="float:left;" >
+	 						<span class="legend_color_my_act"></span><strong>me</strong>
+	 					</div>
+	 					<div style="float:right;" >
+	 						<span class="legend_color_your_act"></span><strong>you</strong>
+	 					</div>
+ 					</div>
+ 					<div class="slider"></div>
+				</div>
+				<div class="lower_sec lower_grid_sec">
+	 				<div id="connection-timetable-flat" class="flat">connection-timetable-flat</div>
+					<div id="connection-timetable-grid" class="dhx_cal_container grid">
+						<div class="dhx_cal_navline">
+							<div class="dhx_cal_date"></div>
+						</div>
+						<div class="dhx_cal_header"></div>
+						<div class="dhx_cal_data"></div>
+					</div>
+				</div>
+			</div>
+			
+			<div id="ical-subscription-tpl" class="module"></div>
+			<div id="add-ical-subscription-tpl" class="module"></div>
+			<div id="edit-ical-subscription-tpl" class="module"></div>
+			<div id="ical-subscription-details-tpl" class="module"></div>
+			
+			<div id="workgroup-tpl" class="module"></div>
+			<div id="add-workgroup-tpl" class="module"></div>
+			<div id="edit-workgroup-tpl" class="module"></div>
+			<div id="workgroup-details-tpl" class="module"></div>
+			
+			<div id="group-tpl" class="module"></div>
+			
+			<div id="section-tpl" class="module"></div>
+			
+			<div id="subject-tpl" class="module"></div>
+			
+			<div id="subject-search-results-tpl" class="module">
+				<div class="upper_sec">
+					Search Results
+				</div>
+				<div class="lower_sec">
+				</div>
+			</div>
+			
+			<div id="subject-search-tpl" class="module">
+				<div class="upper_sec">
+					Subject Search
+				</div>
+				<div class="lower_sec">
+				</div>
+			</div>
+			
+			<div id="activity-details-tpl" class="module"></div>
+			
+			<div id="map-tpl" class="module"></div>
+		</div>
+		<div id="dialog"><div id="dialog-content"></div></div>
+	</div>
+	
+	</div>
+	
+	<div class="spinner"></div>
+	<div class="spinner-mask"></div>
+	
+	<div id="modal"></div>
+
+</body>
+
+
+<script>
+var ss = "6ac4629a353d4138863debeb43d9916b";
+var student_code = "81118603";
+var iCalURL=null;
+;
+iCalURL = "webcal://www.canterbury.ac.nz/theuni/timetable/calendar.php?c=7af5866a-66be-488f-9a9d-7f5d4903218f";
+if(iCalURL=="null"){
+	iCalURL = null;
+}
+
+var subjectInfoURL="http://www.canterbury.ac.nz/courses/cis/redirect.php?search=$uc";
+var student_welcome_html= htmlcondition(function() {/*!<p style="font-size:115%;"><strong>Your personalised UC timetable tool</strong></p>
+
+<div style="text-align:left; margin-bottom:2.5em;">
+<p>The 2014 timetable has been released.  You can see the timetables of your <em>fully enrolled</em> courses.  Most activities are currently set to read only for now, so you may not be allocated all activities.  Closer to the start of semester activities will be pre-allocated or opened for self selection.</p> 
+</div>
+
+<div style="text-align:left; margin-bottom:2.5em;">
+<p style="font-size:14px;"><strong>Step 1:</strong> <a href="https://www.youtube.com/embed/YAyBgLhOHNw" target="_blank">Watch the video</a></p>
+<p style="font-size:14px;"><strong>Step 2:</strong> Allocate yourself to your activities - located in the sidebar on the left</p>
+<p style="font-size:14px;"><strong>Step 3:</strong> View your timetable - using the My Timetable link at the top</p>
+</div>
+
+<div style="text-align:left; margin-bottom:1.5em;">
+<!-- <p><em>The mid-year exam timetable has been released.  Room allocations will be available on Friday, 31 May. Please check these at the <a href="http://www.canterbury.ac.nz/exams/dates.shtml">UC Examinations, dates and timetable page</a> before attending each examination.</em></p> -->
+<p>Room allocations may change as the start of your course approaches and even occasionally after the start of the course.  Some activities not previously open may be opened up for you to self-allocate (or change allocations) by the course co-ordinator.  We recommend that you monitor your timetable for these and other changes, as they may occur up to the course start date. Check back later if there are any activities which are not yet scheduled - these are being addressed as part of timetabling adjustments.</p>
+<p>If you have any questions regarding your timetable please refer them to the appropriate college academic advisor.  Our Contact Centre is also there to help.</p><p>Telephone: +64 3 364 2555<br>
+Freephone (within New Zealand): 0800 VARSITY (0800 827 748)<br>
+<a href="mailto:enrol@canterbury.ac.nz">enrol@canterbury.ac.nz</a></p>
+<p>If you have any issues with the My Timetable interface, please refer them to the ICT Service Desk (call ext. 6060, direct dial 364 2060, or <a href="http://assist.canterbury.ac.nz/" target="_top">online via the new service management tool</a>).</p>
+</div>*/});
+	
+
+data={"student":{"student_code":"81118603","first_name":"Matthew Robert","last_name":"Knox","attend_type":"-","disability":"-","course":"-","email_address":"mrk45@uclive.ac.nz","course_type":"-","allocated":{"COSC261-14S1 (C)||Com||03":{"subject_code":"COSC261-14S1 (C)","activity_group_code":"Com","activity_code":"03","campus":"C","day_of_week":"Tue","start_time":"13:00","location":"Kirkwood KE07 (25\/2-8\/4, 6\/5-3\/6), Erskine 133 Lab 2 (25\/2-8\/4, 6\/5-3\/6)","staff":"Guttmann,WN","duration":"120","activity_size":"35","student_count":"37","buffer":"2","week_pattern":"0000000011111110001111100000000000000000000000000000","description":"Formal Languages and Compilers","zone":"Ilam","department":"Computer Science and Software Engineering","semester":"S1","activityType":"Computer Lab","capacity":"35","message":"","section_code":"-","source":"Allocation Adjustment","start_date":"30\/12\/2013","color":"#null"},"COSC261-14S1 (C)||LecA||01":{"subject_code":"COSC261-14S1 (C)","activity_group_code":"LecA","activity_code":"01","campus":"C","day_of_week":"Wed","start_time":"13:00","location":"C2 Lecture Theatre","staff":"Guttmann,WN","duration":"60","activity_size":"116","student_count":"130","buffer":"20","week_pattern":"0000000011111110001111100000000000000000000000000000","description":"Formal Languages and Compilers","zone":"Ilam","department":"Computer Science and Software Engineering","semester":"S1","activityType":"Lecture","capacity":"116","message":"","section_code":"-","source":"Single Sort","start_date":"30\/12\/2013","color":"#null"},"COSC261-14S1 (C)||LecB||01":{"subject_code":"COSC261-14S1 (C)","activity_group_code":"LecB","activity_code":"01","campus":"C","day_of_week":"Mon","start_time":"14:00","location":"E8 Lecture Theatre","staff":"Guttmann,WN","duration":"60","activity_size":"116","student_count":"130","buffer":"20","week_pattern":"0000000011111110001111100000000000000000000000000000","description":"Formal Languages and Compilers","zone":"Ilam","department":"Computer Science and Software Engineering","semester":"S1","activityType":"Lecture","capacity":"116","message":"","section_code":"-","source":"Single Sort","start_date":"30\/12\/2013","color":"#null"},"COSC261-14S1 (C)||LecC||01":{"subject_code":"COSC261-14S1 (C)","activity_group_code":"LecC","activity_code":"01","campus":"C","day_of_week":"Fri","start_time":"16:00","location":"E8 Lecture Theatre","staff":"Guttmann,WN","duration":"60","activity_size":"116","student_count":"130","buffer":"20","week_pattern":"0000000011111110001111100000000000000000000000000000","description":"Formal Languages and Compilers","zone":"Ilam","department":"Computer Science and Software Engineering","semester":"S1","activityType":"Lecture","capacity":"116","message":"","section_code":"-","source":"Single Sort","start_date":"30\/12\/2013","color":"#null"},"COSC262-14S1 (C)||LecA||01":{"subject_code":"COSC262-14S1 (C)","activity_group_code":"LecA","activity_code":"01","campus":"C","day_of_week":"Mon","start_time":"12:00","location":"E9 Lecture Theatre","staff":"Takaoka,T (24\/2-7\/4, 5\/5-2\/6), Mukundan,R (24\/2-7\/4, 5\/5-2\/6)","duration":"60","activity_size":"95","student_count":"103","buffer":"15","week_pattern":"0000000011111110001111100000000000000000000000000000","description":"Algorithms","zone":"Ilam","department":"Computer Science and Software Engineering","semester":"S1","activityType":"Lecture","capacity":"95","message":"","section_code":"-","source":"Single Sort","start_date":"30\/12\/2013","color":"#null"},"COSC262-14S1 (C)||LecB||01":{"subject_code":"COSC262-14S1 (C)","activity_group_code":"LecB","activity_code":"01","campus":"C","day_of_week":"Fri","start_time":"13:00","location":"A3 Lecture Theatre","staff":"Takaoka,T (28\/2-11\/4, 9\/5-6\/6), Mukundan,R (28\/2-11\/4, 9\/5-6\/6)","duration":"60","activity_size":"90","student_count":"103","buffer":"20","week_pattern":"0000000011111110001111100000000000000000000000000000","description":"Algorithms","zone":"Ilam","department":"Computer Science and Software Engineering","semester":"S1","activityType":"Lecture","capacity":"90","message":"","section_code":"-","source":"Single Sort","start_date":"30\/12\/2013","color":"#null"},"COSC262-14S1 (C)||LecC||01":{"subject_code":"COSC262-14S1 (C)","activity_group_code":"LecC","activity_code":"01","campus":"C","day_of_week":"Tue","start_time":"10:00","location":"A3 Lecture Theatre","staff":"Takaoka,T (25\/2-8\/4, 6\/5-3\/6), Mukundan,R (25\/2-8\/4, 6\/5-3\/6)","duration":"60","activity_size":"90","student_count":"103","buffer":"20","week_pattern":"0000000011111110001111100000000000000000000000000000","description":"Algorithms","zone":"Ilam","department":"Computer Science and Software Engineering","semester":"S1","activityType":"Lecture","capacity":"90","message":"","section_code":"-","source":"Single Sort","start_date":"30\/12\/2013","color":"#null"},"COSC262-14S1 (C)||Tut||01":{"subject_code":"COSC262-14S1 (C)","activity_group_code":"Tut","activity_code":"01","campus":"C","day_of_week":"Mon","start_time":"10:00","location":"Kirkwood KF05","staff":"Takaoka,T (24\/2-7\/4, 5\/5-2\/6), Mukundan,R (24\/2-7\/4, 5\/5-2\/6)","duration":"120","activity_size":"35","student_count":"35","buffer":"0","week_pattern":"0000000011111110001111100000000000000000000000000000","description":"Algorithms","zone":"Ilam","department":"Computer Science and Software Engineering","semester":"S1","activityType":"Tutorial","capacity":"35","message":"","section_code":"-","source":"Allocation Adjustment","start_date":"30\/12\/2013","color":"#null"},"COSC264-14S2 (C)||LecA||01":{"subject_code":"COSC264-14S2 (C)","activity_group_code":"LecA","activity_code":"01","campus":"C","day_of_week":"Tue","start_time":"16:00","location":"Law 108","staff":"Pawlikowski,K (15\/7-19\/8, 9\/9-14\/10), Willig,A (15\/7-19\/8, 9\/9-14\/10)","duration":"60","activity_size":"107","student_count":"98","buffer":"0","week_pattern":"0000000000000000000000000000111111001111110000000000","description":"Data Communications and Networking","zone":"Ilam","department":"Computer Science and Software Engineering","semester":"S2","activityType":"Lecture","capacity":"107","section_code":"-","source":"Single Sort","start_date":"30\/12\/2013","color":"#null"},"COSC264-14S2 (C)||LecB||01":{"subject_code":"COSC264-14S2 (C)","activity_group_code":"LecB","activity_code":"01","campus":"C","day_of_week":"Thu","start_time":"17:00","location":"Law 108","staff":"Pawlikowski,K (17\/7-21\/8, 11\/9-16\/10), Willig,A (17\/7-21\/8, 11\/9-16\/10)","duration":"60","activity_size":"107","student_count":"98","buffer":"0","week_pattern":"0000000000000000000000000000111111001111110000000000","description":"Data Communications and Networking","zone":"Ilam","department":"Computer Science and Software Engineering","semester":"S2","activityType":"Lecture","capacity":"107","section_code":"-","source":"Single Sort","start_date":"30\/12\/2013","color":"#null"},"COSC264-14S2 (C)||LecC||01":{"subject_code":"COSC264-14S2 (C)","activity_group_code":"LecC","activity_code":"01","campus":"C","day_of_week":"Fri","start_time":"10:00","location":"E5 Lecture Theatre","staff":"Pawlikowski,K (18\/7-22\/8, 12\/9-17\/10), Willig,A (18\/7-22\/8, 12\/9-17\/10)","duration":"60","activity_size":"107","student_count":"98","buffer":"0","week_pattern":"0000000000000000000000000000111111001111110000000000","description":"Data Communications and Networking","zone":"Ilam","department":"Computer Science and Software Engineering","semester":"S2","activityType":"Lecture","capacity":"107","section_code":"-","source":"Single Sort","start_date":"30\/12\/2013","color":"#null"},"COSC265-14S2 (C)||LecA||01":{"subject_code":"COSC265-14S2 (C)","activity_group_code":"LecA","activity_code":"01","campus":"C","day_of_week":"Wed","start_time":"10:00","location":"A3 Lecture Theatre","staff":"Mitrovic,T","duration":"60","activity_size":"86","student_count":"95","buffer":"0","week_pattern":"0000000000000000000000000000111111001111110000000000","description":"Relational Database Systems","zone":"Ilam","department":"Computer Science and Software Engineering","semester":"S2","activityType":"Lecture","capacity":"86","section_code":"-","source":"Single Sort","start_date":"30\/12\/2013","color":"#null"},"COSC265-14S2 (C)||LecB||01":{"subject_code":"COSC265-14S2 (C)","activity_group_code":"LecB","activity_code":"01","campus":"C","day_of_week":"Thu","start_time":"10:00","location":"A3 Lecture Theatre","staff":"Mitrovic,T","duration":"60","activity_size":"86","student_count":"95","buffer":"0","week_pattern":"0000000000000000000000000000111111001111110000000000","description":"Relational Database Systems","zone":"Ilam","department":"Computer Science and Software Engineering","semester":"S2","activityType":"Lecture","capacity":"86","section_code":"-","source":"Single Sort","start_date":"30\/12\/2013","color":"#null"},"COSC265-14S2 (C)||LecC||01":{"subject_code":"COSC265-14S2 (C)","activity_group_code":"LecC","activity_code":"01","campus":"C","day_of_week":"Fri","start_time":"12:00","location":"E6 Lecture Theatre","staff":"Mitrovic,T","duration":"60","activity_size":"86","student_count":"95","buffer":"0","week_pattern":"0000000000000000000000000000111111001111110000000000","description":"Relational Database Systems","zone":"Ilam","department":"Computer Science and Software Engineering","semester":"S2","activityType":"Lecture","capacity":"86","section_code":"-","source":"Single Sort","start_date":"30\/12\/2013","color":"#null"},"ENCE260-14S2 (C)||LecA||01":{"subject_code":"ENCE260-14S2 (C)","activity_group_code":"LecA","activity_code":"01","campus":"C","day_of_week":"Thu","start_time":"09:00","location":"C2 Lecture Theatre","staff":"Weddell,S (17\/7-21\/8, 11\/9-16\/10), \/Lobb,RJE (17\/7-21\/8, 11\/9-16\/10), Bones,P (17\/7-21\/8, 11\/9-16\/10)","duration":"60","activity_size":"191","student_count":"198","buffer":"20","week_pattern":"0000000000000000000000000000111111001111110000000000","description":"Computer Systems","zone":"Ilam","department":"Electrical and Computer Engineering","semester":"S2","activityType":"Lecture","capacity":"191","message":"","section_code":"-","source":"Single Sort","start_date":"30\/12\/2013","color":"#null"},"ENCE260-14S2 (C)||LecB||01":{"subject_code":"ENCE260-14S2 (C)","activity_group_code":"LecB","activity_code":"01","campus":"C","day_of_week":"Mon","start_time":"12:00","location":"C3 Lecture Theatre","staff":"Weddell,S (14\/7-18\/8, 8\/9-13\/10), \/Lobb,RJE (14\/7-18\/8, 8\/9-13\/10), Bones,P (14\/7-18\/8, 8\/9-13\/10)","duration":"60","activity_size":"191","student_count":"198","buffer":"20","week_pattern":"0000000000000000000000000000111111001111110000000000","description":"Computer Systems","zone":"Ilam","department":"Electrical and Computer Engineering","semester":"S2","activityType":"Lecture","capacity":"191","message":"","section_code":"-","source":"Single Sort","start_date":"30\/12\/2013","color":"#null"},"ENCE260-14S2 (C)||LecC||01":{"subject_code":"ENCE260-14S2 (C)","activity_group_code":"LecC","activity_code":"01","campus":"C","day_of_week":"Wed","start_time":"09:00","location":"E8 Lecture Theatre","staff":"Weddell,S (16\/7-20\/8, 10\/9-15\/10), \/Lobb,RJE (16\/7-20\/8, 10\/9-15\/10), Bones,P (16\/7-20\/8, 10\/9-15\/10)","duration":"60","activity_size":"191","student_count":"198","buffer":"20","week_pattern":"0000000000000000000000000000111111001111110000000000","description":"Computer Systems","zone":"Ilam","department":"Electrical and Computer Engineering","semester":"S2","activityType":"Lecture","capacity":"191","message":"","section_code":"-","source":"Single Sort","start_date":"30\/12\/2013","color":"#null"},"ENCE260-14S2 (C)||Tut||01":{"subject_code":"ENCE260-14S2 (C)","activity_group_code":"Tut","activity_code":"01","campus":"C","day_of_week":"Fri","start_time":"11:00","location":"C3 Lecture Theatre","staff":"Weddell,S (12\/9-17\/10), \/Lobb,RJE (18\/7-22\/8), Bones,P (18\/7-22\/8, 12\/9-17\/10)","duration":"60","activity_size":"191","student_count":"198","buffer":"20","week_pattern":"0000000000000000000000000000111111001111110000000000","description":"Computer Systems","zone":"Ilam","department":"Electrical and Computer Engineering","semester":"S2","activityType":"Tutorial","capacity":"191","message":"","section_code":"-","source":"Single Sort","start_date":"30\/12\/2013","color":"#null"},"MATH220-14S1 (C)||LecA||01":{"subject_code":"MATH220-14S1 (C)","activity_group_code":"LecA","activity_code":"01","campus":"C","day_of_week":"Tue","start_time":"12:00","location":"A3 Lecture Theatre","staff":"Semple,CA","duration":"60","activity_size":"80","student_count":"104","buffer":"40","week_pattern":"0000000011111110001111100000000000000000000000000000","description":"Discrete Mathematics and Cryptography","zone":"Ilam","department":"Mathematics and Statistics","semester":"S1","activityType":"Lecture","capacity":"80","message":"","section_code":"-","source":"Single Sort","start_date":"30\/12\/2013","color":"#null"},"MATH220-14S1 (C)||LecB||01":{"subject_code":"MATH220-14S1 (C)","activity_group_code":"LecB","activity_code":"01","campus":"C","day_of_week":"Fri","start_time":"14:00","location":"E7 Lecture Theatre","staff":"Semple,CA","duration":"60","activity_size":"80","student_count":"104","buffer":"40","week_pattern":"0000000011111110001111100000000000000000000000000000","description":"Discrete Mathematics and Cryptography","zone":"Ilam","department":"Mathematics and Statistics","semester":"S1","activityType":"Lecture","capacity":"80","message":"","section_code":"-","source":"Single Sort","start_date":"30\/12\/2013","color":"#null"},"MATH220-14S1 (C)||LecC||01":{"subject_code":"MATH220-14S1 (C)","activity_group_code":"LecC","activity_code":"01","campus":"C","day_of_week":"Mon","start_time":"16:00","location":"E5 Lecture Theatre","staff":"Semple,CA","duration":"60","activity_size":"80","student_count":"104","buffer":"40","week_pattern":"0000000011111110001111100000000000000000000000000000","description":"Discrete Mathematics and Cryptography","zone":"Ilam","department":"Mathematics and Statistics","semester":"S1","activityType":"Lecture","capacity":"80","message":"","section_code":"-","source":"Single Sort","start_date":"30\/12\/2013","color":"#null"},"MATH220-14S1 (C)||Tut||01":{"subject_code":"MATH220-14S1 (C)","activity_group_code":"Tut","activity_code":"01","campus":"C","day_of_week":"Wed","start_time":"10:00","location":"Rutherford 533","staff":"-","duration":"60","activity_size":"24","student_count":"19","buffer":"-4","week_pattern":"0000000011111110001111100000000000000000000000000000","description":"Discrete Mathematics and Cryptography","zone":"Ilam","department":"Mathematics and Statistics","semester":"S1","activityType":"Tutorial","capacity":"24","message":"","section_code":"-","source":"Allocation Adjustment","start_date":"30\/12\/2013","color":"#null"},"SENG202-14S2 (C)||ComA||01":{"subject_code":"SENG202-14S2 (C)","activity_group_code":"ComA","activity_code":"01","campus":"C","day_of_week":"Fri","start_time":"15:00","location":"Erskine 136 Lab 4","staff":"Mathews,MM (18\/7-22\/8, 12\/9-17\/10), Churcher,NI (18\/7-22\/8, 12\/9-17\/10), Galster,M (18\/7-22\/8, 12\/9-17\/10)","duration":"120","activity_size":"30","student_count":"26","buffer":"0","week_pattern":"0000000000000000000000000000111111001111110000000000","description":"Software Engineering Project Workshop","zone":"Ilam","department":"Computer Science and Software Engineering","semester":"S2","activityType":"Computer Lab","capacity":"30","section_code":"-","source":"Single Sort","start_date":"30\/12\/2013","color":"#null"},"SENG202-14S2 (C)||ComB||01":{"subject_code":"SENG202-14S2 (C)","activity_group_code":"ComB","activity_code":"01","campus":"C","day_of_week":"Thu","start_time":"11:00","location":"Erskine 136 Lab 4","staff":"Mathews,MM (17\/7-21\/8, 11\/9-16\/10), Churcher,NI (17\/7-21\/8, 11\/9-16\/10), Galster,M (17\/7-21\/8, 11\/9-16\/10)","duration":"120","activity_size":"30","student_count":"26","buffer":"0","week_pattern":"0000000000000000000000000000111111001111110000000000","description":"Software Engineering Project Workshop","zone":"Ilam","department":"Computer Science and Software Engineering","semester":"S2","activityType":"Computer Lab","capacity":"30","section_code":"-","source":"Single Sort","start_date":"30\/12\/2013","color":"#null"},"SENG202-14S2 (C)||LecA||01":{"subject_code":"SENG202-14S2 (C)","activity_group_code":"LecA","activity_code":"01","campus":"C","day_of_week":"Wed","start_time":"13:00","location":"A4 Lecture Theatre","staff":"Mathews,MM (16\/7-20\/8, 10\/9-15\/10), Galster,M (16\/7-20\/8, 10\/9-15\/10)","duration":"60","activity_size":"30","student_count":"26","buffer":"0","week_pattern":"0000000000000000000000000000111111001111110000000000","description":"Software Engineering Project Workshop","zone":"Ilam","department":"Computer Science and Software Engineering","semester":"S2","activityType":"Lecture","capacity":"30","section_code":"-","source":"Single Sort","start_date":"30\/12\/2013","color":"#null"}},"student_enrolment":{"COSC261-14S1 (C)":{"subject_code":"COSC261-14S1 (C)","description":"Formal Languages and Compilers","manager":"-","email_address":"-","faculty":"ENGC","semester":"S1","campus":"C","showOnTT":"Y","display_subject_code":"COSC261-14S1 (C)","groups":{"Com":{"subject_code":"COSC261-14S1 (C)","activity_group_code":"Com","description":"Computer Lab","num_flagged_timeslots":"0","status":"ALLOCATION ADJUSTMENT","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":4},"LecA":{"subject_code":"COSC261-14S1 (C)","activity_group_code":"LecA","description":"Lecture","num_flagged_timeslots":"0","status":"READ ONLY","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":1},"LecB":{"subject_code":"COSC261-14S1 (C)","activity_group_code":"LecB","description":"Lecture","num_flagged_timeslots":"0","status":"READ ONLY","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":1},"LecC":{"subject_code":"COSC261-14S1 (C)","activity_group_code":"LecC","description":"Lecture","num_flagged_timeslots":"0","status":"READ ONLY","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":1}}},"COSC262-14S1 (C)":{"subject_code":"COSC262-14S1 (C)","description":"Algorithms","manager":"Ramakrishnan Mukundan","email_address":"mukundan@canterbury.ac.nz","faculty":"ENGC","semester":"S1","campus":"C","showOnTT":"Y","display_subject_code":"COSC262-14S1 (C)","groups":{"LecA":{"subject_code":"COSC262-14S1 (C)","activity_group_code":"LecA","description":"Lecture","num_flagged_timeslots":"0","status":"READ ONLY","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":1},"LecB":{"subject_code":"COSC262-14S1 (C)","activity_group_code":"LecB","description":"Lecture","num_flagged_timeslots":"0","status":"READ ONLY","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":1},"LecC":{"subject_code":"COSC262-14S1 (C)","activity_group_code":"LecC","description":"Lecture","num_flagged_timeslots":"0","status":"READ ONLY","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":1},"Tut":{"subject_code":"COSC262-14S1 (C)","activity_group_code":"Tut","description":"Tutorial","num_flagged_timeslots":"0","status":"ALLOCATION ADJUSTMENT","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":3}}},"COSC264-14S2 (C)":{"subject_code":"COSC264-14S2 (C)","description":"Data Communications and Networking","manager":"Krzysztof Pawlikowski","email_address":"krys.pawlikowski@canterbury.ac.nz","faculty":"ENGC","semester":"S2","campus":"C","showOnTT":"Y","display_subject_code":"COSC264-14S2 (C)","groups":{"Com":{"subject_code":"COSC264-14S2 (C)","activity_group_code":"Com","description":"Computer Lab","num_flagged_timeslots":"0","status":"ALLOCATION ADJUSTMENT","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":3},"LecA":{"subject_code":"COSC264-14S2 (C)","activity_group_code":"LecA","description":"Lecture","num_flagged_timeslots":"0","status":"READ ONLY","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":1},"LecB":{"subject_code":"COSC264-14S2 (C)","activity_group_code":"LecB","description":"Lecture","num_flagged_timeslots":"0","status":"READ ONLY","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":1},"LecC":{"subject_code":"COSC264-14S2 (C)","activity_group_code":"LecC","description":"Lecture","num_flagged_timeslots":"0","status":"READ ONLY","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":1},"Tut":{"subject_code":"COSC264-14S2 (C)","activity_group_code":"Tut","description":"Tutorial","num_flagged_timeslots":"0","status":"ALLOCATION ADJUSTMENT","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":3}}},"COSC265-14S2 (C)":{"subject_code":"COSC265-14S2 (C)","description":"Relational Database Systems","manager":"Antonija Mitrovic","email_address":"tanja.mitrovic@canterbury.ac.nz","faculty":"ENGC","semester":"S2","campus":"C","showOnTT":"Y","display_subject_code":"COSC265-14S2 (C)","groups":{"Com":{"subject_code":"COSC265-14S2 (C)","activity_group_code":"Com","description":"Computer Lab","num_flagged_timeslots":"0","status":"ALLOCATION ADJUSTMENT","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":2},"LecA":{"subject_code":"COSC265-14S2 (C)","activity_group_code":"LecA","description":"Lecture","num_flagged_timeslots":"0","status":"READ ONLY","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":1},"LecB":{"subject_code":"COSC265-14S2 (C)","activity_group_code":"LecB","description":"Lecture","num_flagged_timeslots":"0","status":"READ ONLY","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":1},"LecC":{"subject_code":"COSC265-14S2 (C)","activity_group_code":"LecC","description":"Lecture","num_flagged_timeslots":"0","status":"READ ONLY","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":1},"Tut":{"subject_code":"COSC265-14S2 (C)","activity_group_code":"Tut","description":"Tutorial","num_flagged_timeslots":"0","status":"ALLOCATION ADJUSTMENT","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":3}}},"ENCE260-14S2 (C)":{"subject_code":"ENCE260-14S2 (C)","description":"Computer Systems","manager":"-","email_address":"-","faculty":"ENGC","semester":"S2","campus":"C","showOnTT":"Y","display_subject_code":"ENCE260-14S2 (C)","groups":{"Com":{"subject_code":"ENCE260-14S2 (C)","activity_group_code":"Com","description":"Computer Lab","num_flagged_timeslots":"0","status":"ALLOCATION ADJUSTMENT","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":4},"LecA":{"subject_code":"ENCE260-14S2 (C)","activity_group_code":"LecA","description":"Lecture","num_flagged_timeslots":"0","status":"READ ONLY","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":1},"LecB":{"subject_code":"ENCE260-14S2 (C)","activity_group_code":"LecB","description":"Lecture","num_flagged_timeslots":"0","status":"READ ONLY","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":1},"LecC":{"subject_code":"ENCE260-14S2 (C)","activity_group_code":"LecC","description":"Lecture","num_flagged_timeslots":"0","status":"READ ONLY","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":1},"Tes":{"subject_code":"ENCE260-14S2 (C)","activity_group_code":"Tes","description":"Test","num_flagged_timeslots":"0","status":"READ ONLY","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":2},"Tut":{"subject_code":"ENCE260-14S2 (C)","activity_group_code":"Tut","description":"Tutorial","num_flagged_timeslots":"0","status":"READ ONLY","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":1}}},"MATH220-14S1 (C)":{"subject_code":"MATH220-14S1 (C)","description":"Discrete Mathematics and Cryptography","manager":"Charles Alexander Semple","email_address":"charles.semple@canterbury.ac.nz","faculty":"ENGC","semester":"S1","campus":"C","showOnTT":"Y","display_subject_code":"MATH220-14S1 (C)","groups":{"LecA":{"subject_code":"MATH220-14S1 (C)","activity_group_code":"LecA","description":"Lecture","num_flagged_timeslots":"0","status":"READ ONLY","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":1},"LecB":{"subject_code":"MATH220-14S1 (C)","activity_group_code":"LecB","description":"Lecture","num_flagged_timeslots":"0","status":"READ ONLY","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":1},"LecC":{"subject_code":"MATH220-14S1 (C)","activity_group_code":"LecC","description":"Lecture","num_flagged_timeslots":"0","status":"READ ONLY","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":1},"Tut":{"subject_code":"MATH220-14S1 (C)","activity_group_code":"Tut","description":"Tutorial","num_flagged_timeslots":"0","status":"ALLOCATION ADJUSTMENT","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":5}}},"SENG202-14S2 (C)":{"subject_code":"SENG202-14S2 (C)","description":"Software Engineering Project Workshop","manager":"Matthias Galster","email_address":"matthias.galster@canterbury.ac.nz","faculty":"ENGC","semester":"S2","campus":"C","showOnTT":"Y","display_subject_code":"SENG202-14S2 (C)","groups":{"ComA":{"subject_code":"SENG202-14S2 (C)","activity_group_code":"ComA","description":"Computer Lab","num_flagged_timeslots":"0","status":"READ ONLY","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":1},"ComB":{"subject_code":"SENG202-14S2 (C)","activity_group_code":"ComB","description":"Computer Lab","num_flagged_timeslots":"0","status":"READ ONLY","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":1},"LecA":{"subject_code":"SENG202-14S2 (C)","activity_group_code":"LecA","description":"Lecture","num_flagged_timeslots":"0","status":"READ ONLY","auto_single":"Y","min_prefs":"0","allow_justification":"N","allow_waitlist":"N","message":"","show_availability":"N","act_cnt":1}}}},"preferences":{},"section_preferences":{},"external_activities":{}}};
+</script>
+
+</html>

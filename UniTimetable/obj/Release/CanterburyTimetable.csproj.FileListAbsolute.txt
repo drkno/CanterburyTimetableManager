@@ -1,0 +1,3 @@
+C:\Users\Matthew\Desktop\Sort\SourceCode\CanterburyTimetableManager\UniTimetable\bin\Release\CanterburyTimetable.exe.config
+C:\Users\Matthew\Desktop\Sort\SourceCode\CanterburyTimetableManager\UniTimetable\obj\Release\CanterburyTimetable.exe
+C:\Users\Matthew\Desktop\Sort\SourceCode\CanterburyTimetableManager\UniTimetable\obj\Release\CanterburyTimetable.pdb
