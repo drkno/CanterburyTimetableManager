@@ -49,12 +49,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AboutBox.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AboutBox.Designer.cs">
-      <DependentUpon>AboutBox.cs</DependentUpon>
-    </Compile>
     <Compile Include="CanterburyData\CanterburyData.cs" />
     <Compile Include="CanterburyData\CanterburyLoader.cs" />
     <Compile Include="EtchedLine.cs">
@@ -131,10 +125,6 @@
     <Compile Include="Solver.Criteria.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="AboutBox.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>AboutBox.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="EtchedLine.resx">
       <SubType>Designer</SubType>
       <DependentUpon>EtchedLine.cs</DependentUpon>
@@ -231,13 +221,10 @@
     <None Include="Resources\Config-Tools.png" />
     <None Include="Resources\Find.png" />
     <None Include="Resources\Document.png" />
-    <None Include="Resources\Download.png" />
     <None Include="Resources\Favorites.png" />
     <None Include="Resources\Symbol-Add.png" />
     <None Include="Resources\Symbol-Add-Stream.png" />
     <None Include="Resources\Symbol-Add-Time.png" />
-    <None Include="Resources\Trashcan_empty.png" />
-    <None Include="Resources\Trashcan_full.png" />
     <None Include="Resources\Dice.png" />
     <None Include="Resources\TimeTable.ico" />
     <None Include="Resources\Symbol-Check.png" />
@@ -275,9 +262,6 @@
     <Compile Include="TimetableControl.Designer.cs">
       <DependentUpon>TimetableControl.cs</DependentUpon>
     </Compile>
-    <None Include="Resources\UQ.png" />
-    <None Include="Resources\QUT.png" />
-    <None Include="Resources\UNSW.png" />
     <None Include="Resources\Unknown.png" />
     <None Include="Resources\Undo.png" />
     <None Include="Resources\Copy.png" />
@@ -285,7 +269,6 @@
     <None Include="Resources\My-Documents.png" />
     <None Include="Resources\Save.png" />
     <None Include="Resources\Printer.png" />
-    <None Include="Resources\Printer16.png" />
     <None Include="Resources\Redo16.png" />
     <None Include="Resources\Save16.png" />
     <None Include="Resources\Symbol-Add-Stream16.png" />
@@ -293,22 +276,27 @@
     <None Include="Resources\Symbol-Add16.png" />
     <None Include="Resources\Symbol-Check16.png" />
     <None Include="Resources\Symbol-Delete16.png" />
-    <None Include="Resources\Trashcan_full16.png" />
     <None Include="Resources\Undo16.png" />
     <None Include="Resources\Config-Tools16.png" />
     <None Include="Resources\Copy16.png" />
     <None Include="Resources\Dice16.png" />
     <None Include="Resources\Document16.png" />
-    <None Include="Resources\Download16.png" />
-    <None Include="Resources\Find16.png" />
     <None Include="Resources\My-Documents16.png" />
     <None Include="Resources\Help.png" />
-    <None Include="Resources\Help16.png" />
     <None Include="Resources\Color-palette.png" />
     <None Include="Resources\Color-picker.png" />
     <None Include="Resources\Colors.png" />
     <None Include="Resources\Color-Settings.png" />
     <None Include="Resources\Color-picker16.png" />
+    <None Include="Resources\Criteria.png" />
+    <None Include="Resources\Clear.png" />
+    <Content Include="Resources\Export.png" />
+    <None Include="Resources\Import.png" />
+    <None Include="Resources\Open.png" />
+    <None Include="Resources\ShowClasses.png" />
+    <None Include="Resources\Reset.png" />
+    <None Include="Resources\Random.png" />
+    <None Include="Resources\Preferences.png" />
     <Content Include="Resources\UNOC.png" />
     <None Include="Resources\WhiteLogo.png" />
     <Content Include="TimeTable.ico" />

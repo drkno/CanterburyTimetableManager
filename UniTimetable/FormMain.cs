@@ -12,22 +12,19 @@ using System.Drawing.Imaging;
 
 namespace UniTimetable
 {
-    partial class FormMain : Form
+    public partial class FormMain : Form
     {
         TimeOfWeek _clickTime;
         Session _clickSession;
         Unavailability ClickUnavail_;
 
-        Timetable Timetable_;
+        public Timetable Timetable_;
         Solver Solver_;
 
         Settings Settings_ = new Settings();
 
-        FormStyle FormStyle_ = new FormStyle();
         FormUnavailability FormUnavail_ = new FormUnavailability();
-        private FormImport FormImport_;
         FormSettings FormSettings_ = new FormSettings();
-        AboutBox AboutBox_ = new AboutBox();
 
         History<Timetable> History_ = new History<Timetable>(50);
         int Changes_ = 0;
@@ -518,7 +515,7 @@ namespace UniTimetable
             Import();
         }
 
-        private void ImportNew()
+        private void Import()
         {
             if (!AreYouSure("Import Timetable"))
                 return;
@@ -541,28 +538,16 @@ namespace UniTimetable
             ClearHistory();
         }
 
-        private void Import()
-        {
-            if (!AreYouSure("Import Timetable"))
-                return;
-
-            // run the import wizard
-            Timetable t = FormImport_.ShowDialog();
-            if (t == null)
-                return;
-
-            Timetable_ = t;
-            timetableControl1.Timetable = Timetable_;
-            timetableControl1.MatchBounds();
-            SaveDialogXML_.FileName = null;
-            EnableButtons(true);
-            ClearHistory();
-        }
-
         private void importAndMergeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // run the import wizard
-            Timetable t = FormImport_.ShowDialog();
+            var importForm = new FormImport();
+            if (importForm.DialogResult == DialogResult.Cancel)
+            {
+                return;
+            }
+
+            var t = importForm.ShowDialog();
             if (t == null)
                 return;
 
@@ -626,7 +611,7 @@ namespace UniTimetable
             UpdateRemaining();
         }
 
-        private void MadeChanges(bool recompute)
+        public void MadeChanges(bool recompute)
         {
             Changes_++;
             History_.Add(Timetable_.DeepCopy());
@@ -641,21 +626,10 @@ namespace UniTimetable
 
         #region Timetable config
 
-        private void coloursToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (Timetable_ == null)
-                return;
-
-            if (FormStyle_.ShowDialog(Timetable_) == DialogResult.Cancel)
-                return;
-
-            MadeChanges(false);
-        }
-
-        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SettingsToolStripMenuItemClick(object sender, EventArgs e)
         {
             Settings_.ResetWindow = false;
-            Settings result = FormSettings_.ShowDialog(Settings_);
+            var result = FormSettings_.ShowDialog(Settings_, this);
             if (result == null)
                 return;
             Settings_ = result;
@@ -688,11 +662,6 @@ namespace UniTimetable
         #endregion
 
         #region Solver
-
-        private void findSolutionsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FindSolutions();
-        }
 
         private void FindSolutions()
         {
@@ -734,80 +703,7 @@ namespace UniTimetable
         }
 
         #endregion
-
-        #region Help
-
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            AboutBox_.ShowDialog();
-        }
-
-        private void utmHelpToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            string address = "http://jack.valmadre.net/timetable/";
-            try
-            {
-                System.Diagnostics.Process.Start(address);
-            }
-            catch
-            {
-                MessageBox.Show(
-                    "Unable to open web page.\n\nPlease point your browser to " + address,
-                    "Online Help",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Exclamation);
-            }
-        }
-
         #endregion
-
-        #region Drop down disablers
-
-        private void timetableToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
-        {
-            undoToolStripMenuItem.Enabled = (History_.PeekBack() != null);
-            redoToolStripMenuItem.Enabled = (History_.PeekForward() != null);
-
-            importAndMergeToolStripMenuItem.Enabled = TimetableLoaded();
-            coloursToolStripMenuItem.Enabled = TimetableLoaded();
-        }
-
-        private void timetableToolStripMenuItem_DropDownClosed(object sender, EventArgs e)
-        {
-            undoToolStripMenuItem.Enabled = true;
-            redoToolStripMenuItem.Enabled = true;
-            importAndMergeToolStripMenuItem.Enabled = true;
-            coloursToolStripMenuItem.Enabled = true;
-        }
-
-        private void fileToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
-        {
-            saveToolStripMenuItem.Enabled = TimetableLoaded();
-            saveAsToolStripMenuItem.Enabled = TimetableLoaded();
-        }
-
-        private void fileToolStripMenuItem_DropDownClosed(object sender, EventArgs e)
-        {
-            saveToolStripMenuItem.Enabled = true;
-            saveAsToolStripMenuItem.Enabled = true;
-        }
-
-        private void optimiseToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
-        {
-            findSolutionsToolStripMenuItem.Enabled = TimetableLoaded();
-            editSolutionCriteriaToolStripMenuItem.Enabled = TimetableLoaded();
-        }
-
-        private void optimiseToolStripMenuItem_DropDownClosed(object sender, EventArgs e)
-        {
-            findSolutionsToolStripMenuItem.Enabled = true;
-            editSolutionCriteriaToolStripMenuItem.Enabled = true;
-        }
-
-        #endregion
-
-        #endregion
-
         #region Tool strip
 
         private void EnableButtons(bool enable)
@@ -816,23 +712,11 @@ namespace UniTimetable
             btnSolver.Enabled = enable;
             btnLucky.Enabled = enable;
             btnClear.Enabled = enable;
+            btnAccept.Enabled = enable;
         }
 
         private void UpdateToolstrip()
         {
-            bool large = Settings_.UseLargeIcons;
-
-            btnNew.Image = (large ? Resources.Document : Resources.Document16);
-            btnImport.Image = (large ? Resources.Download : Resources.Download16);
-            btnOpen.Image = (large ? Resources.My_Documents : Resources.My_Documents16);
-            btnSave.Image = (large ? Resources.Save : Resources.Save16);
-            btnPrint.Image = (large ? Resources.Printer : Resources.Printer16);
-            btnCriteria.Image = (large ? Resources.Config_Tools : Resources.Config_Tools16);
-            btnSolver.Image = (large ? Resources.Find : Resources.Find16);
-            btnLucky.Image = (large ? Resources.Dice : Resources.Dice16);
-            btnAddByClass.Image = (large ? Resources.Symbol_Add_Stream : Resources.Symbol_Add_Stream16);
-            btnClear.Image = (large ? Resources.Trashcan_full : Resources.Trashcan_full16);
-
             for (var i = 0; i < toolStrip1.Items.Count; i++)
             {
                 ToolStripButton item;
@@ -845,16 +729,7 @@ namespace UniTimetable
                     continue;
                 }
 
-                if (large)
-                {
-                    item.Padding = new Padding(3, item.Padding.Top, 3, item.Padding.Bottom);
-                    item.TextImageRelation = TextImageRelation.ImageAboveText;
-                }
-                else
-                {
-                    item.Padding = new Padding(0, item.Padding.Top, 0, item.Padding.Bottom);
-                    item.TextImageRelation = TextImageRelation.ImageBeforeText;
-                }
+                item.Padding = new Padding(3, item.Padding.Top, 3, item.Padding.Bottom);
             }
         }
 
@@ -863,14 +738,9 @@ namespace UniTimetable
             New();
         }
 
-        private void btnImport_Click(object sender, EventArgs e)
-        {
-            Import();
-        }
-
         private void btnImportNew_Click(object sender, EventArgs e)
         {
-            ImportNew();
+            Import();
         }
 
         private void btnOpen_Click(object sender, EventArgs e)
@@ -1564,7 +1434,6 @@ namespace UniTimetable
             Size screen = Screen.GetWorkingArea(this).Size;
             if (Height > screen.Height)
             {
-                Properties.Settings.Default.LargeIcons = false;
                 Properties.Settings.Default.Save();
                 UpdateSettings();
                 //if (Height > screen.Height)

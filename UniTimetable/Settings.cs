@@ -1,12 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace UniTimetable
 {
     public class Settings
     {
-        public bool UseLargeIcons;
         public bool ShowGhost;
         public bool ShowWeekend;
         public bool ShowLocation;
@@ -21,7 +16,6 @@ namespace UniTimetable
         }
 
         public Settings(
-            bool useLargeIcons,
             bool showGhost,
             bool showWeekend,
             bool showGray,
@@ -30,7 +24,6 @@ namespace UniTimetable
             int hourEnd,
             bool resetWindow)
         {
-            UseLargeIcons = useLargeIcons;
             ShowGhost = showGhost;
             ShowWeekend = showWeekend;
             ShowGray = showGray;
@@ -42,7 +35,6 @@ namespace UniTimetable
 
         public Settings(Settings other)
         {
-            UseLargeIcons = other.UseLargeIcons;
             ShowGhost = other.ShowGhost;
             ShowWeekend = other.ShowWeekend;
             ShowGray = other.ShowGray;
@@ -54,7 +46,6 @@ namespace UniTimetable
 
         public void Load()
         {
-            UseLargeIcons = Properties.Settings.Default.LargeIcons;
             ShowGhost = Properties.Settings.Default.ShowGhost;
             ShowWeekend = Properties.Settings.Default.ShowWeekend;
             ShowGray = Properties.Settings.Default.ShowGray;
@@ -66,7 +57,6 @@ namespace UniTimetable
 
         public void Save()
         {
-            Properties.Settings.Default.LargeIcons = UseLargeIcons;
             Properties.Settings.Default.ShowGhost = ShowGhost;
             Properties.Settings.Default.ShowWeekend = ShowWeekend;
             Properties.Settings.Default.ShowLocation = ShowGray;

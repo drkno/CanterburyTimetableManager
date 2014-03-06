@@ -1,6 +1,6 @@
 namespace UniTimetable
 {
-    partial class FormMain
+    public partial class FormMain
     {
         /// <summary>
         /// Required designer variable.
@@ -30,37 +30,6 @@ namespace UniTimetable
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
-            this.menuStrip = new System.Windows.Forms.MenuStrip();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.exportImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.colourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.greyscaleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
-            this.colourVectorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.greyscaleVectorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
-            this.wallpaperToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.pageSetupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.printPreviewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.printToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.timetableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.importAndMergeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
-            this.undoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.redoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.coloursToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.optimiseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.findSolutionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.editSolutionCriteriaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.findClassAtThisTimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.findAlternativeStreamToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -87,21 +56,38 @@ namespace UniTimetable
             this.BottomToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.TopToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
-            this.btnImport = new System.Windows.Forms.ToolStripButton();
+            this.btnImport = new System.Windows.Forms.ToolStripSplitButton();
+            this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importAndMergeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnAccept = new System.Windows.Forms.ToolStripSplitButton();
+            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItemColour = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemGreyscale = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItemColourEmf = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemGreyscaleEmf = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItemBackground = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.btnNew = new System.Windows.Forms.ToolStripButton();
             this.btnOpen = new System.Windows.Forms.ToolStripButton();
-            this.btnSave = new System.Windows.Forms.ToolStripButton();
-            this.btnPrint = new System.Windows.Forms.ToolStripButton();
+            this.btnSave = new System.Windows.Forms.ToolStripSplitButton();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnPrint = new System.Windows.Forms.ToolStripSplitButton();
+            this.sToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+            this.pageSetupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.printPreviewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.btnAddByClass = new System.Windows.Forms.ToolStripButton();
+            this.btnNew = new System.Windows.Forms.ToolStripButton();
             this.btnClear = new System.Windows.Forms.ToolStripButton();
+            this.btnPreferences = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
-            this.btnCriteria = new System.Windows.Forms.ToolStripButton();
             this.btnSolver = new System.Windows.Forms.ToolStripButton();
+            this.btnCriteria = new System.Windows.Forms.ToolStripButton();
             this.btnLucky = new System.Windows.Forms.ToolStripButton();
-            this.btnAccept = new System.Windows.Forms.ToolStripButton();
             this.RightToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.LeftToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
@@ -110,13 +96,12 @@ namespace UniTimetable
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.btnShowHide = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.timetableControl1 = new UniTimetable.TimetableControl();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.listBox2 = new UniTimetable.ListBoxBuffered();
-            this.listBox1 = new UniTimetable.ListBoxBuffered();
             this.lblRemaining = new System.Windows.Forms.Label();
             this.lblIgnored = new System.Windows.Forms.Label();
-            this.menuStrip.SuspendLayout();
+            this.timetableControl1 = new UniTimetable.TimetableControl();
+            this.listBox2 = new UniTimetable.ListBoxBuffered();
+            this.listBox1 = new UniTimetable.ListBoxBuffered();
             this.contextMenuStrip1.SuspendLayout();
             this.streamMenu.SuspendLayout();
             this.timeMenu.SuspendLayout();
@@ -130,262 +115,6 @@ namespace UniTimetable
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // menuStrip
-            // 
-            this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
-            this.timetableToolStripMenuItem,
-            this.optimiseToolStripMenuItem});
-            this.menuStrip.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(992, 24);
-            this.menuStrip.TabIndex = 0;
-            this.menuStrip.Text = "menuStrip1";
-            // 
-            // fileToolStripMenuItem
-            // 
-            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newToolStripMenuItem,
-            this.openToolStripMenuItem,
-            this.saveToolStripMenuItem,
-            this.saveAsToolStripMenuItem,
-            this.toolStripSeparator5,
-            this.exportImageToolStripMenuItem,
-            this.toolStripSeparator3,
-            this.pageSetupToolStripMenuItem,
-            this.printPreviewToolStripMenuItem,
-            this.printToolStripMenuItem});
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.fileToolStripMenuItem.Text = "&File";
-            this.fileToolStripMenuItem.DropDownClosed += new System.EventHandler(this.fileToolStripMenuItem_DropDownClosed);
-            this.fileToolStripMenuItem.DropDownOpening += new System.EventHandler(this.fileToolStripMenuItem_DropDownOpening);
-            // 
-            // newToolStripMenuItem
-            // 
-            this.newToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("newToolStripMenuItem.Image")));
-            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.ShortcutKeyDisplayString = "";
-            this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
-            this.newToolStripMenuItem.Text = "&Clear";
-            this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
-            // 
-            // openToolStripMenuItem
-            // 
-            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
-            this.openToolStripMenuItem.Text = "&Open...";
-            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
-            // 
-            // saveToolStripMenuItem
-            // 
-            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
-            this.saveToolStripMenuItem.Text = "&Save";
-            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
-            // 
-            // saveAsToolStripMenuItem
-            // 
-            this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
-            this.saveAsToolStripMenuItem.Text = "Save &As...";
-            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(152, 6);
-            // 
-            // exportImageToolStripMenuItem
-            // 
-            this.exportImageToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.colourToolStripMenuItem,
-            this.greyscaleToolStripMenuItem,
-            this.toolStripSeparator7,
-            this.colourVectorToolStripMenuItem,
-            this.greyscaleVectorToolStripMenuItem,
-            this.toolStripSeparator9,
-            this.wallpaperToolStripMenuItem});
-            this.exportImageToolStripMenuItem.Name = "exportImageToolStripMenuItem";
-            this.exportImageToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
-            this.exportImageToolStripMenuItem.Text = "Export &Image";
-            // 
-            // colourToolStripMenuItem
-            // 
-            this.colourToolStripMenuItem.Name = "colourToolStripMenuItem";
-            this.colourToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
-            this.colourToolStripMenuItem.Text = "&Colour...";
-            this.colourToolStripMenuItem.Click += new System.EventHandler(this.colourToolStripMenuItem_Click);
-            // 
-            // greyscaleToolStripMenuItem
-            // 
-            this.greyscaleToolStripMenuItem.Name = "greyscaleToolStripMenuItem";
-            this.greyscaleToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
-            this.greyscaleToolStripMenuItem.Text = "&Greyscale...";
-            this.greyscaleToolStripMenuItem.Click += new System.EventHandler(this.greyscaleToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator7
-            // 
-            this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(190, 6);
-            // 
-            // colourVectorToolStripMenuItem
-            // 
-            this.colourVectorToolStripMenuItem.Name = "colourVectorToolStripMenuItem";
-            this.colourVectorToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
-            this.colourVectorToolStripMenuItem.Text = "C&olour EMF...";
-            this.colourVectorToolStripMenuItem.Click += new System.EventHandler(this.colourVectorToolStripMenuItem_Click);
-            // 
-            // greyscaleVectorToolStripMenuItem
-            // 
-            this.greyscaleVectorToolStripMenuItem.Name = "greyscaleVectorToolStripMenuItem";
-            this.greyscaleVectorToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
-            this.greyscaleVectorToolStripMenuItem.Text = "G&reyscale EMF...";
-            this.greyscaleVectorToolStripMenuItem.Click += new System.EventHandler(this.greyscaleVectorToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator9
-            // 
-            this.toolStripSeparator9.Name = "toolStripSeparator9";
-            this.toolStripSeparator9.Size = new System.Drawing.Size(190, 6);
-            // 
-            // wallpaperToolStripMenuItem
-            // 
-            this.wallpaperToolStripMenuItem.Name = "wallpaperToolStripMenuItem";
-            this.wallpaperToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
-            this.wallpaperToolStripMenuItem.Text = "&Desktop Background...";
-            this.wallpaperToolStripMenuItem.Click += new System.EventHandler(this.wallpaperToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(152, 6);
-            // 
-            // pageSetupToolStripMenuItem
-            // 
-            this.pageSetupToolStripMenuItem.Name = "pageSetupToolStripMenuItem";
-            this.pageSetupToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
-            this.pageSetupToolStripMenuItem.Text = "Page Set&up...";
-            this.pageSetupToolStripMenuItem.Click += new System.EventHandler(this.pageSetupToolStripMenuItem_Click);
-            // 
-            // printPreviewToolStripMenuItem
-            // 
-            this.printPreviewToolStripMenuItem.Name = "printPreviewToolStripMenuItem";
-            this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
-            this.printPreviewToolStripMenuItem.Text = "Print Pre&view...";
-            this.printPreviewToolStripMenuItem.Click += new System.EventHandler(this.printPreviewToolStripMenuItem_Click);
-            // 
-            // printToolStripMenuItem
-            // 
-            this.printToolStripMenuItem.Name = "printToolStripMenuItem";
-            this.printToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-            this.printToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
-            this.printToolStripMenuItem.Text = "&Print...";
-            this.printToolStripMenuItem.Click += new System.EventHandler(this.printToolStripMenuItem_Click);
-            // 
-            // timetableToolStripMenuItem
-            // 
-            this.timetableToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.importToolStripMenuItem,
-            this.importAndMergeToolStripMenuItem,
-            this.toolStripSeparator8,
-            this.undoToolStripMenuItem,
-            this.redoToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.coloursToolStripMenuItem,
-            this.settingsToolStripMenuItem});
-            this.timetableToolStripMenuItem.Name = "timetableToolStripMenuItem";
-            this.timetableToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
-            this.timetableToolStripMenuItem.Text = "&Timetable";
-            this.timetableToolStripMenuItem.DropDownClosed += new System.EventHandler(this.timetableToolStripMenuItem_DropDownClosed);
-            this.timetableToolStripMenuItem.DropDownOpening += new System.EventHandler(this.timetableToolStripMenuItem_DropDownOpening);
-            // 
-            // importToolStripMenuItem
-            // 
-            this.importToolStripMenuItem.Name = "importToolStripMenuItem";
-            this.importToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
-            this.importToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.importToolStripMenuItem.Text = "&Import...";
-            this.importToolStripMenuItem.Click += new System.EventHandler(this.importToolStripMenuItem_Click);
-            // 
-            // importAndMergeToolStripMenuItem
-            // 
-            this.importAndMergeToolStripMenuItem.Name = "importAndMergeToolStripMenuItem";
-            this.importAndMergeToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.importAndMergeToolStripMenuItem.Text = "Import and Merge...";
-            this.importAndMergeToolStripMenuItem.Click += new System.EventHandler(this.importAndMergeToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator8
-            // 
-            this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(182, 6);
-            // 
-            // undoToolStripMenuItem
-            // 
-            this.undoToolStripMenuItem.Name = "undoToolStripMenuItem";
-            this.undoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.undoToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.undoToolStripMenuItem.Text = "&Undo";
-            this.undoToolStripMenuItem.Click += new System.EventHandler(this.undoToolStripMenuItem_Click);
-            // 
-            // redoToolStripMenuItem
-            // 
-            this.redoToolStripMenuItem.Name = "redoToolStripMenuItem";
-            this.redoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-            this.redoToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.redoToolStripMenuItem.Text = "&Redo";
-            this.redoToolStripMenuItem.Click += new System.EventHandler(this.redoToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(182, 6);
-            // 
-            // coloursToolStripMenuItem
-            // 
-            this.coloursToolStripMenuItem.Name = "coloursToolStripMenuItem";
-            this.coloursToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
-            this.coloursToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.coloursToolStripMenuItem.Text = "&Colours...";
-            this.coloursToolStripMenuItem.Click += new System.EventHandler(this.coloursToolStripMenuItem_Click);
-            // 
-            // settingsToolStripMenuItem
-            // 
-            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.K)));
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.settingsToolStripMenuItem.Text = "&Preferences...";
-            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
-            // 
-            // optimiseToolStripMenuItem
-            // 
-            this.optimiseToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.findSolutionsToolStripMenuItem,
-            this.editSolutionCriteriaToolStripMenuItem});
-            this.optimiseToolStripMenuItem.Name = "optimiseToolStripMenuItem";
-            this.optimiseToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
-            this.optimiseToolStripMenuItem.Text = "&Optimise";
-            this.optimiseToolStripMenuItem.DropDownClosed += new System.EventHandler(this.optimiseToolStripMenuItem_DropDownClosed);
-            this.optimiseToolStripMenuItem.DropDownOpening += new System.EventHandler(this.optimiseToolStripMenuItem_DropDownOpening);
-            // 
-            // findSolutionsToolStripMenuItem
-            // 
-            this.findSolutionsToolStripMenuItem.Name = "findSolutionsToolStripMenuItem";
-            this.findSolutionsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-            this.findSolutionsToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
-            this.findSolutionsToolStripMenuItem.Text = "&Find Solutions...";
-            this.findSolutionsToolStripMenuItem.Click += new System.EventHandler(this.findSolutionsToolStripMenuItem_Click);
-            // 
-            // editSolutionCriteriaToolStripMenuItem
-            // 
-            this.editSolutionCriteriaToolStripMenuItem.Name = "editSolutionCriteriaToolStripMenuItem";
-            this.editSolutionCriteriaToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this.editSolutionCriteriaToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
-            this.editSolutionCriteriaToolStripMenuItem.Text = "Edit Solution C&riteria";
-            this.editSolutionCriteriaToolStripMenuItem.Click += new System.EventHandler(this.editSolutionCriteriaToolStripMenuItem_Click);
             // 
             // contextMenuStrip1
             // 
@@ -569,162 +298,327 @@ namespace UniTimetable
             // 
             this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton2,
             this.btnImport,
+            this.btnAccept,
             this.toolStripSeparator2,
-            this.btnNew,
             this.btnOpen,
             this.btnSave,
             this.btnPrint,
             this.toolStripSeparator4,
             this.btnAddByClass,
+            this.btnNew,
             this.btnClear,
+            this.btnPreferences,
             this.toolStripSeparator10,
-            this.btnCriteria,
             this.btnSolver,
-            this.btnLucky,
-            this.btnAccept});
+            this.btnCriteria,
+            this.btnLucky});
             this.toolStrip1.Location = new System.Drawing.Point(3, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(791, 38);
+            this.toolStrip1.Size = new System.Drawing.Size(627, 52);
             this.toolStrip1.TabIndex = 10;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // toolStripButton2
-            // 
-            this.toolStripButton2.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(47, 35);
-            this.toolStripButton2.Text = "Import";
-            this.toolStripButton2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            // 
             // btnImport
             // 
+            this.btnImport.DropDownButtonWidth = 7;
+            this.btnImport.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.importToolStripMenuItem,
+            this.importAndMergeToolStripMenuItem});
+            this.btnImport.Image = global::UniTimetable.Properties.Resources.Import;
             this.btnImport.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnImport.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnImport.Name = "btnImport";
-            this.btnImport.Size = new System.Drawing.Size(71, 35);
-            this.btnImport.Text = "ImportNew";
+            this.btnImport.Size = new System.Drawing.Size(55, 49);
+            this.btnImport.Text = "Import";
             this.btnImport.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnImport.Click += new System.EventHandler(this.btnImportNew_Click);
+            this.btnImport.ToolTipText = "Import from MyTimetable";
+            this.btnImport.ButtonClick += new System.EventHandler(this.btnImportNew_Click);
+            // 
+            // importToolStripMenuItem
+            // 
+            this.importToolStripMenuItem.Name = "importToolStripMenuItem";
+            this.importToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
+            this.importToolStripMenuItem.Text = "&Import";
+            this.importToolStripMenuItem.Click += new System.EventHandler(this.importToolStripMenuItem_Click);
+            // 
+            // importAndMergeToolStripMenuItem
+            // 
+            this.importAndMergeToolStripMenuItem.Name = "importAndMergeToolStripMenuItem";
+            this.importAndMergeToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
+            this.importAndMergeToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
+            this.importAndMergeToolStripMenuItem.Text = "Import and &Merge";
+            this.importAndMergeToolStripMenuItem.ToolTipText = "Import and merge into current timetable";
+            this.importAndMergeToolStripMenuItem.Click += new System.EventHandler(this.importAndMergeToolStripMenuItem_Click);
+            // 
+            // btnAccept
+            // 
+            this.btnAccept.DropDownButtonWidth = 7;
+            this.btnAccept.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exportToolStripMenuItem,
+            this.toolStripSeparator3,
+            this.toolStripMenuItemColour,
+            this.toolStripMenuItemGreyscale,
+            this.toolStripSeparator5,
+            this.toolStripMenuItemColourEmf,
+            this.toolStripMenuItemGreyscaleEmf,
+            this.toolStripSeparator8,
+            this.toolStripMenuItemBackground});
+            this.btnAccept.Image = global::UniTimetable.Properties.Resources.Export;
+            this.btnAccept.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.btnAccept.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnAccept.Name = "btnAccept";
+            this.btnAccept.Size = new System.Drawing.Size(52, 49);
+            this.btnAccept.Text = "Export";
+            this.btnAccept.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnAccept.ToolTipText = "Export to MyTimetable (set your classes to those selected)";
+            this.btnAccept.ButtonClick += new System.EventHandler(this.BtnAcceptClick);
+            // 
+            // exportToolStripMenuItem
+            // 
+            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            this.exportToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.exportToolStripMenuItem.Text = "&Export";
+            this.exportToolStripMenuItem.Click += new System.EventHandler(this.BtnAcceptClick);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(190, 6);
+            // 
+            // toolStripMenuItemColour
+            // 
+            this.toolStripMenuItemColour.Name = "toolStripMenuItemColour";
+            this.toolStripMenuItemColour.Size = new System.Drawing.Size(193, 22);
+            this.toolStripMenuItemColour.Text = "&Colour...";
+            this.toolStripMenuItemColour.Click += new System.EventHandler(this.colourToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItemGreyscale
+            // 
+            this.toolStripMenuItemGreyscale.Name = "toolStripMenuItemGreyscale";
+            this.toolStripMenuItemGreyscale.Size = new System.Drawing.Size(193, 22);
+            this.toolStripMenuItemGreyscale.Text = "&Greyscale...";
+            this.toolStripMenuItemGreyscale.Click += new System.EventHandler(this.greyscaleToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(190, 6);
+            // 
+            // toolStripMenuItemColourEmf
+            // 
+            this.toolStripMenuItemColourEmf.Name = "toolStripMenuItemColourEmf";
+            this.toolStripMenuItemColourEmf.Size = new System.Drawing.Size(193, 22);
+            this.toolStripMenuItemColourEmf.Text = "C&olour EMF...";
+            this.toolStripMenuItemColourEmf.Click += new System.EventHandler(this.colourVectorToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItemGreyscaleEmf
+            // 
+            this.toolStripMenuItemGreyscaleEmf.Name = "toolStripMenuItemGreyscaleEmf";
+            this.toolStripMenuItemGreyscaleEmf.Size = new System.Drawing.Size(193, 22);
+            this.toolStripMenuItemGreyscaleEmf.Text = "G&reyscale EMF...";
+            this.toolStripMenuItemGreyscaleEmf.Click += new System.EventHandler(this.greyscaleVectorToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator8
+            // 
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            this.toolStripSeparator8.Size = new System.Drawing.Size(190, 6);
+            // 
+            // toolStripMenuItemBackground
+            // 
+            this.toolStripMenuItemBackground.Name = "toolStripMenuItemBackground";
+            this.toolStripMenuItemBackground.Size = new System.Drawing.Size(193, 22);
+            this.toolStripMenuItemBackground.Text = "&Desktop Background...";
+            this.toolStripMenuItemBackground.Click += new System.EventHandler(this.wallpaperToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 38);
-            // 
-            // btnNew
-            // 
-            this.btnNew.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btnNew.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnNew.Name = "btnNew";
-            this.btnNew.Size = new System.Drawing.Size(38, 35);
-            this.btnNew.Text = "Clear";
-            this.btnNew.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 52);
             // 
             // btnOpen
             // 
+            this.btnOpen.Image = global::UniTimetable.Properties.Resources.Open;
             this.btnOpen.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnOpen.Name = "btnOpen";
-            this.btnOpen.Size = new System.Drawing.Size(40, 35);
+            this.btnOpen.Size = new System.Drawing.Size(40, 49);
             this.btnOpen.Text = "Open";
             this.btnOpen.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnOpen.ToolTipText = "Open saved timetable";
             this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
             // 
             // btnSave
             // 
+            this.btnSave.DropDownButtonWidth = 7;
+            this.btnSave.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.saveToolStripMenuItem,
+            this.saveAsToolStripMenuItem});
+            this.btnSave.Image = global::UniTimetable.Properties.Resources.Save;
             this.btnSave.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(35, 35);
+            this.btnSave.Size = new System.Drawing.Size(43, 49);
             this.btnSave.Text = "Save";
             this.btnSave.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            this.btnSave.ToolTipText = "Save timetable to file";
+            this.btnSave.ButtonClick += new System.EventHandler(this.btnSave_Click);
+            // 
+            // saveToolStripMenuItem
+            // 
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.saveToolStripMenuItem.Text = "&Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            // 
+            // saveAsToolStripMenuItem
+            // 
+            this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
+            this.saveAsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.S)));
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.saveAsToolStripMenuItem.Text = "Save &As";
+            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // btnPrint
             // 
+            this.btnPrint.DropDownButtonWidth = 7;
+            this.btnPrint.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sToolStripMenuItem,
+            this.toolStripSeparator7,
+            this.pageSetupToolStripMenuItem,
+            this.printPreviewToolStripMenuItem});
+            this.btnPrint.Image = global::UniTimetable.Properties.Resources.Printer;
             this.btnPrint.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnPrint.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnPrint.Name = "btnPrint";
-            this.btnPrint.Size = new System.Drawing.Size(36, 35);
+            this.btnPrint.Size = new System.Drawing.Size(44, 49);
             this.btnPrint.Text = "Print";
             this.btnPrint.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
+            this.btnPrint.ToolTipText = "Print timetable";
+            this.btnPrint.ButtonClick += new System.EventHandler(this.btnPrint_Click);
+            // 
+            // sToolStripMenuItem
+            // 
+            this.sToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.sToolStripMenuItem.Name = "sToolStripMenuItem";
+            this.sToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
+            this.sToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.sToolStripMenuItem.Text = "&Print";
+            this.sToolStripMenuItem.ToolTipText = "Print timetable";
+            this.sToolStripMenuItem.Click += new System.EventHandler(this.printToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator7
+            // 
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            this.toolStripSeparator7.Size = new System.Drawing.Size(149, 6);
+            // 
+            // pageSetupToolStripMenuItem
+            // 
+            this.pageSetupToolStripMenuItem.Name = "pageSetupToolStripMenuItem";
+            this.pageSetupToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.pageSetupToolStripMenuItem.Text = "Page Set&up...";
+            this.pageSetupToolStripMenuItem.Click += new System.EventHandler(this.pageSetupToolStripMenuItem_Click);
+            // 
+            // printPreviewToolStripMenuItem
+            // 
+            this.printPreviewToolStripMenuItem.Name = "printPreviewToolStripMenuItem";
+            this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.printPreviewToolStripMenuItem.Text = "Print Pre&view...";
+            this.printPreviewToolStripMenuItem.Click += new System.EventHandler(this.printPreviewToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 38);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 52);
             // 
             // btnAddByClass
             // 
-            this.btnAddByClass.Checked = true;
-            this.btnAddByClass.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.btnAddByClass.Image = global::UniTimetable.Properties.Resources.ShowClasses;
             this.btnAddByClass.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnAddByClass.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnAddByClass.Name = "btnAddByClass";
-            this.btnAddByClass.Size = new System.Drawing.Size(79, 35);
-            this.btnAddByClass.Text = "Add by Class";
+            this.btnAddByClass.Size = new System.Drawing.Size(49, 49);
+            this.btnAddByClass.Text = "Classes";
             this.btnAddByClass.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnAddByClass.ToolTipText = "Show/hide avalible classes";
             this.btnAddByClass.Click += new System.EventHandler(this.btnAddByClass_Click);
+            // 
+            // btnNew
+            // 
+            this.btnNew.Image = global::UniTimetable.Properties.Resources.Clear;
+            this.btnNew.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.btnNew.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnNew.Name = "btnNew";
+            this.btnNew.Size = new System.Drawing.Size(38, 49);
+            this.btnNew.Text = "Clear";
+            this.btnNew.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnNew.ToolTipText = "Clear timetable";
+            this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
             // 
             // btnClear
             // 
+            this.btnClear.Image = global::UniTimetable.Properties.Resources.Reset;
             this.btnClear.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnClear.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(39, 35);
+            this.btnClear.Size = new System.Drawing.Size(39, 49);
             this.btnClear.Text = "Reset";
             this.btnClear.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnClear.ToolTipText = "Reset Canterbury Timetable Manager";
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
+            // btnPreferences
+            // 
+            this.btnPreferences.Image = global::UniTimetable.Properties.Resources.Preferences;
+            this.btnPreferences.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.btnPreferences.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnPreferences.Name = "btnPreferences";
+            this.btnPreferences.Size = new System.Drawing.Size(72, 49);
+            this.btnPreferences.Text = "Preferences";
+            this.btnPreferences.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnPreferences.Click += new System.EventHandler(this.SettingsToolStripMenuItemClick);
             // 
             // toolStripSeparator10
             // 
             this.toolStripSeparator10.Name = "toolStripSeparator10";
-            this.toolStripSeparator10.Size = new System.Drawing.Size(6, 38);
-            // 
-            // btnCriteria
-            // 
-            this.btnCriteria.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btnCriteria.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnCriteria.Name = "btnCriteria";
-            this.btnCriteria.Size = new System.Drawing.Size(72, 35);
-            this.btnCriteria.Text = "Edit Criteria";
-            this.btnCriteria.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnCriteria.Click += new System.EventHandler(this.btnCriteria_Click);
+            this.toolStripSeparator10.Size = new System.Drawing.Size(6, 52);
             // 
             // btnSolver
             // 
+            this.btnSolver.Image = global::UniTimetable.Properties.Resources.Find;
             this.btnSolver.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnSolver.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnSolver.Name = "btnSolver";
-            this.btnSolver.Size = new System.Drawing.Size(86, 35);
-            this.btnSolver.Text = "Find Solutions";
+            this.btnSolver.Size = new System.Drawing.Size(60, 49);
+            this.btnSolver.Text = "Solutions";
             this.btnSolver.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnSolver.Click += new System.EventHandler(this.btnSolver_Click);
             // 
+            // btnCriteria
+            // 
+            this.btnCriteria.Image = global::UniTimetable.Properties.Resources.Criteria;
+            this.btnCriteria.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.btnCriteria.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnCriteria.Name = "btnCriteria";
+            this.btnCriteria.Size = new System.Drawing.Size(49, 49);
+            this.btnCriteria.Text = "Criteria";
+            this.btnCriteria.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnCriteria.Click += new System.EventHandler(this.btnCriteria_Click);
+            // 
             // btnLucky
             // 
+            this.btnLucky.Image = global::UniTimetable.Properties.Resources.Random;
             this.btnLucky.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnLucky.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnLucky.Name = "btnLucky";
-            this.btnLucky.Size = new System.Drawing.Size(83, 35);
-            this.btnLucky.Text = "Feeling Lucky";
+            this.btnLucky.Size = new System.Drawing.Size(56, 49);
+            this.btnLucky.Text = "Random";
             this.btnLucky.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnLucky.Click += new System.EventHandler(this.btnLucky_Click);
-            // 
-            // btnAccept
-            // 
-            this.btnAccept.Image = ((System.Drawing.Image)(resources.GetObject("btnAccept.Image")));
-            this.btnAccept.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnAccept.Name = "btnAccept";
-            this.btnAccept.Size = new System.Drawing.Size(104, 35);
-            this.btnAccept.Text = "Accept Timetable";
-            this.btnAccept.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnAccept.Click += new System.EventHandler(this.BtnAcceptClick);
             // 
             // RightToolStripPanel
             // 
@@ -756,19 +650,19 @@ namespace UniTimetable
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.tableLayoutPanel2);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(992, 662);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(992, 672);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             // 
             // toolStripContainer1.LeftToolStripPanel
             // 
             this.toolStripContainer1.LeftToolStripPanel.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStripContainer1.Location = new System.Drawing.Point(0, 24);
+            this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
             this.toolStripContainer1.Name = "toolStripContainer1";
             // 
             // toolStripContainer1.RightToolStripPanel
             // 
             this.toolStripContainer1.RightToolStripPanel.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStripContainer1.Size = new System.Drawing.Size(992, 700);
+            this.toolStripContainer1.Size = new System.Drawing.Size(992, 724);
             this.toolStripContainer1.TabIndex = 10;
             this.toolStripContainer1.Text = "toolStripContainer1";
             // 
@@ -793,7 +687,7 @@ namespace UniTimetable
             this.tableLayoutPanel2.Padding = new System.Windows.Forms.Padding(6, 0, 6, 6);
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(992, 662);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(992, 672);
             this.tableLayoutPanel2.TabIndex = 13;
             // 
             // tableLayoutPanel1
@@ -810,13 +704,13 @@ namespace UniTimetable
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(20, 656);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(20, 666);
             this.tableLayoutPanel1.TabIndex = 16;
             // 
             // btnShowHide
             // 
             this.btnShowHide.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnShowHide.Location = new System.Drawing.Point(0, 278);
+            this.btnShowHide.Location = new System.Drawing.Point(0, 283);
             this.btnShowHide.Margin = new System.Windows.Forms.Padding(0);
             this.btnShowHide.Name = "btnShowHide";
             this.btnShowHide.Size = new System.Drawing.Size(20, 100);
@@ -830,42 +724,12 @@ namespace UniTimetable
             // 
             this.groupBox1.Controls.Add(this.timetableControl1);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox1.Location = new System.Drawing.Point(12, 6);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(6);
+            this.groupBox1.Location = new System.Drawing.Point(6, 0);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(0, 0, 6, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(804, 644);
+            this.groupBox1.Size = new System.Drawing.Size(810, 666);
             this.groupBox1.TabIndex = 13;
             this.groupBox1.TabStop = false;
-            // 
-            // timetableControl1
-            // 
-            this.timetableControl1.AllowDrop = true;
-            this.timetableControl1.BackColor = System.Drawing.Color.Transparent;
-            this.timetableControl1.EnableDrag = true;
-            this.timetableControl1.Grayscale = false;
-            this.timetableControl1.HourEnd = 21;
-            this.timetableControl1.HourStart = 8;
-            this.timetableControl1.Location = new System.Drawing.Point(2, 8);
-            this.timetableControl1.Name = "timetableControl1";
-            this.timetableControl1.ShowAll = false;
-            this.timetableControl1.ShowDays = true;
-            this.timetableControl1.ShowDragGhost = true;
-            this.timetableControl1.ShowGrayArea = true;
-            this.timetableControl1.ShowLocation = true;
-            this.timetableControl1.ShowText = true;
-            this.timetableControl1.ShowTimes = true;
-            this.timetableControl1.ShowWeekend = true;
-            this.timetableControl1.Size = new System.Drawing.Size(801, 581);
-            this.timetableControl1.TabIndex = 9;
-            this.timetableControl1.Timetable = null;
-            this.timetableControl1.TimetableMouseClick += new UniTimetable.TimetableEventHandler(this.timetableControl1_TimetableMouseClick);
-            this.timetableControl1.TimetableMouseDoubleClick += new UniTimetable.TimetableEventHandler(this.timetableControl1_TimetableMouseDoubleClick);
-            this.timetableControl1.TimetableChanged += new UniTimetable.TimetableChangedEventHandler(this.timetableControl1_TimetableChanged);
-            this.timetableControl1.ResizeCell += new UniTimetable.ResizeCellEventHandler(this.timetableControl1_ResizeCell);
-            this.timetableControl1.BoundsClipped += new UniTimetable.BoundsClippedEventHandler(this.timetableControl1_BoundsClipped);
-            this.timetableControl1.DragDrop += new System.Windows.Forms.DragEventHandler(this.timetableControl1_DragDrop);
-            this.timetableControl1.DragEnter += new System.Windows.Forms.DragEventHandler(this.listBox1_DragEnter);
-            this.timetableControl1.DragOver += new System.Windows.Forms.DragEventHandler(this.timetableControl1_DragOver);
             // 
             // tableLayoutPanel3
             // 
@@ -884,8 +748,61 @@ namespace UniTimetable
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(132, 644);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(132, 654);
             this.tableLayoutPanel3.TabIndex = 14;
+            // 
+            // lblRemaining
+            // 
+            this.lblRemaining.AutoSize = true;
+            this.lblRemaining.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblRemaining.Location = new System.Drawing.Point(3, 0);
+            this.lblRemaining.Name = "lblRemaining";
+            this.lblRemaining.Size = new System.Drawing.Size(126, 20);
+            this.lblRemaining.TabIndex = 15;
+            this.lblRemaining.Text = "Remaining";
+            this.lblRemaining.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblIgnored
+            // 
+            this.lblIgnored.AutoSize = true;
+            this.lblIgnored.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblIgnored.Location = new System.Drawing.Point(3, 449);
+            this.lblIgnored.Name = "lblIgnored";
+            this.lblIgnored.Size = new System.Drawing.Size(126, 20);
+            this.lblIgnored.TabIndex = 16;
+            this.lblIgnored.Text = "Ignored";
+            this.lblIgnored.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // timetableControl1
+            // 
+            this.timetableControl1.AllowDrop = true;
+            this.timetableControl1.BackColor = System.Drawing.Color.Transparent;
+            this.timetableControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.timetableControl1.EnableDrag = true;
+            this.timetableControl1.Grayscale = false;
+            this.timetableControl1.HourEnd = 21;
+            this.timetableControl1.HourStart = 8;
+            this.timetableControl1.Location = new System.Drawing.Point(3, 16);
+            this.timetableControl1.Name = "timetableControl1";
+            this.timetableControl1.ShowAll = false;
+            this.timetableControl1.ShowDays = true;
+            this.timetableControl1.ShowDragGhost = true;
+            this.timetableControl1.ShowGrayArea = true;
+            this.timetableControl1.ShowLocation = true;
+            this.timetableControl1.ShowText = true;
+            this.timetableControl1.ShowTimes = true;
+            this.timetableControl1.ShowWeekend = true;
+            this.timetableControl1.Size = new System.Drawing.Size(804, 647);
+            this.timetableControl1.TabIndex = 9;
+            this.timetableControl1.Timetable = null;
+            this.timetableControl1.TimetableMouseClick += new UniTimetable.TimetableEventHandler(this.timetableControl1_TimetableMouseClick);
+            this.timetableControl1.TimetableMouseDoubleClick += new UniTimetable.TimetableEventHandler(this.timetableControl1_TimetableMouseDoubleClick);
+            this.timetableControl1.TimetableChanged += new UniTimetable.TimetableChangedEventHandler(this.timetableControl1_TimetableChanged);
+            this.timetableControl1.ResizeCell += new UniTimetable.ResizeCellEventHandler(this.timetableControl1_ResizeCell);
+            this.timetableControl1.BoundsClipped += new UniTimetable.BoundsClippedEventHandler(this.timetableControl1_BoundsClipped);
+            this.timetableControl1.DragDrop += new System.Windows.Forms.DragEventHandler(this.timetableControl1_DragDrop);
+            this.timetableControl1.DragEnter += new System.Windows.Forms.DragEventHandler(this.listBox1_DragEnter);
+            this.timetableControl1.DragOver += new System.Windows.Forms.DragEventHandler(this.timetableControl1_DragOver);
             // 
             // listBox2
             // 
@@ -895,10 +812,10 @@ namespace UniTimetable
             this.listBox2.FormattingEnabled = true;
             this.listBox2.IntegralHeight = false;
             this.listBox2.ItemHeight = 40;
-            this.listBox2.Location = new System.Drawing.Point(0, 462);
+            this.listBox2.Location = new System.Drawing.Point(0, 469);
             this.listBox2.Margin = new System.Windows.Forms.Padding(0);
             this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(132, 182);
+            this.listBox2.Size = new System.Drawing.Size(132, 185);
             this.listBox2.TabIndex = 14;
             this.listBox2.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBox1_DrawItem);
             this.listBox2.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
@@ -919,7 +836,7 @@ namespace UniTimetable
             this.listBox1.Location = new System.Drawing.Point(0, 20);
             this.listBox1.Margin = new System.Windows.Forms.Padding(0);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(132, 422);
+            this.listBox1.Size = new System.Drawing.Size(132, 429);
             this.listBox1.TabIndex = 14;
             this.listBox1.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBox1_DrawItem);
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
@@ -929,28 +846,6 @@ namespace UniTimetable
             this.listBox1.Leave += new System.EventHandler(this.listBox1_Leave);
             this.listBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listBox1_MouseDown);
             // 
-            // lblRemaining
-            // 
-            this.lblRemaining.AutoSize = true;
-            this.lblRemaining.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblRemaining.Location = new System.Drawing.Point(3, 0);
-            this.lblRemaining.Name = "lblRemaining";
-            this.lblRemaining.Size = new System.Drawing.Size(126, 20);
-            this.lblRemaining.TabIndex = 15;
-            this.lblRemaining.Text = "Remaining";
-            this.lblRemaining.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblIgnored
-            // 
-            this.lblIgnored.AutoSize = true;
-            this.lblIgnored.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblIgnored.Location = new System.Drawing.Point(3, 442);
-            this.lblIgnored.Name = "lblIgnored";
-            this.lblIgnored.Size = new System.Drawing.Size(126, 20);
-            this.lblIgnored.TabIndex = 16;
-            this.lblIgnored.Text = "Ignored";
-            this.lblIgnored.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // FormMain
             // 
             this.AllowDrop = true;
@@ -958,16 +853,12 @@ namespace UniTimetable
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(992, 724);
             this.Controls.Add(this.toolStripContainer1);
-            this.Controls.Add(this.menuStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
-            this.MainMenuStrip = this.menuStrip;
             this.MinimumSize = new System.Drawing.Size(640, 480);
             this.Name = "FormMain";
-            this.Text = "University Timetable Manager";
+            this.Text = "Canterbury Timetable Manager";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
-            this.menuStrip.ResumeLayout(false);
-            this.menuStrip.PerformLayout();
             this.contextMenuStrip1.ResumeLayout(false);
             this.streamMenu.ResumeLayout(false);
             this.timeMenu.ResumeLayout(false);
@@ -985,27 +876,13 @@ namespace UniTimetable
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.MenuStrip menuStrip;
-        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem timetableToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem coloursToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem deleteClassToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripMenuItem printToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem pageSetupToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem printPreviewToolStripMenuItem;
         private System.Drawing.Printing.PrintDocument printDocument;
         private System.Windows.Forms.PrintDialog printDialog;
         private System.Windows.Forms.PageSetupDialog pageSetupDialog;
@@ -1013,12 +890,6 @@ namespace UniTimetable
         private System.Windows.Forms.ToolStripMenuItem findClassAtThisTimeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem findAlternativeStreamToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewEquivalentStreamsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
-        private System.Windows.Forms.ToolStripMenuItem exportImageToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem colourToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem greyscaleToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem optimiseToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem findSolutionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private System.Windows.Forms.ToolStripMenuItem addUnavailableTimeslotToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem removeUnavailableTimeslotToolStripMenuItem;
@@ -1029,28 +900,15 @@ namespace UniTimetable
         private System.Windows.Forms.ToolStripMenuItem equivalentToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip timeMenu;
         private System.Windows.Forms.ToolStripMenuItem findClassHereToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
-        private System.Windows.Forms.ToolStripMenuItem colourVectorToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem greyscaleVectorToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
-        private System.Windows.Forms.ToolStripMenuItem undoToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem redoToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem editSolutionCriteriaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem unavailabilityToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip unavailableMenu;
         private System.Windows.Forms.ToolStripMenuItem editUnavailableToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem removeUnavailableToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem importToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem importAndMergeToolStripMenuItem;
         private System.Windows.Forms.ToolStripPanel BottomToolStripPanel;
         private System.Windows.Forms.ToolStripPanel TopToolStripPanel;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton btnNew;
-        private System.Windows.Forms.ToolStripButton btnImport;
         private System.Windows.Forms.ToolStripButton btnOpen;
-        private System.Windows.Forms.ToolStripButton btnSave;
-        private System.Windows.Forms.ToolStripButton btnPrint;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripButton btnCriteria;
         private System.Windows.Forms.ToolStripButton btnSolver;
@@ -1073,10 +931,28 @@ namespace UniTimetable
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.Label lblRemaining;
         private System.Windows.Forms.Label lblIgnored;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
-        private System.Windows.Forms.ToolStripMenuItem wallpaperToolStripMenuItem;
-        private System.Windows.Forms.ToolStripButton btnAccept;
-        private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.ToolStripSplitButton btnSave;
+        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSplitButton btnImport;
+        private System.Windows.Forms.ToolStripMenuItem importToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem importAndMergeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSplitButton btnAccept;
+        private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemColour;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemGreyscale;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemColourEmf;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemGreyscaleEmf;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemBackground;
+        private System.Windows.Forms.ToolStripSplitButton btnPrint;
+        private System.Windows.Forms.ToolStripMenuItem sToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
+        private System.Windows.Forms.ToolStripMenuItem pageSetupToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem printPreviewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton btnPreferences;
     }
 }
 

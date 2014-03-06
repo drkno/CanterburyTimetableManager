@@ -402,8 +402,8 @@ namespace UniTimetable
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(544, 525);
-            this.Controls.Add(this.panelStreams);
             this.Controls.Add(this.panelLoading);
+            this.Controls.Add(this.panelStreams);
             this.Controls.Add(this.panelBottom);
             this.Controls.Add(this.panelPreview);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -415,8 +415,8 @@ namespace UniTimetable
             this.Load += new System.EventHandler(this.FormImportLoad);
             this.Controls.SetChildIndex(this.panelPreview, 0);
             this.Controls.SetChildIndex(this.panelBottom, 0);
-            this.Controls.SetChildIndex(this.panelLoading, 0);
             this.Controls.SetChildIndex(this.panelStreams, 0);
+            this.Controls.SetChildIndex(this.panelLoading, 0);
             this.panelBottom.ResumeLayout(false);
             this.panelStreams.ResumeLayout(false);
             this.panelStreams.PerformLayout();

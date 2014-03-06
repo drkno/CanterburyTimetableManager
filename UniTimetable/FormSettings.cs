@@ -1,52 +1,46 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using UniTimetable.Properties;
 
 namespace UniTimetable
 {
     public partial class FormSettings : Form
     {
-        Settings Settings_ = null;
+        Settings _settings;
+        private FormMain _form;
 
         public FormSettings()
         {
             InitializeComponent();
-            for (int i = 0; i <= 23; i++)
+            for (var i = 0; i <= 23; i++)
             {
-                int hr = i % 24;
-                string time = (hr < 12 ? "am" : "pm");
+                var hr = i % 24;
+                var time = (hr < 12 ? "am" : "pm");
                 hr = i % 12;
-                time = (hr == 0 ? 12 : hr).ToString() + time;
+                time = (hr == 0 ? 12 : hr) + time;
 
                 ddStart.Items.Add(time);
                 ddEnd.Items.Add(time);
             }
         }
 
-        private void FormSettings_Load(object sender, EventArgs e)
+        private void FormSettingsLoad(object sender, EventArgs e)
         {
-            cbLarge.Checked = Settings_.UseLargeIcons;
-            cbGhost.Checked = Settings_.ShowGhost;
-            cbWeekend.Checked = Settings_.ShowWeekend;
-            cbGray.Checked = Settings_.ShowGray;
-            cbLocation.Checked = Settings_.ShowLocation;
-            ddStart.SelectedIndex = Settings_.HourStart;
-            ddEnd.SelectedIndex = Settings_.HourEnd;
-            cbReset.Checked = Settings_.ResetWindow;
+            cbGhost.Checked = _settings.ShowGhost;
+            cbWeekend.Checked = _settings.ShowWeekend;
+            cbGray.Checked = _settings.ShowGray;
+            cbLocation.Checked = _settings.ShowLocation;
+            ddStart.SelectedIndex = _settings.HourStart;
+            ddEnd.SelectedIndex = _settings.HourEnd;
+            cbReset.Checked = _settings.ResetWindow;
         }
 
-        public Settings ShowDialog(Settings settings)
+        public Settings ShowDialog(Settings settings, FormMain formMain)
         {
-            Settings_ = settings;
+            _form = formMain;
+            _settings = settings;
             if (base.ShowDialog() != DialogResult.OK)
                 return null;
             return new Settings(
-                cbLarge.Checked,
                 cbGhost.Checked,
                 cbWeekend.Checked,
                 cbGray.Checked,
@@ -61,7 +55,7 @@ namespace UniTimetable
             throw new Exception("No input was provided.");
         }
 
-        private void btnOK_Click(object sender, EventArgs e)
+        private void BtnOkClick(object sender, EventArgs e)
         {
             if (ddStart.SelectedIndex == -1)
             {
@@ -85,10 +79,22 @@ namespace UniTimetable
             Close();
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+        private void BtnCancelClick(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
             Close();
+        }
+
+        private void ButtonColoursClick(object sender, EventArgs e)
+        {
+            if (_form == null || _form.Timetable_ == null)
+                return;
+
+            var formStyle = new FormStyle();
+            if (formStyle.ShowDialog(_form.Timetable_) == DialogResult.Cancel)
+                return;
+
+            _form.MadeChanges(false);
         }
     }
 }

@@ -16,9 +16,10 @@ namespace UniTimetable
             Close();
         }
 
-        public DialogResult ShowDialog(out string username, out string password, string title = "Import Timetable")
+        public DialogResult ShowDialog(out string username, out string password, string title = "Import Timetable", string acceptText = "Import")
         {
             Text = title;
+            buttonImport.Text = acceptText;
             var result = ShowDialog();
             username = textBoxUsername.Text;
             password = textBoxPassword.Text;

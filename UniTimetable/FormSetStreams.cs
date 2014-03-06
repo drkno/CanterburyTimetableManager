@@ -25,7 +25,7 @@ namespace UniTimetable
                 ModifyList("Logging In...");
                 string username, password;
                 var login = new FormLogin();
-                login.ShowDialog(out username, out password, "Login");
+                login.ShowDialog(out username, out password, "Login", "Set Course");
                 importer.SetLogin(username, password);
             }
 
