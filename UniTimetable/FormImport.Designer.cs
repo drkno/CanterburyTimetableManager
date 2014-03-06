@@ -107,6 +107,7 @@ namespace UniTimetable
             // btnFinish
             // 
             this.btnFinish.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnFinish.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnFinish.Location = new System.Drawing.Point(355, 8);
             this.btnFinish.Name = "btnFinish";
             this.btnFinish.Size = new System.Drawing.Size(75, 23);
@@ -345,11 +346,14 @@ namespace UniTimetable
             // timetableControl1
             // 
             this.timetableControl1.EnableDrag = false;
+            this.timetableControl1.Font = new System.Drawing.Font("Arial Narrow", 8.25F);
             this.timetableControl1.Grayscale = false;
             this.timetableControl1.HourEnd = 21;
             this.timetableControl1.HourStart = 8;
             this.timetableControl1.Location = new System.Drawing.Point(22, 170);
+            this.timetableControl1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.timetableControl1.Name = "timetableControl1";
+            this.timetableControl1.OutlineColour = System.Drawing.Color.LightGray;
             this.timetableControl1.ShowAll = true;
             this.timetableControl1.ShowDays = false;
             this.timetableControl1.ShowDragGhost = true;
@@ -360,6 +364,7 @@ namespace UniTimetable
             this.timetableControl1.ShowWeekend = true;
             this.timetableControl1.Size = new System.Drawing.Size(220, 155);
             this.timetableControl1.TabIndex = 3;
+            this.timetableControl1.TimeslotUnavalibleColour = System.Drawing.Color.LightGray;
             this.timetableControl1.Timetable = null;
             // 
             // txtTreeDetails

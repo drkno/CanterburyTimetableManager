@@ -1,6 +1,6 @@
 namespace UniTimetable
 {
-    partial class TimetableControl
+    sealed partial class TimetableControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -32,9 +32,12 @@ namespace UniTimetable
             // 
             // TimetableControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Font = new System.Drawing.Font("Arial Narrow", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.Name = "TimetableControl";
+            this.Size = new System.Drawing.Size(151, 119);
             this.ResumeLayout(false);
 
         }

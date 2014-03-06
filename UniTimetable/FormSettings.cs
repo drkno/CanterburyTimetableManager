@@ -87,11 +87,11 @@ namespace UniTimetable
 
         private void ButtonColoursClick(object sender, EventArgs e)
         {
-            if (_form == null || _form.Timetable_ == null)
+            if (_form == null || _form.Timetable == null)
                 return;
 
             var formStyle = new FormStyle();
-            if (formStyle.ShowDialog(_form.Timetable_) == DialogResult.Cancel)
+            if (formStyle.ShowDialog(_form.Timetable) == DialogResult.Cancel)
                 return;
 
             _form.MadeChanges(false);

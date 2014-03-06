@@ -20,4 +20,3 @@ C:\Users\Matthew\Desktop\Sort\SourceCode\CanterburyTimetableManager\UniTimetable
 C:\Users\Matthew\Desktop\Sort\SourceCode\CanterburyTimetableManager\UniTimetable\obj\Release\CanterburyTimetable.csproj.GenerateResource.Cache
 C:\Users\Matthew\Desktop\Sort\SourceCode\CanterburyTimetableManager\UniTimetable\obj\Release\CanterburyTimetable.exe
 C:\Users\Matthew\Desktop\Sort\SourceCode\CanterburyTimetableManager\UniTimetable\obj\Release\CanterburyTimetable.pdb
-C:\Users\Matthew\Desktop\Sort\SourceCode\CanterburyTimetableManager\UniTimetable\obj\Release\CanterburyTimetable.csprojResolveAssemblyReference.cache
