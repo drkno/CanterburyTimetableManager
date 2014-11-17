@@ -16,7 +16,7 @@ Version 1.0.0.0:
 -----------------
 Unreleased initial source code, forked from original project.
 
-This program is a fork of University Timetable Manager (http://jack.valmadre.net/timetable/) specifically for the University of Canterbury. It's code is released under the same licence as the original until all code from the original is removed.
+This program is a fork of University Timetable Manager (http://jack.valmadre.net/timetable/) specifically for the University of Canterbury. It's code is released under the same licence as the original until all code from the original is removed. As time has gone on the base code and interface has begun to barely resemble the origional.
 
 From the origional description:
 The timetable manager calculates the best possible timetable you can choose this semester. You can select which criteria to optimise against, such as the number of days at uni, the average start time, the total time at uni or even the longest block of consecutive classes. There's also a swish drag-drop interface for making manual adjustments.
