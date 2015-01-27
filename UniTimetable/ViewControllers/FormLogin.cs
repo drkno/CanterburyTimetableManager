@@ -1,7 +1,11 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Windows.Forms;
 
-namespace UniTimetable
+#endregion
+
+namespace UniTimetable.ViewControllers
 {
     public partial class FormLogin : FormModel
     {
@@ -16,7 +20,8 @@ namespace UniTimetable
             Close();
         }
 
-        public DialogResult ShowDialog(out string username, out string password, string title = "Import Timetable", string acceptText = "Import")
+        public DialogResult ShowDialog(out string username, out string password, string title = "Import Timetable",
+            string acceptText = "Import")
         {
             Text = title;
             buttonImport.Text = acceptText;

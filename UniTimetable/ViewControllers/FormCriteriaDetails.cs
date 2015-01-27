@@ -1,11 +1,16 @@
+#region
+
 using System;
 using System.Windows.Forms;
+using UniTimetable.Model.Solver;
 
-namespace UniTimetable
+#endregion
+
+namespace UniTimetable.ViewControllers
 {
     public partial class FormCriteriaDetails : Form
     {
-        Solver.Criteria Criteria_;
+        private Solver.Criteria Criteria_;
 
         public FormCriteriaDetails()
         {
@@ -50,9 +55,9 @@ namespace UniTimetable
             }
             else
             {
-                ddField.SelectedIndex = (int)Criteria_.FieldIndex;
+                ddField.SelectedIndex = (int) Criteria_.FieldIndex;
                 UpdatePreferenceItems();
-                ddPreference.SelectedIndex = (int)Criteria_.Preference;
+                ddPreference.SelectedIndex = (int) Criteria_.Preference;
             }
         }
 
@@ -61,7 +66,7 @@ namespace UniTimetable
             UpdatePreferenceItems();
             if (ddField.SelectedIndex != -1)
             {
-                ddPreference.SelectedIndex = (int)Solver.Fields[ddField.SelectedIndex].DefaultPreference;
+                ddPreference.SelectedIndex = (int) Solver.Fields[ddField.SelectedIndex].DefaultPreference;
             }
         }
 
@@ -87,20 +92,22 @@ namespace UniTimetable
         {
             if (ddField.SelectedIndex == -1)
             {
-                MessageBox.Show("Please select a criteria.", "Criteria Details", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Please select a criteria.", "Criteria Details", MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation);
                 ddField.Focus();
                 return;
             }
             if (ddPreference.SelectedIndex == -1)
             {
-                MessageBox.Show("Please select a preference.", "Criteria Details", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Please select a preference.", "Criteria Details", MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation);
                 ddPreference.Focus();
                 return;
             }
 
             Criteria_ = new Solver.Criteria(
-                (Solver.FieldIndex)ddField.SelectedIndex,
-                (Solver.Preference)ddPreference.SelectedIndex);
+                (Solver.FieldIndex) ddField.SelectedIndex,
+                (Solver.Preference) ddPreference.SelectedIndex);
 
             DialogResult = DialogResult.OK;
             Close();

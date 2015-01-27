@@ -1,16 +1,20 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using UniTimetable.Model.Solver;
 
-namespace UniTimetable
+#endregion
+
+namespace UniTimetable.ViewControllers
 {
     public partial class FormCriteria : Form
     {
-        Solver Solver_;
-
-        Solver.Criteria DragCriteria_;
-        int DragTarget_;
+        private Solver.Criteria DragCriteria_;
+        private int DragTarget_;
+        private Solver Solver_;
 
         public FormCriteria()
         {
@@ -18,6 +22,16 @@ namespace UniTimetable
 
             ddPresets.Items.Clear();
             ddPresets.Items.AddRange(Solver.Presets);
+        }
+
+        private void ddPresets_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int index = ddPresets.SelectedIndex;
+            if (index == -1)
+                return;
+
+            Solver.Preset preset = Solver.Presets[index];
+            LoadLists(preset.Criteria, preset.Filters);
         }
 
         #region Opening form
@@ -70,10 +84,11 @@ namespace UniTimetable
                 return;
 
             Graphics g = e.Graphics;
-            Solver.Criteria criteria = (Solver.Criteria)listBoxCriteria.Items[e.Index];
+            Solver.Criteria criteria = (Solver.Criteria) listBoxCriteria.Items[e.Index];
 
             const int margin = 2;
-            Rectangle r = new Rectangle(e.Bounds.X + margin, e.Bounds.Y + margin, e.Bounds.Width - 2 * margin, e.Bounds.Height - 2 * margin);
+            Rectangle r = new Rectangle(e.Bounds.X + margin, e.Bounds.Y + margin, e.Bounds.Width - 2*margin,
+                e.Bounds.Height - 2*margin);
 
             Font font;
             Rectangle q;
@@ -124,7 +139,7 @@ namespace UniTimetable
                 return;
             }
 
-            Solver.Criteria criteria = (Solver.Criteria)listBoxCriteria.Items[index];
+            Solver.Criteria criteria = (Solver.Criteria) listBoxCriteria.Items[index];
             DragTarget_ = -1;
             DragCriteria_ = null;
             // drag drop failed
@@ -154,7 +169,7 @@ namespace UniTimetable
 
         private void listBoxCriteria_DragEnter(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(typeof(Solver.Criteria)))
+            if (e.Data.GetDataPresent(typeof (Solver.Criteria)))
             {
                 e.Effect = DragDropEffects.Move;
             }
@@ -166,12 +181,12 @@ namespace UniTimetable
 
         private void listBoxCriteria_DragDrop(object sender, DragEventArgs e)
         {
-            if (!e.Data.GetDataPresent(typeof(Solver.Criteria)))
+            if (!e.Data.GetDataPresent(typeof (Solver.Criteria)))
                 return;
 
             Point location = listBoxCriteria.PointToClient(new Point(e.X, e.Y));
             DragTarget_ = listBoxCriteria.IndexFromPoint(location);
-            DragCriteria_ = (Solver.Criteria)e.Data.GetData(typeof(Solver.Criteria));
+            DragCriteria_ = (Solver.Criteria) e.Data.GetData(typeof (Solver.Criteria));
         }
 
         private void listBoxCriteria_KeyDown(object sender, KeyEventArgs e)
@@ -227,7 +242,7 @@ namespace UniTimetable
             if (index == -1)
                 return;
 
-            Solver.Criteria criteria = (Solver.Criteria)listBoxCriteria.SelectedItem;
+            Solver.Criteria criteria = (Solver.Criteria) listBoxCriteria.SelectedItem;
             FormCriteriaDetails formDetails = new FormCriteriaDetails();
             criteria = formDetails.ShowDialog(criteria);
             if (criteria == null)
@@ -247,7 +262,7 @@ namespace UniTimetable
             listBoxCriteria.Items.RemoveAt(index);
             listBoxCriteria.SelectedIndex = Math.Min(index, listBoxCriteria.Items.Count - 1);
             UpdateCriteriaButtons();
-            
+
             ddPresets.SelectedIndex = -1;
         }
 
@@ -270,10 +285,11 @@ namespace UniTimetable
                 return;
 
             Graphics g = e.Graphics;
-            Solver.Filter filter = (Solver.Filter)listBoxFilters.Items[e.Index];
+            Solver.Filter filter = (Solver.Filter) listBoxFilters.Items[e.Index];
 
             const int margin = 2;
-            Rectangle r = new Rectangle(e.Bounds.X + margin, e.Bounds.Y + margin, e.Bounds.Width - 2 * margin, e.Bounds.Height - 2 * margin);
+            Rectangle r = new Rectangle(e.Bounds.X + margin, e.Bounds.Y + margin, e.Bounds.Width - 2*margin,
+                e.Bounds.Height - 2*margin);
 
             Font font;
             Rectangle q;
@@ -292,8 +308,8 @@ namespace UniTimetable
             font = new Font("Microsoft Sans Serif", 8.25f, FontStyle.Regular);
             q = new Rectangle(r.X + specLeft, r.Y + specTop, r.Width - specLeft, r.Height - specTop);
             string text = (filter.Exclude ? "Must not" : "Must") + " be " +
-                Solver.Filter.FieldSpecificTest(filter) + " " +
-                filter.ValueToString();
+                          Solver.Filter.FieldSpecificTest(filter) + " " +
+                          filter.ValueToString();
             g.DrawString(text, font, Brushes.Black, q, format);
 
             g.DrawRectangle(Pens.Black, r);
@@ -363,7 +379,7 @@ namespace UniTimetable
             if (index == -1)
                 return;
 
-            Solver.Filter filter = (Solver.Filter)listBoxFilters.SelectedItem;
+            Solver.Filter filter = (Solver.Filter) listBoxFilters.SelectedItem;
             FormFilterDetails formDetails = new FormFilterDetails();
             filter = formDetails.ShowDialog(filter);
             if (filter == null)
@@ -416,7 +432,7 @@ namespace UniTimetable
                 for (int i = 0; i < Solver_.Comparer.Criteria.Count; i++)
                 {
                     Solver.Criteria criteria = Solver_.Comparer.Criteria[i];
-                    Solver.Criteria other = (Solver.Criteria)listBoxCriteria.Items[i];
+                    Solver.Criteria other = (Solver.Criteria) listBoxCriteria.Items[i];
                     if (criteria.FieldIndex != other.FieldIndex || criteria.Preference != other.Preference)
                     {
                         changed = false;
@@ -433,7 +449,7 @@ namespace UniTimetable
                 for (int i = 0; i < Solver_.Filters.Count; i++)
                 {
                     Solver.Filter filter = Solver_.Filters[i];
-                    Solver.Filter other = (Solver.Filter)listBoxFilters.Items[i];
+                    Solver.Filter other = (Solver.Filter) listBoxFilters.Items[i];
                     if (filter.FieldIndex == other.FieldIndex
                         && filter.Exclude == other.Exclude
                         && filter.Test == other.Test
@@ -476,15 +492,5 @@ namespace UniTimetable
         }
 
         #endregion
-
-        private void ddPresets_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            int index = ddPresets.SelectedIndex;
-            if (index == -1)
-                return;
-
-            Solver.Preset preset = Solver.Presets[index];
-            LoadLists(preset.Criteria, preset.Filters);
-        }
     }
 }

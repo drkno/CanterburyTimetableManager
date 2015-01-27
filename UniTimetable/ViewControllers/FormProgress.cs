@@ -1,14 +1,19 @@
+#region
+
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
+using UniTimetable.Model.Solver;
 
-namespace UniTimetable
+#endregion
+
+namespace UniTimetable.ViewControllers
 {
     partial class FormProgress : Form
     {
-        Solver Solver_ = null;
-        float TimeElapsed_ = 0f;
-        SolverResult Result_ = SolverResult.Clash;
+        private SolverResult Result_ = SolverResult.Clash;
+        private Solver Solver_;
+        private float TimeElapsed_;
 
         public FormProgress()
         {
@@ -41,7 +46,7 @@ namespace UniTimetable
 
         private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            e.Result = Solver_.Compute((BackgroundWorker)sender, e);
+            e.Result = Solver_.Compute((BackgroundWorker) sender, e);
         }
 
         private void backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -52,7 +57,7 @@ namespace UniTimetable
         private void UpdateProgress(int percent)
         {
             progressBar.Value = percent;
-            txtProgress.Text = "Calculating: " + percent.ToString() + "%\r\n" + txtProgress.Lines[1];
+            txtProgress.Text = "Calculating: " + percent + "%\r\n" + txtProgress.Lines[1];
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -65,22 +70,26 @@ namespace UniTimetable
             timer.Stop();
             if (e.Cancelled)
             {
-                if (Solver_.Solutions.Count > 0 && MessageBox.Show("Calculation aborted!\nWould you like to use the solutions found so far?", "Find Solutions", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (Solver_.Solutions.Count > 0 &&
+                    MessageBox.Show("Calculation aborted!\nWould you like to use the solutions found so far?",
+                        "Find Solutions", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     Result_ = SolverResult.Complete;
                 else
                     Result_ = SolverResult.UserCancel;
             }
             else
             {
-                Result_ = (SolverResult)e.Result;
+                Result_ = (SolverResult) e.Result;
                 if (Result_ == SolverResult.NoTimetable)
                 {
-                    MessageBox.Show("No timetable loaded.", "Find Solutions", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("No timetable loaded.", "Find Solutions", MessageBoxButtons.OK,
+                        MessageBoxIcon.Exclamation);
                 }
                 else if (Result_ == SolverResult.Clash)
                 {
                     // TODO: be more helpful here (maybe move this back to main form?)
-                    MessageBox.Show("Couldn't find any solutions, there's an inherent clash.", "Find Solutions", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("Couldn't find any solutions, there's an inherent clash.", "Find Solutions",
+                        MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
             Close();

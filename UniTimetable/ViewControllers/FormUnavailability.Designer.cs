@@ -1,4 +1,4 @@
-namespace UniTimetable
+namespace UniTimetable.ViewControllers
 {
     partial class FormUnavailability
     {
@@ -39,7 +39,7 @@ namespace UniTimetable
             this.timeEnd = new System.Windows.Forms.DateTimePicker();
             this.txtName = new System.Windows.Forms.TextBox();
             this.ddDay = new System.Windows.Forms.ComboBox();
-            this.etchedLine1 = new UniTimetable.EtchedLine();
+            this.etchedLine1 = new EtchedLine();
             this.SuspendLayout();
             // 
             // btnCancel

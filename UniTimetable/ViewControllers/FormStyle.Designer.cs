@@ -1,4 +1,4 @@
-namespace UniTimetable
+namespace UniTimetable.ViewControllers
 {
     partial class FormStyle
     {
@@ -34,7 +34,7 @@ namespace UniTimetable
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.listBox1 = new UniTimetable.ListBoxBuffered();
+            this.listBox1 = new ListBoxBuffered();
             this.ddSchemes = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();

@@ -12,10 +12,16 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using Microsoft.Win32;
+using UniTimetable.Model;
+using UniTimetable.Model.Solver;
+using UniTimetable.Model.Time;
+using UniTimetable.Model.Timetable;
+using Stream = UniTimetable.Model.Timetable.Stream;
+using Type = UniTimetable.Model.Timetable.Type;
 
 #endregion
 
-namespace UniTimetable
+namespace UniTimetable.ViewControllers
 {
     public partial class FormMain : Form
     {
@@ -29,13 +35,10 @@ namespace UniTimetable
         };
 
         private readonly TimetableControl _export = new TimetableControl();
-
         private readonly FormSettings _formSettings = new FormSettings();
         private readonly FormUnavailability _formUnavail = new FormUnavailability();
-
         private readonly History<Timetable> _history = new History<Timetable>(50);
         private readonly Size _imageSize = new Size(1024, 768);
-
         private readonly OpenFileDialog _openDialogXml = new OpenFileDialog();
         private readonly Random _random = new Random((int) DateTime.Now.Ticks);
         private readonly SaveFileDialog _saveDialogRaster = new SaveFileDialog();
@@ -43,17 +46,15 @@ namespace UniTimetable
         private readonly SaveFileDialog _saveDialogWallpaper = new SaveFileDialog();
         private readonly SaveFileDialog _saveDialogXml = new SaveFileDialog();
         private readonly Solver _solver;
-        public Timetable Timetable;
         private int _changes;
         private Session _clickSession;
         private TimeOfWeek _clickTime;
         private Unavailability _clickUnavail;
-
         private Cursor _dragCursor;
         private int _egg;
         private Settings _settings = new Settings();
         private bool _sidePaneEnabled = true;
-
+        public Timetable Timetable;
 
         public FormMain()
         {
@@ -1172,7 +1173,7 @@ namespace UniTimetable
                         timeMenu.Show(timetableControl, e.Location);
                     }
 
-                        // right clicked empty space?
+                    // right clicked empty space?
                     else if (_clickSession == null && _clickUnavail == null)
                     {
                         findClassHereToolStripMenuItem.DropDownItems.Clear();
@@ -1186,7 +1187,9 @@ namespace UniTimetable
                             {
                                 foreach (var stream in type.UniqueStreams)
                                 {
-                                    var atTime = stream.Classes.Any(session => _clickTime >= session.Start && _clickTime <= session.End);
+                                    var atTime =
+                                        stream.Classes.Any(
+                                            session => _clickTime >= session.Start && _clickTime <= session.End);
                                     if (!atTime)
                                         continue;
 
@@ -1228,7 +1231,7 @@ namespace UniTimetable
                         timeMenu.Show(timetableControl, e.Location);
                     }
 
-                        // right clicked a session
+                    // right clicked a session
                     else if (_clickSession != null)
                     {
                         alternativeToolStripMenuItem.DropDownItems.Clear();
@@ -1284,7 +1287,7 @@ namespace UniTimetable
                         streamMenu.Show(timetableControl, e.Location);
                     }
 
-                        // right clicked an unavailability
+                    // right clicked an unavailability
                     else
                     {
                         timetableControl.SetActive(_clickUnavail);
@@ -1360,71 +1363,6 @@ namespace UniTimetable
         }
 
         #endregion
-
-        private void timetableControl1_TimetableMouseClick(object sender, TimetableEventArgs e)
-        {
-
-        }
-
-        private void timetableControl1_TimetableMouseDoubleClick(object sender, TimetableEventArgs e)
-        {
-
-        }
-
-        private void timetableControl_TimetableChanged(object sender)
-        {
-
-        }
-
-        private void timetableControl1_BoundsClipped(object sender)
-        {
-
-        }
-
-        private void timetableControl1_DragDrop(object sender, DragEventArgs e)
-        {
-
-        }
-
-        private void timetableControl1_DragOver(object sender, DragEventArgs e)
-        {
-
-        }
-
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void listBox2_DragDrop(object sender, DragEventArgs e)
-        {
-
-        }
-
-        private void listBox1_DragEnter(object sender, DragEventArgs e)
-        {
-
-        }
-
-        private void listBox1_GiveFeedback(object sender, GiveFeedbackEventArgs e)
-        {
-
-        }
-
-        private void listBox1_Leave(object sender, EventArgs e)
-        {
-
-        }
-
-        private void listBox1_MouseDown(object sender, MouseEventArgs e)
-        {
-
-        }
-
-        private void listBox1_DragDrop(object sender, DragEventArgs e)
-        {
-
-        }
     }
 
     internal static class WinAPI

@@ -1,108 +1,22 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
-using System.IO;
-using System.Threading;
-using System.ComponentModel;
+#region
 
-namespace UniTimetable
+using System.Collections.Generic;
+using System.ComponentModel;
+using UniTimetable.Model.Timetable;
+
+#endregion
+
+namespace UniTimetable.Model.Solver
 {
     public partial class Solver
     {
-        Timetable Timetable_;
-
-        Solver.SolutionComparer Comparer_;
-        List<Solver.Filter> Filters_;
-
-        List<Solution> Solutions_ = new List<Solution>();
-        int MaxResults_ = 250;
-
+        private readonly int MaxResults_ = 250;
+        private readonly List<Solution> Solutions_ = new List<Solution>();
+        private int NumberValidSolutions_;
+        private HeapWithComparer<Solution> SolutionHeap_;
         // mid-calculation stuff
-        List<List<Stream>> StreamSets_ = new List<List<Stream>>();
-        Solution[] UnorderedSolutions_;
-        int NumberValidSolutions_;
-        HeapWithComparer<Solution> SolutionHeap_;
-
-        #region Constructors
-
-        public Solver(Timetable timetable)
-        {
-            Timetable_ = timetable;
-
-            Comparer_ = new Solver.SolutionComparer();
-            Filters_ = new List<Solver.Filter>();
-            Default();
-        }
-
-        public Solver(Timetable timetable, Solver other)
-        {
-            Timetable_ = timetable;
-
-            this.Comparer_ = other.Comparer_.Clone();
-            this.Filters_ = new List<Solver.Filter>(other.Filters_);
-
-            this.Solutions_ = new List<Solution>(Solutions_);
-            this.MaxResults_ = other.MaxResults_;
-
-            // other variables are initiated during solving
-        }
-
-        public Solver Clone(Timetable timetable)
-        {
-            return new Solver(timetable, this);
-        }
-
-        public Solver Clone()
-        {
-            return new Solver(Timetable_.DeepCopy(), this);
-        }
-
-        #endregion
-
-        #region Accessors
-
-        public Timetable Timetable
-        {
-            get
-            {
-                return Timetable_;
-            }
-            set
-            {
-                Timetable_ = value;
-            }
-        }
-
-        public List<Solution> Solutions
-        {
-            get
-            {
-                return Solutions_;
-            }
-        }
-
-        public Solver.SolutionComparer Comparer
-        {
-            get
-            {
-                return Comparer_;
-            }
-        }
-
-        public List<Solver.Filter> Filters
-        {
-            get
-            {
-                return Filters_;
-            }
-            set
-            {
-                Filters_ = value;
-            }
-        }
-
-        #endregion
+        private List<List<Stream>> StreamSets_ = new List<List<Stream>>();
+        private Solution[] UnorderedSolutions_;
 
         public void Default()
         {
@@ -111,21 +25,72 @@ namespace UniTimetable
 
         public void LoadPreset(Preset preset)
         {
-            Comparer_.LoadCriteria(preset.Criteria);
+            Comparer.LoadCriteria(preset.Criteria);
 
             Filters.Clear();
             Filters.AddRange(preset.Filters);
         }
 
+        #region Constructors
+
+        public Solver(Timetable.Timetable timetable)
+        {
+            Timetable = timetable;
+
+            Comparer = new SolutionComparer();
+            Filters = new List<Filter>();
+            Default();
+        }
+
+        public Solver(Timetable.Timetable timetable, Solver other)
+        {
+            Timetable = timetable;
+
+            Comparer = other.Comparer.Clone();
+            Filters = new List<Filter>(other.Filters);
+
+            Solutions_ = new List<Solution>(Solutions_);
+            MaxResults_ = other.MaxResults_;
+
+            // other variables are initiated during solving
+        }
+
+        public Solver Clone(Timetable.Timetable timetable)
+        {
+            return new Solver(timetable, this);
+        }
+
+        public Solver Clone()
+        {
+            return new Solver(Timetable.DeepCopy(), this);
+        }
+
+        #endregion
+
+        #region Accessors
+
+        public Timetable.Timetable Timetable { get; set; }
+
+        public List<Solution> Solutions
+        {
+            get { return Solutions_; }
+        }
+
+        public SolutionComparer Comparer { get; private set; }
+
+        public List<Filter> Filters { get; set; }
+
+        #endregion
+
         #region Actual solving
 
         public SolverResult Compute(BackgroundWorker worker, DoWorkEventArgs e)
         {
-            if (Timetable_ == null || !Timetable_.HasData())
+            if (Timetable == null || !Timetable.HasData())
             {
                 return SolverResult.NoTimetable;
             }
-            
+
             Solutions_.Clear();
             StreamSets_.Clear();
 
@@ -135,7 +100,7 @@ namespace UniTimetable
 
             #region Build lists of stream options
 
-            foreach (Type type in Timetable_.TypeList)
+            foreach (Type type in Timetable.TypeList)
             {
                 // if the stream type is ignored, skip
                 if (!type.Required)
@@ -155,7 +120,7 @@ namespace UniTimetable
                     foreach (Stream stream in type.UniqueStreams)
                     {
                         // if stream can't be selected, skip it
-                        if (!Timetable_.Fits(stream))
+                        if (!Timetable.Fits(stream))
                             continue;
 
                         streams.Add(stream);
@@ -190,7 +155,7 @@ namespace UniTimetable
                 {
                     List<Stream> otherSet = StreamSets_[j];
 
-                    int total = set.Count * otherSet.Count;
+                    int total = set.Count*otherSet.Count;
                     int clash = 0;
                     foreach (Stream stream in set)
                     {
@@ -200,12 +165,12 @@ namespace UniTimetable
                                 clash++;
                         }
                     }
-                    float chance = (float)clash / (float)total;
+                    float chance = clash/(float) total;
                     clashChance[i, j] = chance;
                     clashChance[j, i] = chance;
                 }
             }
-            
+
             // build index lists, extract sets of only one stream
             List<int> ordered = new List<int>();
             List<int> remaining = new List<int>();
@@ -292,7 +257,7 @@ namespace UniTimetable
                 remaining.Remove(maxIndex);
                 ordered.Add(maxIndex);
             }
-            
+
             /*
             // do specialised selection sort to bring most incompatible streams to the front
 
@@ -387,7 +352,7 @@ namespace UniTimetable
             cumulativeProduct[cumulativeProduct.Length - 1] = 1;
             for (int i = cumulativeProduct.Length - 2; i >= 0; i--)
             {
-                cumulativeProduct[i] = cumulativeProduct[i + 1] * StreamSets_[i + 1].Count;
+                cumulativeProduct[i] = cumulativeProduct[i + 1]*StreamSets_[i + 1].Count;
             }
 
             // setIndex represents from which set of streams the next stream is being selected
@@ -436,7 +401,7 @@ namespace UniTimetable
                 {
                     // add to progress the number of solutions just skipped
                     progress += cumulativeProduct[setIndex];
-                    int percent = (int)((float)progress / totalSolutions * 100);
+                    int percent = (int) ((float) progress/totalSolutions*100);
                     if (percent > progressPercent)
                     {
                         worker.ReportProgress(percent);
@@ -455,7 +420,7 @@ namespace UniTimetable
                 {
                     // increment progress
                     progress++;
-                    int percent = (int)((float)progress / totalSolutions * 100);
+                    int percent = (int) ((float) progress/totalSolutions*100);
                     if (percent > progressPercent)
                     {
                         worker.ReportProgress(percent);
@@ -463,7 +428,7 @@ namespace UniTimetable
                     }
 
                     bool filteredOut = false;
-                    foreach (Filter filter in Filters_)
+                    foreach (Filter filter in Filters)
                     {
                         // failed on a filter?
                         if (!filter.Pass(solution))
@@ -491,7 +456,8 @@ namespace UniTimetable
                             if (NumberValidSolutions_ == MaxResults_)
                             {
                                 // build the heap from the array
-                                SolutionHeap_ = new HeapWithComparer<Solution>(MaxResults_, UnorderedSolutions_, Comparer_);
+                                SolutionHeap_ = new HeapWithComparer<Solution>(MaxResults_, UnorderedSolutions_,
+                                    Comparer);
                             }
                         }
                     }
@@ -562,10 +528,10 @@ namespace UniTimetable
             //    "\nNumber of solutions \"checked\": " + progress.ToString());
 
             SortFinalResults();
-            
+
             #endregion
 
-            Timetable_.RecomputeSolutions = false;
+            Timetable.RecomputeSolutions = false;
             return SolverResult.Complete;
         }
 
@@ -573,7 +539,7 @@ namespace UniTimetable
         {
             // if the best list didn't fill up
             if (NumberValidSolutions_ < MaxResults_)
-                SolutionHeap_ = new HeapWithComparer<Solution>(MaxResults_, UnorderedSolutions_, Comparer_);
+                SolutionHeap_ = new HeapWithComparer<Solution>(MaxResults_, UnorderedSolutions_, Comparer);
 
             // run heapsort on the top solutions, copy into solution list
             Solutions_.AddRange(SolutionHeap_.GetSorted());

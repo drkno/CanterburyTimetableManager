@@ -1,14 +1,14 @@
-namespace UniTimetable
+namespace UniTimetable.Model
 {
     public class Settings
     {
-        public bool ShowGhost;
-        public bool ShowWeekend;
-        public bool ShowLocation;
-        public bool ShowGray;
-        public int HourStart;
         public int HourEnd;
+        public int HourStart;
         public bool ResetWindow;
+        public bool ShowGhost;
+        public bool ShowGray;
+        public bool ShowLocation;
+        public bool ShowWeekend;
 
         public Settings()
         {

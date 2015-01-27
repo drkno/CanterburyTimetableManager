@@ -1,24 +1,36 @@
+#region
+
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Xml.Serialization;
 
-namespace UniTimetable
+#endregion
+
+namespace UniTimetable.Model.Timetable
 {
     public class Session : Timeslot, IComparable<Session>
     {
-        string Location_ = "";
+        private string Location_ = "";
 
-        Stream Stream_ = null;
+        #region IComparable<Session> Members
+
+        public int CompareTo(Session other)
+        {
+            return base.CompareTo(other);
+        }
+
+        #endregion
 
         #region Constructors
 
         public Session()
-            : base() { }
+        {
+            Stream = null;
+        }
 
         public Session(Timeslot time, string location)
             : base(time)
         {
+            Stream = null;
             Location_ = location;
         }
 
@@ -26,28 +38,29 @@ namespace UniTimetable
             : base(time)
         {
             Location_ = location;
-            Stream_ = stream;
+            Stream = stream;
         }
 
         public Session(int day, int startHour, int startMinute, int endHour, int endMinute, string location)
             : base(day, startHour, startMinute, endHour, endMinute)
         {
             Location_ = location;
-            Stream_ = null;
+            Stream = null;
         }
 
-        public Session(int day, int startHour, int startMinute, int endHour, int endMinute, string location, Stream stream)
+        public Session(int day, int startHour, int startMinute, int endHour, int endMinute, string location,
+            Stream stream)
             : base(day, startHour, startMinute, endHour, endMinute)
         {
             Location_ = location;
-            Stream_ = stream;
+            Stream = stream;
         }
 
         public Session(Session other)
             : base(other)
         {
             Location_ = other.Location_;
-            Stream_ = other.Stream_;
+            Stream = other.Stream;
         }
 
         public Session Clone()
@@ -62,28 +75,13 @@ namespace UniTimetable
         [XmlAttribute("location")]
         public string Location
         {
-            get
-            {
-                return Location_;
-            }
-            set
-            {
-                Location_ = value;
-            }
+            get { return Location_; }
+            set { Location_ = value; }
         }
 
         [XmlIgnore]
-        public Stream Stream
-        {
-            get
-            {
-                return Stream_;
-            }
-            set
-            {
-                Stream_ = value;
-            }
-        }
+        public Stream Stream { get; set; }
+
         /*
         /// <summary>
         /// Gets or sets the day.
@@ -190,14 +188,6 @@ namespace UniTimetable
             }
         }
         */
-        #endregion
-
-        #region IComparable<Session> Members
-
-        public int CompareTo(Session other)
-        {
-            return base.CompareTo(other);
-        }
 
         #endregion
     }

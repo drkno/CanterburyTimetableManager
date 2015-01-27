@@ -1,22 +1,46 @@
+#region
+
 using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace UniTimetable
+#endregion
+
+namespace UniTimetable.Model
 {
     // Heap implementation. Concepts/code based on
     // http://en.wikipedia.org/wiki/Heapsort
 
-    class HeapBase<T>
+    internal class HeapBase<T>
     {
-        int MaxLength_;
-        int N_;
-        T[] Heap_;
+        private readonly T[] Heap_;
+        private int MaxLength_;
+        private int N_;
+
+        protected virtual int CompareItems(T item1, T item2)
+        {
+            return 0;
+        }
+
+        public override string ToString()
+        {
+            string text = "";
+            int nextLine = 1;
+            for (int i = 1; i <= N_; i++)
+            {
+                text += Heap_[i] + " ";
+                if (i == nextLine)
+                {
+                    text += "\n";
+                    nextLine = nextLine*2 + 1;
+                }
+            }
+            return text;
+        }
 
         #region Heap operations
 
         /// <summary>
-        /// Constructs an empty heap.
+        ///     Constructs an empty heap.
         /// </summary>
         /// <param name="maxLength"></param>
         public HeapBase(int maxLength)
@@ -27,7 +51,7 @@ namespace UniTimetable
         }
 
         /// <summary>
-        /// Builds a heap from an existing list in time O(N).
+        ///     Builds a heap from an existing list in time O(N).
         /// </summary>
         /// <param name="maxLength"></param>
         /// <param name="unordered"></param>
@@ -47,7 +71,7 @@ namespace UniTimetable
         }
 
         /// <summary>
-        /// Finds the maximum element in the heap in time O(1).
+        ///     Finds the maximum element in the heap in time O(1).
         /// </summary>
         /// <returns>The greatest element.</returns>
         public T FindMaximum()
@@ -57,7 +81,7 @@ namespace UniTimetable
         }
 
         /// <summary>
-        /// Replaces the maximum element with a new one in time O(lg N).
+        ///     Replaces the maximum element with a new one in time O(lg N).
         /// </summary>
         /// <param name="item"></param>
         /// <returns>The greatest element.</returns>
@@ -74,7 +98,7 @@ namespace UniTimetable
         }
 
         /// <summary>
-        /// Replaces the maximum element if the new element is less. Takes time O(lg N).
+        ///     Replaces the maximum element if the new element is less. Takes time O(lg N).
         /// </summary>
         /// <param name="item"></param>
         /// <returns>The larger element.</returns>
@@ -91,15 +115,12 @@ namespace UniTimetable
                 // return the old max
                 return max;
             }
-            else
-            {
-                // keep the old max and return the new item
-                return item;
-            }
+            // keep the old max and return the new item
+            return item;
         }
 
         /// <summary>
-        /// Removes the maximum element from the heap in time O(lg N).
+        ///     Removes the maximum element from the heap in time O(lg N).
         /// </summary>
         /// <param name="item"></param>
         /// <returns>The greatest element.</returns>
@@ -116,7 +137,7 @@ namespace UniTimetable
         }
 
         /// <summary>
-        /// Adds a new element to the heap in time O(lg N).
+        ///     Adds a new element to the heap in time O(lg N).
         /// </summary>
         /// <param name="item"></param>
         public void Add(T item)
@@ -128,7 +149,7 @@ namespace UniTimetable
         }
 
         /// <summary>
-        /// Sorts the elements in the heap in ascending order. Worst case time O(N lg N).
+        ///     Sorts the elements in the heap in ascending order. Worst case time O(N lg N).
         /// </summary>
         /// <returns></returns>
         public T[] GetSorted()
@@ -160,7 +181,7 @@ namespace UniTimetable
         {
             // FixDown all nodes, bottom-up
             // start at the last node which has any children
-            for (int start = N_ / 2; start >= 1; start--)
+            for (int start = N_/2; start >= 1; start--)
             {
                 FixDown(start);
             }
@@ -168,7 +189,7 @@ namespace UniTimetable
 
         private void FixDown(int node)
         {
-            int child1 = node * 2;
+            int child1 = node*2;
             int child2 = child1 + 1;
 
             // already reached end
@@ -202,7 +223,7 @@ namespace UniTimetable
 
         private void FixDown(T[] heap, int node, int start, int end)
         {
-            int child1 = (node - start + 1) * 2 + start - 1;
+            int child1 = (node - start + 1)*2 + start - 1;
             int child2 = child1 + 1;
 
             // already reached end
@@ -240,7 +261,7 @@ namespace UniTimetable
             if (node <= 1)
                 return;
             // find parent
-            int parent = node / 2;
+            int parent = node/2;
             // if the parent is less than the node
             //if (Heap_[parent] < Heap_[node])
             if (CompareItems(Heap_[parent], Heap_[node]) < 0)
@@ -258,7 +279,7 @@ namespace UniTimetable
             if (node <= start)
                 return;
             // find parent
-            int parent = (node - start + 1) / 2 + start - 1;
+            int parent = (node - start + 1)/2 + start - 1;
             // if the parent is less than the node
             //if (Heap_[parent] < Heap_[node])
             if (CompareItems(heap[parent], heap[node]) < 0)
@@ -290,30 +311,14 @@ namespace UniTimetable
         }*/
 
         #endregion
-
-        protected virtual int CompareItems(T item1, T item2) { return 0; }
-
-        public override string ToString()
-        {
-            string text = "";
-            int nextLine = 1;
-            for (int i = 1; i <= N_; i++)
-            {
-                text += Heap_[i].ToString() + " ";
-                if (i == nextLine)
-                {
-                    text += "\n";
-                    nextLine = nextLine * 2 + 1;
-                }
-            }
-            return text;
-        }
     }
 
-    class HeapOfComparable<T> : HeapBase<T> where T : IComparable
+    internal class HeapOfComparable<T> : HeapBase<T> where T : IComparable
     {
         public HeapOfComparable(int maxLength)
-            : base(maxLength) { }
+            : base(maxLength)
+        {
+        }
 
         public HeapOfComparable(int maxLength, IEnumerable<T> unordered)
             : base(maxLength, unordered)
@@ -327,9 +332,9 @@ namespace UniTimetable
         }
     }
 
-    class HeapWithComparer<T> : HeapBase<T>
+    internal class HeapWithComparer<T> : HeapBase<T>
     {
-        IComparer<T> Comparer_;
+        private readonly IComparer<T> Comparer_;
 
         public HeapWithComparer(int maxLength, IComparer<T> comparer)
             : base(maxLength)

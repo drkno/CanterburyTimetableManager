@@ -1,26 +1,56 @@
+#region
+
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Xml.Serialization;
 
-namespace UniTimetable
+#endregion
+
+namespace UniTimetable.Model.Timetable
 {
     public class Stream : IComparable<Stream>
     {
-        int ID_ = -1;
-        int Number_ = -1;
-        bool Selected_ = false;
-        Type Type_ = null;
-        List<Session> Classes_ = new List<Session>();
+        private List<Session> Classes_ = new List<Session>();
+        private List<Stream> Equivalent_ = new List<Stream>();
+        private int ID_ = -1;
+        private List<Stream> Incompatible_ = new List<Stream>();
+        private int Number_ = -1;
 
-        bool[] ClashTable_ = null;
-        List<Stream> Incompatible_ = new List<Stream>();
-        List<Stream> Equivalent_ = new List<Stream>();
+        #region IComparable<Stream> Members
+
+        public int CompareTo(Stream other)
+        {
+            // sort by name
+            int result;
+            // compare type codes
+            if ((result = Type.Code.CompareTo(other.Type.Code)) != 0)
+                return result;
+            // then compare stream numbers
+            return Number.CompareTo(other.Number);
+        }
+
+        #endregion
+
+        #region Base methods
+
+        // TODO: provide some way of handling null => ""?
+        public override string ToString()
+        {
+            string text = Type.Code;
+            if (Number_ > 0)
+                text += Number_.ToString();
+            return text;
+        }
+
+        #endregion
 
         #region Constructors
 
         public Stream()
         {
+            ClashTable = null;
+            Type = null;
+            Selected = false;
             Classes_ = new List<Session>();
             //State_ = StreamState.Null;
             Incompatible_ = new List<Stream>();
@@ -29,24 +59,30 @@ namespace UniTimetable
 
         public Stream(int number)
         {
+            ClashTable = null;
+            Type = null;
+            Selected = false;
             Number_ = number;
         }
 
         public Stream(int number, Type type)
         {
+            ClashTable = null;
+            Selected = false;
             Number_ = number;
-            Type_ = type;
+            Type = type;
         }
 
         public Stream(Stream other)
         {
-            this.ID_ = other.ID_;
-            this.Number_ = other.Number_;
-            this.Selected_ = other.Selected_;
-            this.Type_ = other.Type_;
-            this.Classes_ = new List<Session>(other.Classes_);
-            this.Incompatible_ = new List<Stream>(other.Incompatible_);
-            this.Equivalent_ = new List<Stream>(other.Equivalent_);
+            ClashTable = null;
+            ID_ = other.ID_;
+            Number_ = other.Number_;
+            Selected = other.Selected;
+            Type = other.Type;
+            Classes_ = new List<Session>(other.Classes_);
+            Incompatible_ = new List<Stream>(other.Incompatible_);
+            Equivalent_ = new List<Stream>(other.Equivalent_);
             //this.State_ = other.State_;
         }
 
@@ -62,27 +98,15 @@ namespace UniTimetable
         [XmlIgnore]
         public int ID
         {
-            get
-            {
-                return ID_;
-            }
-            set
-            {
-                ID_ = value;
-            }
+            get { return ID_; }
+            set { ID_ = value; }
         }
 
         [XmlAttribute("number")]
         public int Number
         {
-            get
-            {
-                return Number_;
-            }
-            set
-            {
-                Number_ = value;
-            }
+            get { return Number_; }
+            set { Number_ = value; }
         }
 
         /*public StreamState State
@@ -98,96 +122,33 @@ namespace UniTimetable
         }*/
 
         [XmlAttribute("selected")]
-        public bool Selected
-        {
-            get
-            {
-                return Selected_;
-            }
-            set
-            {
-                Selected_ = value;
-            }
-        }
+        public bool Selected { get; set; }
 
         [XmlIgnore]
-        public Type Type
-        {
-            get
-            {
-                return Type_;
-            }
-            set
-            {
-                Type_ = value;
-            }
-        }
+        public Type Type { get; set; }
 
-        [XmlArray("sessions"), XmlArrayItem("session", typeof(Session))]
+        [XmlArray("sessions"), XmlArrayItem("session", typeof (Session))]
         public List<Session> Classes
         {
-            get
-            {
-                return Classes_;
-            }
-            set
-            {
-                Classes_ = value;
-            }
+            get { return Classes_; }
+            set { Classes_ = value; }
         }
 
         [XmlIgnore]
-        public bool[] ClashTable
-        {
-            get
-            {
-                return ClashTable_;
-            }
-            set
-            {
-                ClashTable_ = value;
-            }
-        }
+        public bool[] ClashTable { get; set; }
 
         [XmlIgnore]
         public List<Stream> Incompatible
         {
-            get
-            {
-                return Incompatible_;
-            }
-            set
-            {
-                Incompatible_ = value;
-            }
+            get { return Incompatible_; }
+            set { Incompatible_ = value; }
         }
 
         [XmlIgnore]
         public List<Stream> Equivalent
         {
-            get
-            {
-                return Equivalent_;
-            }
-            set
-            {
-                Equivalent_ = value;
-            }
-        }
-
-        #endregion
-
-        #region IComparable<Stream> Members
-
-        public int CompareTo(Stream other)
-        {
-            // sort by name
-            int result;
-            // compare type codes
-            if ((result = this.Type.Code.CompareTo(other.Type.Code)) != 0)
-                return result;
-            // then compare stream numbers
-            return this.Number.CompareTo(other.Number);
+            get { return Equivalent_; }
+            set { Equivalent_ = value; }
         }
 
         #endregion
@@ -196,13 +157,13 @@ namespace UniTimetable
 
         public bool ClashesWith(Stream other)
         {
-            if (ClashTable_ != null)
-                return ClashTable_[other.ID_];
+            if (ClashTable != null)
+                return ClashTable[other.ID_];
 
             if (other == this)
                 return false;
 
-            foreach (Session a in this.Classes)
+            foreach (Session a in Classes)
             {
                 foreach (Session b in other.Classes)
                 {
@@ -216,17 +177,17 @@ namespace UniTimetable
         public bool EquivalentTo(Stream other)
         {
             // streams can't be equivalent if they don't have the same number of classes
-            if (this.Classes.Count != other.Classes.Count)
+            if (Classes.Count != other.Classes.Count)
                 return false;
 
             int matches = 0;
             // compare each class in stream 1
-            for (int i = 0; i == matches && i < this.Classes.Count; i++)
+            for (int i = 0; i == matches && i < Classes.Count; i++)
             {
                 // against each class in stream 2
                 for (int j = 0; j < other.Classes.Count; j++)
                 {
-                    if (this.Classes[i].EquivalentTo(other.Classes[j]))
+                    if (Classes[i].EquivalentTo(other.Classes[j]))
                     {
                         matches++;
                         break;
@@ -235,21 +196,8 @@ namespace UniTimetable
             }
 
             // return true if the number of class matches equals the number of classes
-            return (matches == this.Classes.Count);
+            return (matches == Classes.Count);
             // TODO: this method may fail if one stream contains equivalent classes
-        }
-
-        #endregion
-
-        #region Base methods
-
-        // TODO: provide some way of handling null => ""?
-        public override string ToString()
-        {
-            string text = Type_.Code;
-            if (Number_ > 0)
-                text += Number_.ToString();
-            return text;
         }
 
         #endregion

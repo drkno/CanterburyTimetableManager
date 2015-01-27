@@ -1,15 +1,64 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml.Serialization;
+#region
 
-namespace UniTimetable
+using System;
+using System.Xml.Serialization;
+using UniTimetable.Model.Time;
+
+#endregion
+
+namespace UniTimetable.Model.Timetable
 {
     public class Timeslot : IComparable<Timeslot>
     {
         protected int Day_;
-        protected TimeOfDay Start_;
         protected TimeOfDay End_;
+        protected TimeOfDay Start_;
+
+        #region IComparable<Timeslot> Members
+
+        public int CompareTo(Timeslot other)
+        {
+            int result;
+            // first compare days
+            if ((result = Day_.CompareTo(other.Day_)) != 0)
+                return result;
+            // same day - compare starts
+            if ((result = Start_.CompareTo(other.Start_)) != 0)
+                return result;
+            // same start - compare end
+            return End_.CompareTo(other.End_);
+        }
+
+        #endregion
+
+        public bool ClashesWith(Timeslot other)
+        {
+            // return true if on the same day
+            return ((Day_ == other.Day_)
+                // and object's start time is within the other's period
+                    && ((Start_ >= other.Start_ && Start_ < other.End_)
+                        // or object's end time is within the other's period
+                        || (End_ > other.Start_ && End_ <= other.End_)
+                        // or start/end times are either side
+                        || (Start_ <= other.Start_ && End >= other.End_)));
+        }
+
+        public bool EquivalentTo(Timeslot other)
+        {
+            // return true if they're at the same time
+            return (Day_ == other.Day_
+                    && Start_ == other.Start_
+                    && End_ == other.End_);
+        }
+
+        #region Base methods
+
+        public override string ToString()
+        {
+            return DayOfWeek + " " + Start_ + "-" + End_;
+        }
+
+        #endregion
 
         #region Constructors
 
@@ -22,9 +71,9 @@ namespace UniTimetable
 
         public Timeslot(Timeslot other)
         {
-            this.Day_ = other.Day_;
-            this.Start_ = new TimeOfDay(other.Start_);
-            this.End_ = new TimeOfDay(other.End_);
+            Day_ = other.Day_;
+            Start_ = new TimeOfDay(other.Start_);
+            End_ = new TimeOfDay(other.End_);
         }
 
         public Timeslot(int day, TimeOfDay start, TimeOfDay end)
@@ -51,10 +100,7 @@ namespace UniTimetable
         /// </summary>
         public TimeOfDay StartTime
         {
-            get
-            {
-                return Start_;
-            }
+            get { return Start_; }
             set
             {
                 if (value > End_)
@@ -71,10 +117,7 @@ namespace UniTimetable
         /// </summary>
         public TimeOfDay EndTime
         {
-            get
-            {
-                return End_;
-            }
+            get { return End_; }
             set
             {
                 if (value < Start_)
@@ -91,10 +134,7 @@ namespace UniTimetable
         /// </summary>
         public TimeOfWeek Start
         {
-            get
-            {
-                return new TimeOfWeek(Day_, Start_);
-            }
+            get { return new TimeOfWeek(Day_, Start_); }
         }
 
         [XmlIgnore]
@@ -103,10 +143,7 @@ namespace UniTimetable
         /// </summary>
         public TimeOfWeek End
         {
-            get
-            {
-                return new TimeOfWeek(Day_, End_);
-            }
+            get { return new TimeOfWeek(Day_, End_); }
         }
 
         [XmlAttribute("day")]
@@ -115,14 +152,8 @@ namespace UniTimetable
         /// </summary>
         public int Day
         {
-            get
-            {
-                return Day_;
-            }
-            set
-            {
-                Day_ = value;
-            }
+            get { return Day_; }
+            set { Day_ = value; }
         }
 
         [XmlIgnore]
@@ -131,14 +162,8 @@ namespace UniTimetable
         /// </summary>
         public DayOfWeek DayOfWeek
         {
-            get
-            {
-                return (DayOfWeek)Day_;
-            }
-            set
-            {
-                Day_ = (int)value;
-            }
+            get { return (DayOfWeek) Day_; }
+            set { Day_ = (int) value; }
         }
 
         [XmlIgnore]
@@ -147,10 +172,7 @@ namespace UniTimetable
         /// </summary>
         public TimeLength Length
         {
-            get
-            {
-                return End_ - Start_;
-            }
+            get { return End_ - Start_; }
         }
 
         [XmlIgnore]
@@ -159,10 +181,7 @@ namespace UniTimetable
         /// </summary>
         public int TotalMinutes
         {
-            get
-            {
-                return End_.DayMinutes - Start_.DayMinutes;
-            }
+            get { return End_.DayMinutes - Start_.DayMinutes; }
         }
 
         [XmlIgnore]
@@ -171,10 +190,7 @@ namespace UniTimetable
         /// </summary>
         public int StartHour
         {
-            get
-            {
-                return Start_.Hour;
-            }
+            get { return Start_.Hour; }
             set
             {
                 TimeOfDay newStart = new TimeOfDay(Start_);
@@ -193,10 +209,7 @@ namespace UniTimetable
         /// </summary>
         public int StartMinute
         {
-            get
-            {
-                return Start_.Minute;
-            }
+            get { return Start_.Minute; }
             set
             {
                 TimeOfDay newStart = new TimeOfDay(Start_);
@@ -215,10 +228,7 @@ namespace UniTimetable
         /// </summary>
         public int StartTotalMinutes
         {
-            get
-            {
-                return Start_.DayMinutes;
-            }
+            get { return Start_.DayMinutes; }
             set
             {
                 TimeOfDay newStart = new TimeOfDay();
@@ -237,10 +247,7 @@ namespace UniTimetable
         /// </summary>
         public int EndHour
         {
-            get
-            {
-                return End_.Hour;
-            }
+            get { return End_.Hour; }
             set
             {
                 TimeOfDay newEnd = new TimeOfDay(End_);
@@ -259,10 +266,7 @@ namespace UniTimetable
         /// </summary>
         public int EndMinute
         {
-            get
-            {
-                return End_.Minute;
-            }
+            get { return End_.Minute; }
             set
             {
                 TimeOfDay newEnd = new TimeOfDay(End_);
@@ -281,10 +285,7 @@ namespace UniTimetable
         /// </summary>
         public int EndTotalMinutes
         {
-            get
-            {
-                return End_.DayMinutes;
-            }
+            get { return End_.DayMinutes; }
             set
             {
                 TimeOfDay newEnd = new TimeOfDay();
@@ -295,52 +296,6 @@ namespace UniTimetable
                 }*/
                 End_.DayMinutes = value;
             }
-        }
-
-        #endregion
-
-        public bool ClashesWith(Timeslot other)
-        {
-            // return true if on the same day
-            return ((this.Day_ == other.Day_)
-                // and object's start time is within the other's period
-                && ((this.Start_ >= other.Start_ && this.Start_ < other.End_)
-                // or object's end time is within the other's period
-                    || (this.End_ > other.Start_ && this.End_ <= other.End_)
-                // or start/end times are either side
-                    || (this.Start_ <= other.Start_ && this.End >= other.End_)));
-        }
-
-        public bool EquivalentTo(Timeslot other)
-        {
-            // return true if they're at the same time
-            return (this.Day_ == other.Day_
-                && this.Start_ == other.Start_
-                && this.End_ == other.End_);
-        }
-
-        #region IComparable<Timeslot> Members
-
-        public int CompareTo(Timeslot other)
-        {
-            int result;
-            // first compare days
-            if ((result = this.Day_.CompareTo(other.Day_)) != 0)
-                return result;
-            // same day - compare starts
-            if ((result = this.Start_.CompareTo(other.Start_)) != 0)
-                return result;
-            // same start - compare end
-            return this.End_.CompareTo(other.End_);
-        }
-
-        #endregion
-
-        #region Base methods
-
-        public override string ToString()
-        {
-            return DayOfWeek.ToString() + " " + Start_.ToString() + "-" + End_.ToString();
         }
 
         #endregion

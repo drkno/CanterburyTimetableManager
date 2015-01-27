@@ -1,159 +1,35 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
+#region
 
-namespace UniTimetable
+using System.Collections.Generic;
+using UniTimetable.Model.Time;
+using UniTimetable.Model.Timetable;
+
+#endregion
+
+namespace UniTimetable.Model.Solver
 {
     public partial class Solver
     {
         public class Solution
         {
-            // list of streams
-            List<Stream> Combination_;
-            // member variables for solution analysis
-            OrderedList<Session>[] ClassesByDay_;
-
             public static int MinBreak = 15;
+            // list of streams
+            // member variables for solution analysis
+            private OrderedList<Session>[] ClassesByDay_;
+            private TimeLength TotalEnd_;
+            // used in computation
+            private TimeLength TotalStart_;
 
             #region Accessors
 
-            public List<Stream> Streams
-            {
-                get
-                {
-                    return Combination_;
-                }
-            }
-
-            #endregion
-
-            #region Solution criteria accessors
-
-            public TimeLength TimeAtUni { get { return TimeAtUni_; } }
-            public TimeLength TimeInClasses { get { return TimeInClasses_; } }
-            public TimeLength TimeInBreaks { get { return TimeInBreaks_; } }
-            public int Days { get { return Days_; } }
-
-            public TimeLength MinDayLength { get { return MinDayLength_; } }
-            public TimeLength MaxDayLength { get { return MaxDayLength_; } }
-            public TimeLength AverageDayLength { get { return AverageDayLength_; } }
-
-            public TimeLength ShortBreak { get { return ShortBreak_; } }
-            public TimeLength LongBreak { get { return LongBreak_; } }
-            public TimeLength AverageBreak { get { return AverageBreak_; } }
-            public int NumberBreaks { get { return NumberBreaks_; } }
-
-            public TimeLength ShortBlock { get { return ShortBlock_; } }
-            public TimeLength LongBlock { get { return LongBlock_; } }
-            public TimeLength AverageBlock { get { return AverageBlock_; } }
-            public int NumberBlocks { get { return NumberBlocks_; } }
-
-            public TimeOfDay EarlyStart { get { return EarlyStart_; } }
-            public TimeOfDay LateStart { get { return LateStart_; } }
-            public TimeOfDay AverageStart { get { return AverageStart_; } }
-
-            public TimeOfDay EarlyEnd { get { return EarlyEnd_; } }
-            public TimeOfDay LateEnd { get { return LateEnd_; } }
-            public TimeOfDay AverageEnd { get { return AverageEnd_; } }
-
-            #endregion
-
-            #region Solution criteria
-
-            TimeLength TimeAtUni_;          // 0
-            TimeLength TimeInClasses_;      // 1
-            TimeLength TimeInBreaks_;       // 2
-            int Days_;                      // 3
-
-            TimeLength MinDayLength_;       // 4
-            TimeLength MaxDayLength_;       // 5
-            TimeLength AverageDayLength_;   // 6
-
-            TimeLength ShortBreak_;         // 7
-            TimeLength LongBreak_;          // 8
-            TimeLength AverageBreak_;       // 9
-            int NumberBreaks_;              // 10
-
-            TimeLength ShortBlock_;         // 11
-            TimeLength LongBlock_;          // 12
-            TimeLength AverageBlock_;       // 13
-            int NumberBlocks_;              // 14
-
-            TimeOfDay EarlyStart_;          // 15
-            TimeOfDay LateStart_;           // 16
-            TimeOfDay AverageStart_;        // 17
-
-            TimeOfDay EarlyEnd_;            // 18
-            TimeOfDay LateEnd_;             // 19
-            TimeOfDay AverageEnd_;          // 20
-
-            #endregion
-
-            // used in computation
-            TimeLength TotalStart_;
-            TimeLength TotalEnd_;
-
-            #region Constructors
-
-            public Solution()
-            {
-                Clear();
-            }
-
-            public Solution(IEnumerable<Stream> streams)
-            {
-                Combination_ = new List<Stream>(streams);
-                ReCompute();
-            }
-
-            public Solution(Solution other)
-            {
-                this.Combination_ = new List<Stream>(other.Combination_);
-                this.ClassesByDay_ = new OrderedList<Session>[7];
-                for (int i = 0; i < 7; i++)
-                {
-                    ClassesByDay_[i] = new OrderedList<Session>(other.ClassesByDay_[i]);
-                    //ClassesByDay_[i] = other.ClassesByDay_[i].Clone();
-                }
-
-                this.TimeAtUni_ = other.TimeAtUni_;
-                this.TimeInClasses_ = other.TimeInClasses_;
-                this.TimeInBreaks_ = other.TimeInBreaks_;
-                this.Days_ = other.Days_;
-
-                this.MinDayLength_ = other.MinDayLength_;
-                this.MaxDayLength_ = other.MaxDayLength_;
-                this.AverageDayLength_ = other.AverageDayLength_;
-
-                this.ShortBreak_ = other.ShortBreak_;
-                this.LongBreak_ = other.LongBreak_;
-                this.AverageBreak_ = other.AverageBreak_;
-                this.NumberBreaks_ = other.NumberBreaks_;
-
-                this.ShortBlock_ = other.ShortBlock_;
-                this.LongBlock_ = other.LongBlock_;
-                this.AverageBlock_ = other.AverageBlock_;
-                this.NumberBlocks_ = other.NumberBlocks_;
-
-                this.EarlyStart_ = other.EarlyStart_;
-                this.LateStart_ = other.LateStart_;
-                this.AverageStart_ = other.AverageStart_;
-
-                this.EarlyEnd_ = other.EarlyEnd_;
-                this.LateEnd_ = other.EarlyEnd_;
-                this.AverageEnd_ = other.AverageEnd_;
-
-                this.TotalStart_ = other.TotalStart_;
-                this.TotalEnd_ = other.TotalEnd_;
-            }
+            public List<Stream> Streams { get; private set; }
 
             #endregion
 
             public void Clear()
             {
                 // list of streams
-                Combination_ = new List<Stream>();
+                Streams = new List<Stream>();
                 // clear all the data for calculating statistics
                 ClearComputation();
             }
@@ -165,36 +41,132 @@ namespace UniTimetable
                 for (int i = 0; i < 7; i++)
                     ClassesByDay_[i] = new OrderedList<Session>();
 
-                TimeAtUni_ = new TimeLength(0, 0);
-                TimeInClasses_ = new TimeLength(0, 0);
-                TimeInBreaks_ = new TimeLength(0, 0);
-                Days_ = 0;
+                TimeAtUni = new TimeLength(0, 0);
+                TimeInClasses = new TimeLength(0, 0);
+                TimeInBreaks = new TimeLength(0, 0);
+                Days = 0;
 
-                MinDayLength_ = new TimeLength(24, 0);
-                MaxDayLength_ = new TimeLength(0, 0);
-                AverageDayLength_ = new TimeLength(0, 0);
+                MinDayLength = new TimeLength(24, 0);
+                MaxDayLength = new TimeLength(0, 0);
+                AverageDayLength = new TimeLength(0, 0);
 
-                ShortBreak_ = new TimeLength(24, 0);
-                LongBreak_ = new TimeLength(0, 0);
-                AverageBreak_ = new TimeLength(0, 0);
-                NumberBreaks_ = 0;
+                ShortBreak = new TimeLength(24, 0);
+                LongBreak = new TimeLength(0, 0);
+                AverageBreak = new TimeLength(0, 0);
+                NumberBreaks = 0;
 
-                ShortBlock_ = new TimeLength(24, 0);
-                LongBlock_ = new TimeLength(0, 0);
-                AverageBlock_ = new TimeLength(0, 0);
-                NumberBlocks_ = 0;
+                ShortBlock = new TimeLength(24, 0);
+                LongBlock = new TimeLength(0, 0);
+                AverageBlock = new TimeLength(0, 0);
+                NumberBlocks = 0;
 
-                EarlyStart_ = TimeOfDay.Maximum;
-                LateStart_ = TimeOfDay.Minimum;
-                AverageStart_ = TimeOfDay.Minimum;
+                EarlyStart = TimeOfDay.Maximum;
+                LateStart = TimeOfDay.Minimum;
+                AverageStart = TimeOfDay.Minimum;
 
-                EarlyEnd_ = TimeOfDay.Maximum;
-                LateEnd_ = TimeOfDay.Minimum;
-                AverageEnd_ = TimeOfDay.Minimum;
+                EarlyEnd = TimeOfDay.Maximum;
+                LateEnd = TimeOfDay.Minimum;
+                AverageEnd = TimeOfDay.Minimum;
 
                 TotalStart_ = new TimeLength(0);
                 TotalEnd_ = new TimeLength(0);
             }
+
+            public int CompareTo(Solution other, SolutionComparer solutionComparer)
+            {
+                return solutionComparer.Compare(this, other);
+            }
+
+            #region Solution criteria accessors
+
+            public TimeLength TimeAtUni { get; private set; }
+            public TimeLength TimeInClasses { get; private set; }
+            public TimeLength TimeInBreaks { get; private set; }
+            public int Days { get; private set; }
+
+            public TimeLength MinDayLength { get; private set; }
+            public TimeLength MaxDayLength { get; private set; }
+            public TimeLength AverageDayLength { get; private set; }
+
+            public TimeLength ShortBreak { get; private set; }
+            public TimeLength LongBreak { get; private set; }
+            public TimeLength AverageBreak { get; private set; }
+            public int NumberBreaks { get; private set; }
+
+            public TimeLength ShortBlock { get; private set; }
+            public TimeLength LongBlock { get; private set; }
+            public TimeLength AverageBlock { get; private set; }
+            public int NumberBlocks { get; private set; }
+
+            public TimeOfDay EarlyStart { get; private set; }
+            public TimeOfDay LateStart { get; private set; }
+            public TimeOfDay AverageStart { get; private set; }
+
+            public TimeOfDay EarlyEnd { get; private set; }
+            public TimeOfDay LateEnd { get; private set; }
+            public TimeOfDay AverageEnd { get; private set; }
+
+            #endregion
+
+            #region Solution criteria
+
+            #endregion
+
+            #region Constructors
+
+            public Solution()
+            {
+                Clear();
+            }
+
+            public Solution(IEnumerable<Stream> streams)
+            {
+                Streams = new List<Stream>(streams);
+                ReCompute();
+            }
+
+            public Solution(Solution other)
+            {
+                Streams = new List<Stream>(other.Streams);
+                ClassesByDay_ = new OrderedList<Session>[7];
+                for (int i = 0; i < 7; i++)
+                {
+                    ClassesByDay_[i] = new OrderedList<Session>(other.ClassesByDay_[i]);
+                    //ClassesByDay_[i] = other.ClassesByDay_[i].Clone();
+                }
+
+                TimeAtUni = other.TimeAtUni;
+                TimeInClasses = other.TimeInClasses;
+                TimeInBreaks = other.TimeInBreaks;
+                Days = other.Days;
+
+                MinDayLength = other.MinDayLength;
+                MaxDayLength = other.MaxDayLength;
+                AverageDayLength = other.AverageDayLength;
+
+                ShortBreak = other.ShortBreak;
+                LongBreak = other.LongBreak;
+                AverageBreak = other.AverageBreak;
+                NumberBreaks = other.NumberBreaks;
+
+                ShortBlock = other.ShortBlock;
+                LongBlock = other.LongBlock;
+                AverageBlock = other.AverageBlock;
+                NumberBlocks = other.NumberBlocks;
+
+                EarlyStart = other.EarlyStart;
+                LateStart = other.LateStart;
+                AverageStart = other.AverageStart;
+
+                EarlyEnd = other.EarlyEnd;
+                LateEnd = other.EarlyEnd;
+                AverageEnd = other.AverageEnd;
+
+                TotalStart_ = other.TotalStart_;
+                TotalEnd_ = other.TotalEnd_;
+            }
+
+            #endregion
 
             #region Evaluation
 
@@ -213,7 +185,7 @@ namespace UniTimetable
                 }*/
 
                 // for each stream
-                foreach (Stream stream in Combination_)
+                foreach (Stream stream in Streams)
                 {
                     // for each session in each stream
                     foreach (Session session in stream.Classes)
@@ -221,7 +193,7 @@ namespace UniTimetable
                         // build day-indexed list of classes
                         ClassesByDay_[session.Day].Add(session);
                         // calculate total time spent in classes
-                        TimeInClasses_ += session.Length;
+                        TimeInClasses += session.Length;
                     }
                 }
 
@@ -232,7 +204,7 @@ namespace UniTimetable
                     if (daySessions.Count == 0)
                         continue;
                     // otherwise increment day count
-                    Days_++;
+                    Days++;
 
                     #region Breaks and blocks
 
@@ -254,43 +226,43 @@ namespace UniTimetable
                         blockLength = daySessions[i - 1].EndTime - blockStart;
 
                         // increment number of blocks
-                        NumberBlocks_++;
+                        NumberBlocks++;
                         // add block length to cumulative sum
-                        AverageBlock_ += blockLength;
+                        AverageBlock += blockLength;
                         // set start of next block
                         blockStart = daySessions[i].StartTime;
 
                         // compare block against maxima/minima
-                        if (blockLength < ShortBlock_)
-                            ShortBlock_ = blockLength;
-                        if (blockLength > LongBlock_)
-                            LongBlock_ = blockLength;
+                        if (blockLength < ShortBlock)
+                            ShortBlock = blockLength;
+                        if (blockLength > LongBlock)
+                            LongBlock = blockLength;
 
                         // increment number of breaks
-                        NumberBreaks_++;
+                        NumberBreaks++;
                         // add break to cumulative sum
-                        TimeInBreaks_ += breakLength;
+                        TimeInBreaks += breakLength;
 
                         // compare break length against maxima/minima
-                        if (breakLength < ShortBreak_)
-                            ShortBreak_ = breakLength;
+                        if (breakLength < ShortBreak)
+                            ShortBreak = breakLength;
                         // check if it's the longest break so far
-                        if (breakLength > LongBreak_)
-                            LongBreak_ = breakLength;
+                        if (breakLength > LongBreak)
+                            LongBreak = breakLength;
                     }
 
                     // also create a block at the end
                     // find block length
                     blockLength = daySessions[i - 1].EndTime - blockStart;
                     // compare block against maxima/minima
-                    if (blockLength < ShortBlock_)
-                        ShortBlock_ = blockLength;
-                    if (blockLength > LongBlock_)
-                        LongBlock_ = blockLength;
+                    if (blockLength < ShortBlock)
+                        ShortBlock = blockLength;
+                    if (blockLength > LongBlock)
+                        LongBlock = blockLength;
                     // increment number of blocks
-                    NumberBlocks_++;
+                    NumberBlocks++;
                     // add block length to cumulative sum
-                    AverageBlock_ += blockLength;
+                    AverageBlock += blockLength;
 
                     #endregion
 
@@ -299,36 +271,35 @@ namespace UniTimetable
 
                     TimeLength dayLength = dayEnd - dayStart;
                     // add to total time at uni
-                    TimeAtUni_ += dayLength;
+                    TimeAtUni += dayLength;
                     // check max/min
-                    if (dayLength > MaxDayLength_)
-                        MaxDayLength_ = dayLength;
-                    if (dayLength < MinDayLength_)
-                        MinDayLength_ = dayLength;
+                    if (dayLength > MaxDayLength)
+                        MaxDayLength = dayLength;
+                    if (dayLength < MinDayLength)
+                        MinDayLength = dayLength;
 
                     // add to total time for start and end
                     TotalStart_.TotalMinutes += dayStart.DayMinutes;
                     TotalEnd_.TotalMinutes += dayEnd.DayMinutes;
 
                     // check start/end min/max
-                    if (dayStart < EarlyStart_)
-                        EarlyStart_ = dayStart;
-                    if (dayStart > LateStart_)
-                        LateStart_ = dayStart;
-                    if (dayEnd < EarlyEnd_)
-                        EarlyEnd_ = dayEnd;
-                    if (dayEnd > LateEnd_)
-                        LateEnd_ = dayEnd;
+                    if (dayStart < EarlyStart)
+                        EarlyStart = dayStart;
+                    if (dayStart > LateStart)
+                        LateStart = dayStart;
+                    if (dayEnd < EarlyEnd)
+                        EarlyEnd = dayEnd;
+                    if (dayEnd > LateEnd)
+                        LateEnd = dayEnd;
                 }
 
                 // calculate averages using totals and counts
-                if (NumberBreaks_ > 0)
-                    AverageBreak_ = TimeInBreaks_ / NumberBreaks_;
-                AverageBlock_ /= NumberBlocks_;
-                AverageStart_ = new TimeOfDay(TotalStart_.TotalMinutes / Days_);
-                AverageEnd_ = new TimeOfDay(TotalEnd_.TotalMinutes / Days_);
-                AverageDayLength_ = TimeAtUni_ / Days_;
-
+                if (NumberBreaks > 0)
+                    AverageBreak = TimeInBreaks/NumberBreaks;
+                AverageBlock /= NumberBlocks;
+                AverageStart = new TimeOfDay(TotalStart_.TotalMinutes/Days);
+                AverageEnd = new TimeOfDay(TotalEnd_.TotalMinutes/Days);
+                AverageDayLength = TimeAtUni/Days;
 
 
                 /*
@@ -491,7 +462,7 @@ namespace UniTimetable
             public bool Fits(Stream stream)
             {
                 // check if stream fits with the current streams
-                foreach (Stream other in Combination_)
+                foreach (Stream other in Streams)
                 {
                     if (stream.ClashesWith(other))
                         return false;
@@ -506,25 +477,25 @@ namespace UniTimetable
                     return false;
 
                 // add to list of streams
-                Combination_.Add(stream);
+                Streams.Add(stream);
 
                 // run through list of classes
                 foreach (Session session in stream.Classes)
                 {
                     // increase total time spent in classes
-                    TimeInClasses_ += session.Length;
+                    TimeInClasses += session.Length;
 
                     // if we're adding the class to an empty day
                     if (ClassesByDay_[session.Day].Count == 0)
                     {
                         // increment day count
-                        Days_++;
+                        Days++;
                         // add start and ending times to totals
                         TotalStart_ += new TimeLength(session.StartTime.DayMinutes);
                         TotalEnd_ += new TimeLength(session.EndTime.DayMinutes);
 
                         // add length to total time at uni
-                        TimeAtUni_ += session.Length;
+                        TimeAtUni += session.Length;
                     }
                     else
                     {
@@ -535,55 +506,57 @@ namespace UniTimetable
                             // remove the difference for total start
                             TotalStart_ -= difference;
                             // add the difference for total time at uni
-                            TimeAtUni_ += difference;
+                            TimeAtUni += difference;
                         }
                         // if it's later than the latest class
                         if (session.EndTime > ClassesByDay_[session.Day][ClassesByDay_[session.Day].Count - 1].EndTime)
                         {
-                            TimeLength difference = session.EndTime - ClassesByDay_[session.Day][ClassesByDay_[session.Day].Count - 1].EndTime;
+                            TimeLength difference = session.EndTime -
+                                                    ClassesByDay_[session.Day][ClassesByDay_[session.Day].Count - 1]
+                                                        .EndTime;
                             // add the difference for total end
                             TotalEnd_ += difference;
                             // add the difference for total time at uni
-                            TimeAtUni_ += difference;
+                            TimeAtUni += difference;
                         }
                     }
                     // update average day length
-                    AverageDayLength_ = TimeAtUni_ / Days_;
+                    AverageDayLength = TimeAtUni/Days;
 
                     // add new classes to day-indexed list
                     ClassesByDay_[session.Day].Add(session);
                     //ClassesByDay_[session.Day].Sort();
 
                     // check class start/end times against maxima/minima
-                    if (session.StartTime < EarlyStart_)
-                        EarlyStart_ = session.StartTime;
-                    if (session.StartTime > LateStart_)
-                        LateStart_ = session.StartTime;
-                    if (session.EndTime < EarlyEnd_)
-                        EarlyEnd_ = session.EndTime;
-                    if (session.EndTime > LateEnd_)
-                        LateEnd_ = session.EndTime;
+                    if (session.StartTime < EarlyStart)
+                        EarlyStart = session.StartTime;
+                    if (session.StartTime > LateStart)
+                        LateStart = session.StartTime;
+                    if (session.EndTime < EarlyEnd)
+                        EarlyEnd = session.EndTime;
+                    if (session.EndTime > LateEnd)
+                        LateEnd = session.EndTime;
 
                     // check day length
                     TimeLength dayLength = ClassesByDay_[session.Day][ClassesByDay_[session.Day].Count - 1].EndTime -
-                        ClassesByDay_[session.Day][0].StartTime;
-                    if (dayLength < MinDayLength_)
-                        MinDayLength_ = dayLength;
-                    if (dayLength > MaxDayLength_)
-                        MaxDayLength_ = dayLength;
+                                           ClassesByDay_[session.Day][0].StartTime;
+                    if (dayLength < MinDayLength)
+                        MinDayLength = dayLength;
+                    if (dayLength > MaxDayLength)
+                        MaxDayLength = dayLength;
                 }
 
                 // clear break data
-                NumberBreaks_ = 0;
-                AverageBreak_ = new TimeLength(0, 0);
-                ShortBreak_ = new TimeLength(24, 0);
-                LongBreak_ = new TimeLength(0, 0);
-                TimeInBreaks_ = new TimeLength(0, 0);
+                NumberBreaks = 0;
+                AverageBreak = new TimeLength(0, 0);
+                ShortBreak = new TimeLength(24, 0);
+                LongBreak = new TimeLength(0, 0);
+                TimeInBreaks = new TimeLength(0, 0);
                 // clear block data
-                NumberBlocks_ = 0;
-                AverageBlock_ = new TimeLength(0, 0);
-                ShortBlock_ = new TimeLength(24, 0);
-                LongBlock_ = new TimeLength(0, 0);
+                NumberBlocks = 0;
+                AverageBlock = new TimeLength(0, 0);
+                ShortBlock = new TimeLength(24, 0);
+                LongBlock = new TimeLength(0, 0);
                 // TODO: rewrite to avoid full sweep?
                 // do a fresh sweep of all days to rebuild break/block data
                 foreach (List<Session> daySessions in ClassesByDay_)
@@ -610,56 +583,56 @@ namespace UniTimetable
                         blockLength = daySessions[i - 1].EndTime - blockStart;
 
                         // increment number of blocks
-                        NumberBlocks_++;
+                        NumberBlocks++;
                         // add block length to cumulative sum
-                        AverageBlock_ += blockLength;
+                        AverageBlock += blockLength;
                         // set start of next block
                         blockStart = daySessions[i].StartTime;
 
                         // compare block against maxima/minima
-                        if (blockLength < ShortBlock_)
-                            ShortBlock_ = blockLength;
-                        if (blockLength > LongBlock_)
-                            LongBlock_ = blockLength;
+                        if (blockLength < ShortBlock)
+                            ShortBlock = blockLength;
+                        if (blockLength > LongBlock)
+                            LongBlock = blockLength;
 
                         // increment number of breaks
-                        NumberBreaks_++;
+                        NumberBreaks++;
                         // add break to cumulative sum
-                        TimeInBreaks_ += breakLength;
+                        TimeInBreaks += breakLength;
 
                         // compare break length against maxima/minima
-                        if (breakLength < ShortBreak_)
-                            ShortBreak_ = breakLength;
+                        if (breakLength < ShortBreak)
+                            ShortBreak = breakLength;
                         // check if it's the longest break so far
-                        if (breakLength > LongBreak_)
-                            LongBreak_ = breakLength;
+                        if (breakLength > LongBreak)
+                            LongBreak = breakLength;
                     }
 
                     // also create a block at the end
                     // find block length
                     blockLength = daySessions[i - 1].EndTime - blockStart;
                     // compare block against maxima/minima
-                    if (blockLength < ShortBlock_)
-                        ShortBlock_ = blockLength;
-                    if (blockLength > LongBlock_)
-                        LongBlock_ = blockLength;
+                    if (blockLength < ShortBlock)
+                        ShortBlock = blockLength;
+                    if (blockLength > LongBlock)
+                        LongBlock = blockLength;
                     // increment number of blocks
-                    NumberBlocks_++;
+                    NumberBlocks++;
                     // add block length to cumulative sum
-                    AverageBlock_ += blockLength;
+                    AverageBlock += blockLength;
                 }
 
-                if (NumberBreaks_ > 0)
+                if (NumberBreaks > 0)
                 {
                     // divide the sum of breaks to find the mean
-                    AverageBreak_ = TimeInBreaks_ / NumberBreaks_;
+                    AverageBreak = TimeInBreaks/NumberBreaks;
                 }
 
                 // divide the sum of blocks to find the mean
-                AverageBlock_ /= NumberBlocks_;
+                AverageBlock /= NumberBlocks;
 
-                AverageStart_ = new TimeOfDay(TotalStart_.TotalMinutes / Days_);
-                AverageEnd_ = new TimeOfDay(TotalEnd_.TotalMinutes / Days_);
+                AverageStart = new TimeOfDay(TotalStart_.TotalMinutes/Days);
+                AverageEnd = new TimeOfDay(TotalEnd_.TotalMinutes/Days);
 
                 return true;
             }
@@ -671,16 +644,11 @@ namespace UniTimetable
                     return false;
 
                 // add to list of streams
-                Combination_.Add(stream);
+                Streams.Add(stream);
                 return true;
             }
 
             #endregion
-
-            public int CompareTo(Solution other, SolutionComparer solutionComparer)
-            {
-                return solutionComparer.Compare(this, other);
-            }
 
             #region Field value accessors
 
@@ -740,67 +708,67 @@ namespace UniTimetable
                 switch (field)
                 {
                     case FieldIndex.TimeAtUni:
-                        return TimeAtUni_.ToString();
+                        return TimeAtUni.ToString();
 
                     case FieldIndex.TimeInClasses:
-                        return TimeInClasses_.ToString();
+                        return TimeInClasses.ToString();
 
                     case FieldIndex.TimeInBreaks:
-                        return TimeInBreaks_.ToString();
+                        return TimeInBreaks.ToString();
 
                     case FieldIndex.Days:
-                        return Days_.ToString();
+                        return Days.ToString();
 
                     case FieldIndex.MinDayLength:
-                        return MinDayLength_.ToString();
+                        return MinDayLength.ToString();
 
                     case FieldIndex.MaxDayLength:
-                        return MaxDayLength_.ToString();
+                        return MaxDayLength.ToString();
 
                     case FieldIndex.AverageDayLength:
-                        return AverageDayLength_.ToString();
+                        return AverageDayLength.ToString();
 
                     case FieldIndex.ShortBreak:
-                        return ShortBreak_.ToString();
+                        return ShortBreak.ToString();
 
                     case FieldIndex.LongBreak:
-                        return LongBreak_.ToString();
+                        return LongBreak.ToString();
 
                     case FieldIndex.AverageBreak:
-                        return AverageBreak_.ToString();
+                        return AverageBreak.ToString();
 
                     case FieldIndex.NumberBreaks:
-                        return NumberBreaks_.ToString();
+                        return NumberBreaks.ToString();
 
                     case FieldIndex.ShortBlock:
-                        return ShortBlock_.ToString();
+                        return ShortBlock.ToString();
 
                     case FieldIndex.LongBlock:
-                        return LongBlock_.ToString();
+                        return LongBlock.ToString();
 
                     case FieldIndex.AverageBlock:
-                        return AverageBlock_.ToString();
+                        return AverageBlock.ToString();
 
                     case FieldIndex.NumberBlocks:
-                        return NumberBlocks_.ToString();
+                        return NumberBlocks.ToString();
 
                     case FieldIndex.EarlyStart:
-                        return EarlyStart_.ToString();
+                        return EarlyStart.ToString();
 
                     case FieldIndex.LateStart:
-                        return LateStart_.ToString();
+                        return LateStart.ToString();
 
                     case FieldIndex.AverageStart:
-                        return AverageStart_.ToString();
+                        return AverageStart.ToString();
 
                     case FieldIndex.EarlyEnd:
-                        return EarlyEnd_.ToString();
+                        return EarlyEnd.ToString();
 
                     case FieldIndex.LateEnd:
-                        return LateEnd_.ToString();
+                        return LateEnd.ToString();
 
                     case FieldIndex.AverageEnd:
-                        return AverageEnd_.ToString();
+                        return AverageEnd.ToString();
 
                     default:
                         return "";
@@ -812,67 +780,67 @@ namespace UniTimetable
                 switch (field)
                 {
                     case FieldIndex.TimeAtUni:
-                        return TimeAtUni_.TotalMinutes;
+                        return TimeAtUni.TotalMinutes;
 
                     case FieldIndex.TimeInClasses:
-                        return TimeInClasses_.TotalMinutes;
+                        return TimeInClasses.TotalMinutes;
 
                     case FieldIndex.TimeInBreaks:
-                        return TimeInBreaks_.TotalMinutes;
+                        return TimeInBreaks.TotalMinutes;
 
                     case FieldIndex.Days:
-                        return Days_;
+                        return Days;
 
                     case FieldIndex.MinDayLength:
-                        return MinDayLength_.TotalMinutes;
+                        return MinDayLength.TotalMinutes;
 
                     case FieldIndex.MaxDayLength:
-                        return MaxDayLength_.TotalMinutes;
+                        return MaxDayLength.TotalMinutes;
 
                     case FieldIndex.AverageDayLength:
-                        return AverageDayLength_.TotalMinutes;
+                        return AverageDayLength.TotalMinutes;
 
                     case FieldIndex.ShortBreak:
-                        return ShortBreak_.TotalMinutes;
+                        return ShortBreak.TotalMinutes;
 
                     case FieldIndex.LongBreak:
-                        return LongBreak_.TotalMinutes;
+                        return LongBreak.TotalMinutes;
 
                     case FieldIndex.AverageBreak:
-                        return AverageBreak_.TotalMinutes;
+                        return AverageBreak.TotalMinutes;
 
                     case FieldIndex.NumberBreaks:
-                        return NumberBreaks_;
+                        return NumberBreaks;
 
                     case FieldIndex.ShortBlock:
-                        return ShortBlock_.TotalMinutes;
+                        return ShortBlock.TotalMinutes;
 
                     case FieldIndex.LongBlock:
-                        return LongBlock_.TotalMinutes;
+                        return LongBlock.TotalMinutes;
 
                     case FieldIndex.AverageBlock:
-                        return AverageBlock_.TotalMinutes;
+                        return AverageBlock.TotalMinutes;
 
                     case FieldIndex.NumberBlocks:
-                        return NumberBlocks_;
+                        return NumberBlocks;
 
                     case FieldIndex.EarlyStart:
-                        return EarlyStart_.DayMinutes;
+                        return EarlyStart.DayMinutes;
 
                     case FieldIndex.LateStart:
-                        return LateStart_.DayMinutes;
+                        return LateStart.DayMinutes;
 
                     case FieldIndex.AverageStart:
-                        return AverageStart_.DayMinutes;
+                        return AverageStart.DayMinutes;
 
                     case FieldIndex.EarlyEnd:
-                        return EarlyEnd_.DayMinutes;
+                        return EarlyEnd.DayMinutes;
 
                     case FieldIndex.LateEnd:
-                        return LateEnd_.DayMinutes;
+                        return LateEnd.DayMinutes;
 
                     case FieldIndex.AverageEnd:
-                        return AverageEnd_.DayMinutes;
+                        return AverageEnd.DayMinutes;
 
                     default:
                         return 0;
@@ -884,67 +852,67 @@ namespace UniTimetable
                 switch (field)
                 {
                     case FieldIndex.TimeAtUni:
-                        return this.TimeAtUni_.CompareTo(other.TimeAtUni_);
+                        return TimeAtUni.CompareTo(other.TimeAtUni);
 
                     case FieldIndex.TimeInClasses:
-                        return this.TimeInClasses_.CompareTo(other.TimeInClasses_);
+                        return TimeInClasses.CompareTo(other.TimeInClasses);
 
                     case FieldIndex.TimeInBreaks:
-                        return this.TimeInBreaks_.CompareTo(other.TimeInBreaks_);
+                        return TimeInBreaks.CompareTo(other.TimeInBreaks);
 
                     case FieldIndex.Days:
-                        return this.Days_.CompareTo(other.Days_);
+                        return Days.CompareTo(other.Days);
 
                     case FieldIndex.MinDayLength:
-                        return this.MinDayLength_.CompareTo(other.MinDayLength_);
+                        return MinDayLength.CompareTo(other.MinDayLength);
 
                     case FieldIndex.MaxDayLength:
-                        return this.MaxDayLength_.CompareTo(other.MaxDayLength_);
+                        return MaxDayLength.CompareTo(other.MaxDayLength);
 
                     case FieldIndex.AverageDayLength:
-                        return this.AverageDayLength_.CompareTo(other.AverageDayLength_);
+                        return AverageDayLength.CompareTo(other.AverageDayLength);
 
                     case FieldIndex.ShortBreak:
-                        return this.ShortBreak_.CompareTo(other.ShortBreak_);
+                        return ShortBreak.CompareTo(other.ShortBreak);
 
                     case FieldIndex.LongBreak:
-                        return this.LongBreak_.CompareTo(other.LongBreak_);
+                        return LongBreak.CompareTo(other.LongBreak);
 
                     case FieldIndex.AverageBreak:
-                        return this.AverageBreak_.CompareTo(other.AverageBreak_);
+                        return AverageBreak.CompareTo(other.AverageBreak);
 
                     case FieldIndex.NumberBreaks:
-                        return this.NumberBreaks_.CompareTo(other.NumberBreaks_);
+                        return NumberBreaks.CompareTo(other.NumberBreaks);
 
                     case FieldIndex.ShortBlock:
-                        return this.ShortBlock_.CompareTo(other.ShortBlock_);
+                        return ShortBlock.CompareTo(other.ShortBlock);
 
                     case FieldIndex.LongBlock:
-                        return this.LongBlock_.CompareTo(other.LongBlock_);
+                        return LongBlock.CompareTo(other.LongBlock);
 
                     case FieldIndex.AverageBlock:
-                        return this.AverageBlock_.CompareTo(other.AverageBlock_);
+                        return AverageBlock.CompareTo(other.AverageBlock);
 
                     case FieldIndex.NumberBlocks:
-                        return this.NumberBlocks_.CompareTo(other.NumberBlocks_);
+                        return NumberBlocks.CompareTo(other.NumberBlocks);
 
                     case FieldIndex.EarlyStart:
-                        return this.EarlyStart_.CompareTo(other.EarlyStart_);
+                        return EarlyStart.CompareTo(other.EarlyStart);
 
                     case FieldIndex.LateStart:
-                        return this.LateStart_.CompareTo(other.LateStart_);
+                        return LateStart.CompareTo(other.LateStart);
 
                     case FieldIndex.AverageStart:
-                        return AverageStart_.CompareTo(other.AverageStart_);
+                        return AverageStart.CompareTo(other.AverageStart);
 
                     case FieldIndex.EarlyEnd:
-                        return EarlyEnd_.CompareTo(other.EarlyEnd_);
+                        return EarlyEnd.CompareTo(other.EarlyEnd);
 
                     case FieldIndex.LateEnd:
-                        return LateEnd_.CompareTo(other.LateEnd_);
+                        return LateEnd.CompareTo(other.LateEnd);
 
                     case FieldIndex.AverageEnd:
-                        return AverageEnd_.CompareTo(other.AverageEnd_);
+                        return AverageEnd.CompareTo(other.AverageEnd);
 
                     default:
                         return 0;

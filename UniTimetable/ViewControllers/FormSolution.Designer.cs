@@ -1,4 +1,4 @@
-namespace UniTimetable
+namespace UniTimetable.ViewControllers
 {
     partial class FormSolution
     {
@@ -34,7 +34,7 @@ namespace UniTimetable
             this.lvbSolutions = new System.Windows.Forms.ListView();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.timetableControl = new UniTimetable.TimetableControl();
+            this.timetableControl = new TimetableControl();
             this.btnCancel = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.textBox1 = new System.Windows.Forms.TextBox();

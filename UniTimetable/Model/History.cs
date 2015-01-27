@@ -1,11 +1,11 @@
-namespace UniTimetable
+namespace UniTimetable.Model
 {
-    class History<T>
+    internal class History<T>
     {
-        readonly int _capacity;
-        T[] _items;
-        int _count;
-        int _current;
+        private readonly int _capacity;
+        private int _count;
+        private int _current;
+        private T[] _items;
 
         public History(int capacity)
         {

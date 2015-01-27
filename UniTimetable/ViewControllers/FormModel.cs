@@ -1,12 +1,18 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace UniTimetable
+#endregion
+
+namespace UniTimetable.ViewControllers
 {
     public partial class FormModel : Form
     {
+        private static readonly Pen OutlinePen = new Pen(Color.Red, 2);
+
         public FormModel()
         {
             InitializeComponent();
@@ -14,10 +20,7 @@ namespace UniTimetable
 
         public override string Text
         {
-            get
-            {
-                return base.Text;
-            }
+            get { return base.Text; }
             set
             {
                 base.Text = value;
@@ -25,14 +28,14 @@ namespace UniTimetable
             }
         }
 
-        private static readonly Pen OutlinePen = new Pen(Color.Red, 2);
         private void ModelFormPaint(object sender, PaintEventArgs e)
         {
             e.Graphics.DrawRectangle(OutlinePen, 1, 1, Width - 2, Height - 2);
         }
 
-        [DllImportAttribute("user32.dll")]
+        [DllImport("user32.dll")]
         public static extern int SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
+
         [DllImport("user32.dll")]
         public static extern bool ReleaseCapture();
 

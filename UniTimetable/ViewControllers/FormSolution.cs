@@ -1,26 +1,29 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using UniTimetable.Model.Solver;
+using UniTimetable.Model.Timetable;
 using UniTimetable.Properties;
 
-namespace UniTimetable
+#endregion
+
+namespace UniTimetable.ViewControllers
 {
     partial class FormSolution : Form
     {
-        Solver Solver_;
-
-        const string StarText_ = "Star It!";
-        const string DeStarText_ = "De-Star It!";
-        readonly Image StarImage_ = Resources.Favorites;
-        readonly Image DeStarImage_ = Resources.DeStar;
-
-        readonly Color StarColor_ = Color.Yellow;
-        readonly Color SolutionColor1_ = Color.White;
-        readonly Color SolutionColor2_ = Color.LightGray;
-
-        ListViewItem[] FullListBackup_;
-        Color[] OriginalColors_;
+        private const string StarText_ = "Star It!";
+        private const string DeStarText_ = "De-Star It!";
+        private readonly Image DeStarImage_ = Resources.DeStar;
+        private readonly Color SolutionColor1_ = Color.White;
+        private readonly Color SolutionColor2_ = Color.LightGray;
+        private readonly Color StarColor_ = Color.Yellow;
+        private readonly Image StarImage_ = Resources.Favorites;
+        private ListViewItem[] FullListBackup_;
+        private Color[] OriginalColors_;
+        private Solver Solver_;
 
         public FormSolution()
         {
@@ -58,7 +61,7 @@ namespace UniTimetable
         }
 
         /// <summary>
-        /// Update preview and information for a new selected solution
+        ///     Update preview and information for a new selected solution
         /// </summary>
         private void lvbSolutions_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -86,7 +89,7 @@ namespace UniTimetable
                 SetStarButton(false);
 
             // set the currently selected solution
-            Solver.Solution solution = (Solver.Solution)lvbSolutions.SelectedItems[0].Tag;
+            Solver.Solution solution = (Solver.Solution) lvbSolutions.SelectedItems[0].Tag;
 
             // a list of lists of streams selected for each subject
             List<List<Stream>> groupedStreams = new List<List<Stream>>();
@@ -128,12 +131,14 @@ namespace UniTimetable
             // properties list - for each property (field)
             for (int i = 0; i < Solver.Fields.Length; i++)
             {
-                ListViewItem item = new ListViewItem(new string[] {
-                    // with the name of the field
-                    Solver.Fields[i].Name,
-                    // and the selected solution's value
-                    solution.FieldValueToString((Solver.FieldIndex)i) } );
-                
+                ListViewItem item = new ListViewItem(new[]
+                                                     {
+                                                         // with the name of the field
+                                                         Solver.Fields[i].Name,
+                                                         // and the selected solution's value
+                                                         solution.FieldValueToString((Solver.FieldIndex) i)
+                                                     });
+
                 lvbProperties.Items.Add(item);
             }
         }
@@ -145,10 +150,10 @@ namespace UniTimetable
                 return;
 
             // set the currently selected solution
-            Solver.Solution solution = (Solver.Solution)lvbSolutions.SelectedItems[0].Tag;
+            Solver.Solution solution = (Solver.Solution) lvbSolutions.SelectedItems[0].Tag;
             Solver_.Timetable.LoadSolution(solution);
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            DialogResult = DialogResult.OK;
+            Close();
         }
 
         private void btnCriteria_Click(object sender, EventArgs e)
@@ -177,13 +182,13 @@ namespace UniTimetable
             if (chkOnlyStarred.Checked)
             {
                 // get the solution
-                Solver.Solution solution = (Solver.Solution)item.Tag;
+                Solver.Solution solution = (Solver.Solution) item.Tag;
                 // remove the item from the list
                 lvbSolutions.Items.RemoveAt(lvbSolutions.SelectedIndices[0]);
                 // search for the item in the backup list and destar it
                 for (int i = 0; i < FullListBackup_.Length; i++)
                 {
-                    if ((Solver.Solution)FullListBackup_[i].Tag == solution)
+                    if ((Solver.Solution) FullListBackup_[i].Tag == solution)
                     {
                         FullListBackup_[i].ImageIndex = -1;
                         FullListBackup_[i].BackColor = OriginalColors_[i];
@@ -289,7 +294,7 @@ namespace UniTimetable
                 return;
             }
 
-            Solver.Solution solution = (Solver.Solution)lvbSolutions.SelectedItems[0].Tag;
+            Solver.Solution solution = (Solver.Solution) lvbSolutions.SelectedItems[0].Tag;
             timetableControl.Timetable = Solver_.Timetable.PreviewSolution(solution);
         }
 
@@ -327,7 +332,7 @@ namespace UniTimetable
                     if (item.BackColor == StarColor_)
                     {
                         // clone the item and add to the list
-                        lvbSolutions.Items.Add((ListViewItem)item.Clone());
+                        lvbSolutions.Items.Add((ListViewItem) item.Clone());
                     }
                 }
                 // now set the colours

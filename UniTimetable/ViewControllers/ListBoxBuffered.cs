@@ -1,7 +1,11 @@
+#region
+
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace UniTimetable
+#endregion
+
+namespace UniTimetable.ViewControllers
 {
     // Adapted from Flicker Free ListBox by Les Potter
     // http://yacsharpblog.blogspot.com/2008/07/listbox-flicker.html
@@ -11,10 +15,9 @@ namespace UniTimetable
     // happens when the OnPaint override is left empty.
     public class ListBoxBuffered : ListBox
     {
-        DrawMode DrawMode_ = DrawMode.Normal;
+        private DrawMode DrawMode_ = DrawMode.Normal;
 
         public ListBoxBuffered()
-            : base()
         {
             SetStyle(
                 ControlStyles.OptimizedDoubleBuffer |
@@ -23,13 +26,10 @@ namespace UniTimetable
                 true);
             base.DrawMode = DrawMode.OwnerDrawFixed;
         }
-        
+
         public override DrawMode DrawMode
         {
-            get
-            {
-                return DrawMode_;
-            }
+            get { return DrawMode_; }
             set
             {
                 if (value != DrawMode.OwnerDrawVariable)
@@ -41,10 +41,11 @@ namespace UniTimetable
         {
             if (DrawMode_ == DrawMode.Normal)
             {
-                if (this.Items.Count > 0)
+                if (Items.Count > 0)
                 {
                     e.DrawBackground();
-                    e.Graphics.DrawString(Items[e.Index].ToString(), e.Font, new SolidBrush(this.ForeColor), new PointF(e.Bounds.X, e.Bounds.Y));
+                    e.Graphics.DrawString(Items[e.Index].ToString(), e.Font, new SolidBrush(ForeColor),
+                        new PointF(e.Bounds.X, e.Bounds.Y));
                 }
             }
             else
@@ -57,16 +58,16 @@ namespace UniTimetable
         {
             Region region = new Region(e.ClipRectangle);
             Graphics g = e.Graphics;
-            g.FillRegion(new SolidBrush(this.BackColor), region);
+            g.FillRegion(new SolidBrush(BackColor), region);
 
-            for (int i = 0; i < this.Items.Count; i++)
+            for (int i = 0; i < Items.Count; i++)
             {
                 Rectangle rect = GetItemRectangle(i);
                 if (e.ClipRectangle.IntersectsWith(rect))
                 {
-                    bool selected = (this.SelectionMode == SelectionMode.One && this.SelectedIndex == i)
-                        || (this.SelectionMode == SelectionMode.MultiSimple && this.SelectedIndices.Contains(i))
-                        || (this.SelectionMode == SelectionMode.MultiExtended && this.SelectedIndices.Contains(i));
+                    bool selected = (SelectionMode == SelectionMode.One && SelectedIndex == i)
+                                    || (SelectionMode == SelectionMode.MultiSimple && SelectedIndices.Contains(i))
+                                    || (SelectionMode == SelectionMode.MultiExtended && SelectedIndices.Contains(i));
                     OnDrawItem(new DrawItemEventArgs(
                         g, Font, rect, i,
                         selected ? DrawItemState.Selected : DrawItemState.Default,

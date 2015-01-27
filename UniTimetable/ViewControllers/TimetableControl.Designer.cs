@@ -1,4 +1,4 @@
-namespace UniTimetable
+namespace UniTimetable.ViewControllers
 {
     sealed partial class TimetableControl
     {

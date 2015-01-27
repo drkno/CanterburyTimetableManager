@@ -1,18 +1,21 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Collections;
-using System.Windows.Forms;
+#region
 
-namespace UniTimetable
+using System.Collections;
+using System.Collections.Generic;
+using System.Windows.Forms;
+using UniTimetable.Model.Timetable;
+
+#endregion
+
+namespace UniTimetable.ViewControllers
 {
-    class ListViewColumnSorter : IComparer
+    internal class ListViewColumnSorter : IComparer
     {
-        private List<int> ColumnOrder_;
-        private List<SortOrder> OrderOfSort_;
-        private CaseInsensitiveComparer ObjectCompare_;
-        private List<bool> NameOfDay_;
-        private List<bool> LeadingZeros_;
+        private readonly List<int> ColumnOrder_;
+        private readonly List<bool> LeadingZeros_;
+        private readonly List<bool> NameOfDay_;
+        private readonly CaseInsensitiveComparer ObjectCompare_;
+        private readonly List<SortOrder> OrderOfSort_;
 
         public ListViewColumnSorter()
         {
@@ -22,6 +25,55 @@ namespace UniTimetable
             NameOfDay_ = new List<bool>();
             LeadingZeros_ = new List<bool>();
         }
+
+        #region IComparer Members
+
+        public int Compare(object x, object y)
+        {
+            int compareResult = 0;
+            ListViewItem itemX = (ListViewItem) x, itemY = (ListViewItem) y;
+
+            for (int i = 0; i < ColumnOrder_.Count && i < OrderOfSort_.Count; i++)
+            {
+                string textX = itemX.SubItems[ColumnOrder_[i]].Text;
+                string textY = itemY.SubItems[ColumnOrder_[i]].Text;
+
+                if (NameOfDay_[i])
+                {
+                    if (Timetable.Days.Contains(textX)) //prefix with (char)1 and numeric index of day
+                    {
+                        textX = (char) 1 + Timetable.Days.IndexOf(textX).ToString() + textX;
+                    }
+                    if (Timetable.Days.Contains(textY))
+                    {
+                        textY = (char) 1 + Timetable.Days.IndexOf(textY).ToString() + textY;
+                    }
+                }
+
+                if (LeadingZeros_[i])
+                {
+                    int digits = MaxDigits(textX, textY);
+                    textX = InsertLeadingZeros(textX, digits);
+                    textY = InsertLeadingZeros(textY, digits);
+                }
+
+                compareResult = ObjectCompare_.Compare(textX, textY);
+                if (compareResult == 0)
+                    continue;
+                if (OrderOfSort_[i] == SortOrder.Ascending)
+                {
+                    return compareResult;
+                }
+                if (OrderOfSort_[i] == SortOrder.Descending)
+                {
+                    return (-compareResult);
+                }
+            }
+
+            return 0;
+        }
+
+        #endregion
 
         private static int MaxDigits(string text)
         {
@@ -51,10 +103,7 @@ namespace UniTimetable
             {
                 return digitsX;
             }
-            else
-            {
-                return digitsY;
-            }
+            return digitsY;
         }
 
         private string InsertLeadingZeros(string text, int digits)
@@ -72,7 +121,7 @@ namespace UniTimetable
                         text = text.Insert(i, "0");
                         length++;
                     }
-                    i += length;    //not (length-1) as following character is not a digit
+                    i += length; //not (length-1) as following character is not a digit
                 }
             }
             return text;
@@ -98,54 +147,5 @@ namespace UniTimetable
             NameOfDay_.Add(day);
             LeadingZeros_.Add(zeros);
         }
-
-        #region IComparer Members
-
-        public int Compare(object x, object y)
-        {
-            int compareResult = 0;
-            ListViewItem itemX = (ListViewItem)x, itemY = (ListViewItem)y;
-
-            for (int i = 0; i < ColumnOrder_.Count && i < OrderOfSort_.Count; i++)
-            {
-                string textX = itemX.SubItems[ColumnOrder_[i]].Text;
-                string textY = itemY.SubItems[ColumnOrder_[i]].Text;
-
-                if (NameOfDay_[i])
-                {
-                    if (Timetable.Days.Contains(textX))    //prefix with (char)1 and numeric index of day
-                    {
-                        textX = (char)1 + Timetable.Days.IndexOf(textX).ToString() + textX;
-                    }
-                    if (Timetable.Days.Contains(textY))
-                    {
-                        textY = (char)1 + Timetable.Days.IndexOf(textY).ToString() + textY;
-                    }
-                }
-
-                if (LeadingZeros_[i])
-                {
-                    int digits = MaxDigits(textX, textY);
-                    textX = InsertLeadingZeros(textX, digits);
-                    textY = InsertLeadingZeros(textY, digits);
-                }
-
-                compareResult = ObjectCompare_.Compare(textX, textY);
-                if (compareResult == 0)
-                    continue;
-                if (OrderOfSort_[i] == SortOrder.Ascending)
-                {
-                    return compareResult;
-                }
-                else if (OrderOfSort_[i] == SortOrder.Descending)
-                {
-                    return (-compareResult);
-                }
-            }
-
-            return 0;
-        }
-
-        #endregion
     }
 }

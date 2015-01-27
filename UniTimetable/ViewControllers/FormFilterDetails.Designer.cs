@@ -1,4 +1,4 @@
-namespace UniTimetable
+namespace UniTimetable.ViewControllers
 {
     partial class FormFilterDetails
     {
@@ -38,7 +38,7 @@ namespace UniTimetable
             this.btnOK = new System.Windows.Forms.Button();
             this.txtTimeLength = new System.Windows.Forms.MaskedTextBox();
             this.btnRevert = new System.Windows.Forms.Button();
-            this.etchedLine1 = new UniTimetable.EtchedLine();
+            this.etchedLine1 = new EtchedLine();
             this.SuspendLayout();
             // 
             // ddTest

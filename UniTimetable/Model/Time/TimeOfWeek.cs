@@ -1,17 +1,27 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
+#region
 
-namespace UniTimetable
+using System;
+
+#endregion
+
+namespace UniTimetable.Model.Time
 {
     public class TimeOfWeek : TimeOfDay, IComparable<TimeOfWeek>
     {
         protected int Day_;
 
+        #region IComparable<TimeOfWeek> Members
+
+        public int CompareTo(TimeOfWeek other)
+        {
+            return WeekMinutes - other.WeekMinutes;
+        }
+
+        #endregion
+
         #region Constructors
 
         public TimeOfWeek()
-            : base()
         {
             Day_ = 0;
         }
@@ -19,7 +29,7 @@ namespace UniTimetable
         public TimeOfWeek(TimeOfWeek other)
             : base(other)
         {
-            this.Day_ = other.Day_;
+            Day_ = other.Day_;
         }
 
         public TimeOfWeek(int day, TimeOfDay time)
@@ -35,9 +45,9 @@ namespace UniTimetable
         }
 
         public TimeOfWeek(int weekMinutes)
-            : base(weekMinutes % (24 * 60))
+            : base(weekMinutes%(24*60))
         {
-            Day_ = (weekMinutes / (24 * 60)) % 7;
+            Day_ = (weekMinutes/(24*60))%7;
         }
 
         #endregion
@@ -46,10 +56,7 @@ namespace UniTimetable
 
         public int Day
         {
-            get
-            {
-                return Day_;
-            }
+            get { return Day_; }
             set
             {
                 Day_ = value;
@@ -62,22 +69,13 @@ namespace UniTimetable
 
         public DayOfWeek DayOfWeek
         {
-            get
-            {
-                return (DayOfWeek)Day_;
-            }
-            set
-            {
-                Day_ = (int)value;
-            }
+            get { return (DayOfWeek) Day_; }
+            set { Day_ = (int) value; }
         }
 
         public int WeekMinutes
         {
-            get
-            {
-                return Day_ * 24 * 60 + DayMinutes;
-            }
+            get { return Day_*24*60 + DayMinutes; }
         }
 
         #endregion
@@ -116,15 +114,6 @@ namespace UniTimetable
 
         #endregion
 
-        #region IComparable<TimeOfWeek> Members
-
-        public int CompareTo(TimeOfWeek other)
-        {
-            return this.WeekMinutes - other.WeekMinutes;
-        }
-
-        #endregion
-
         #region Overloaded arithmetic operators
 
         public static TimeLength operator -(TimeOfWeek time1, TimeOfWeek time2)
@@ -148,7 +137,7 @@ namespace UniTimetable
 
         public override bool Equals(object obj)
         {
-            return this.CompareTo((TimeOfWeek)obj) == 0;
+            return CompareTo((TimeOfWeek) obj) == 0;
         }
 
         public override int GetHashCode()
@@ -158,7 +147,7 @@ namespace UniTimetable
 
         public override string ToString()
         {
-            return DayOfWeek.ToString() + " " + base.ToString();
+            return DayOfWeek + " " + base.ToString();
         }
 
         #endregion

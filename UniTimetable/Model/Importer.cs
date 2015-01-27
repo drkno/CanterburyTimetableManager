@@ -1,61 +1,28 @@
+#region
+
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
-using System.Windows.Forms;
-using System.IO;
-using System.Drawing;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using UniTimetable.CanterburyData;
+using UniTimetable.Model.Timetable;
 using UniTimetable.Properties;
+using UniTimetable.ViewControllers;
+using Stream = UniTimetable.Model.Timetable.Stream;
+using Type = UniTimetable.Model.Timetable.Type;
 
-namespace UniTimetable
+#endregion
+
+namespace UniTimetable.Model
 {
-    class Importer
+    internal class Importer
     {
-        #region Property variables
-
-        public bool RequiresPassword = false;
-
-        protected string FormatName_ = null;
-        protected string University_ = null;
-        protected string CreatedBy_ = null;
-        protected string LastUpdated_ = null;
-
-        protected string File1Description_ = null;
-        protected string File2Description_ = null;
-        protected string File3Description_ = null;
-        protected string FileInstructions_ = null;
-
-        protected OpenFileDialog File1Dialog_ = null;
-        protected OpenFileDialog File2Dialog_ = null;
-        protected OpenFileDialog File3Dialog_ = null;
-
-        protected Image Logo_ = Properties.Resources.Unknown;
-
-        #endregion
-
-        #region Property accessors
-
-        public string FormatName { get { return FormatName_; } }
-        public string University { get { return University_; } }
-        public string CreatedBy { get { return CreatedBy_; } }
-        public string LastUpdated { get { return LastUpdated_; } }
-
-        public string File1Description { get { return File1Description_; } }
-        public string File2Description { get { return File2Description_; } }
-        public string File3Description { get { return File3Description_; } }
-        public string FileInstructions { get { return FileInstructions_; } }
-
-        public OpenFileDialog File1Dialog { get { return File1Dialog_; } }
-        public OpenFileDialog File2Dialog { get { return File2Dialog_; } }
-        public OpenFileDialog File3Dialog { get { return File3Dialog_; } }
-
-        public Image Logo { get { return Logo_; } }
-
-        #endregion
-
         protected Importer()
         {
             File1Dialog_ = DefaultFileDialog;
@@ -73,13 +40,99 @@ namespace UniTimetable
             }
         }
 
+        #region Property variables
+
+        public bool RequiresPassword;
+
+        protected string FormatName_ = null;
+        protected string University_ = null;
+        protected string CreatedBy_ = null;
+        protected string LastUpdated_ = null;
+
+        protected string File1Description_ = null;
+        protected string File2Description_ = null;
+        protected string File3Description_ = null;
+        protected string FileInstructions_ = null;
+
+        protected OpenFileDialog File1Dialog_;
+        protected OpenFileDialog File2Dialog_;
+        protected OpenFileDialog File3Dialog_;
+
+        protected Image Logo_ = Resources.Unknown;
+
+        #endregion
+
+        #region Property accessors
+
+        public string FormatName
+        {
+            get { return FormatName_; }
+        }
+
+        public string University
+        {
+            get { return University_; }
+        }
+
+        public string CreatedBy
+        {
+            get { return CreatedBy_; }
+        }
+
+        public string LastUpdated
+        {
+            get { return LastUpdated_; }
+        }
+
+        public string File1Description
+        {
+            get { return File1Description_; }
+        }
+
+        public string File2Description
+        {
+            get { return File2Description_; }
+        }
+
+        public string File3Description
+        {
+            get { return File3Description_; }
+        }
+
+        public string FileInstructions
+        {
+            get { return FileInstructions_; }
+        }
+
+        public OpenFileDialog File1Dialog
+        {
+            get { return File1Dialog_; }
+        }
+
+        public OpenFileDialog File2Dialog
+        {
+            get { return File2Dialog_; }
+        }
+
+        public OpenFileDialog File3Dialog
+        {
+            get { return File3Dialog_; }
+        }
+
+        public Image Logo
+        {
+            get { return Logo_; }
+        }
+
+        #endregion
+
         #region Importing
 
         /// <summary>
-        /// Takes the user-selected files and builds the stream data for a timetable.
+        ///     Takes the user-selected files and builds the stream data for a timetable.
         /// </summary>
         /// <returns>The stream data parsed from the files if it succeeded, null if it failed.</returns>
-        protected virtual Timetable Parse()
+        protected virtual Timetable.Timetable Parse()
         {
             throw new Exception("Parse method not implemented!");
         }
@@ -92,10 +145,10 @@ namespace UniTimetable
             Password = pass;
         }
 
-        public Timetable Import()
+        public Timetable.Timetable Import()
         {
             // try and parse files
-            Timetable t = Parse();
+            Timetable.Timetable t = Parse();
             // if parsing failed
             if (t == null || !t.HasData())
             {
@@ -107,12 +160,12 @@ namespace UniTimetable
             return t;
         }
 
-        private void SetColors(Timetable timetable)
+        private void SetColors(Timetable.Timetable timetable)
         {
             ColorScheme scheme = ColorScheme.Schemes[0];
             for (int i = 0; i < timetable.SubjectList.Count; i++)
             {
-                timetable.SubjectList[i].Color = scheme.Colors[i % scheme.Colors.Count];
+                timetable.SubjectList[i].Color = scheme.Colors[i%scheme.Colors.Count];
                 /*switch (i % 6)
                 {
                     case 0:
@@ -144,38 +197,38 @@ namespace UniTimetable
 
         #region Overloaded sealed base members
 
-        public sealed override string ToString()
+        public override sealed string ToString()
         {
             return FormatName_;
         }
 
-        public sealed override bool Equals(object obj)
+        public override sealed bool Equals(object obj)
         {
-            return Importer.ReferenceEquals(this, obj);
+            return ReferenceEquals(this, obj);
         }
 
-        public sealed override int GetHashCode()
+        public override sealed int GetHashCode()
         {
-            return (FormatName_.Length + University_.Length + CreatedBy_.Length + LastUpdated_.Length) % 16;
+            return (FormatName_.Length + University_.Length + CreatedBy_.Length + LastUpdated_.Length)%16;
         }
 
         #endregion
     }
 
-    class UnocImporter : Importer
+    internal class UnocImporter : Importer
     {
         public UnocImporter()
         {
             RequiresPassword = true;
         }
 
-        protected override Timetable Parse()
+        protected override Timetable.Timetable Parse()
         {
             try
             {
                 var cantaLoader = new CanterburyLoader(Username, Password);
                 cantaLoader.GetData();
-                var timetable = new Timetable();
+                var timetable = new Timetable.Timetable();
                 foreach (var data in cantaLoader.CanterburyDatas)
                 {
                     foreach (var subs in data.SubjectStreams)
@@ -210,7 +263,7 @@ namespace UniTimetable
                         }
                         var session = new Session(currentDay, subs.Value.Date.Hour,
                             subs.Value.Date.Minute, endTime.Hour, endTime.Minute, subs.Value.location);
-                        
+
                         Subject subject;
                         if (timetable.SubjectList.Exists(element => element.Name == subs.Value.subject_code))
                         {
@@ -234,9 +287,11 @@ namespace UniTimetable
                             switch (subs.Value.activity_group_code)
                             {
                                 case "tes":
-                                    type.Required = false; break;
+                                    type.Required = false;
+                                    break;
                                 default:
-                                    type.Required = true; break;
+                                    type.Required = true;
+                                    break;
                             }
                             timetable.TypeList.Add(type);
                         }
@@ -282,7 +337,7 @@ namespace UniTimetable
             }
         }
 
-        protected Timetable OldParse()
+        protected Timetable.Timetable OldParse()
         {
             /*
              * University of Canterbury Timetable Downloader
@@ -311,18 +366,21 @@ namespace UniTimetable
             */
 
             #region TimetableImport
+
             var cinfo = new List<string>();
 
             /* Online Retreival */
             var cookieContainer = new CookieContainer();
-            const string userAgent = "TimetableDL/1.0 (Based on http://jack.valmadre.net/timetable/; Keywords: webkit,gecko,khtml,trident,safari,firefox,chrome)";
+            const string userAgent =
+                "TimetableDL/1.0 (Based on http://jack.valmadre.net/timetable/; Keywords: webkit,gecko,khtml,trident,safari,firefox,chrome)";
 
-            var webRequest = (HttpWebRequest)WebRequest.Create("https://mytimetable.canterbury.ac.nz/aplus/apstudent?fun=login");
+            var webRequest =
+                (HttpWebRequest) WebRequest.Create("https://mytimetable.canterbury.ac.nz/aplus/apstudent?fun=login");
             webRequest.Method = "POST";
             using (var s = webRequest.GetRequestStream())
             {
                 var postData = "student_code=" + Username + "&password=" + Password;
-                s.Write(System.Text.Encoding.ASCII.GetBytes(postData), 0, postData.Length);
+                s.Write(Encoding.ASCII.GetBytes(postData), 0, postData.Length);
             }
             webRequest.ContentType = "application/x-www-form-urlencoded";
             webRequest.UserAgent = userAgent;
@@ -330,7 +388,7 @@ namespace UniTimetable
             webRequest.AllowAutoRedirect = true;
 
             var ss = "";
-            using (var s = (HttpWebResponse)webRequest.GetResponse())
+            using (var s = (HttpWebResponse) webRequest.GetResponse())
             {
                 cookieContainer = webRequest.CookieContainer;
                 System.IO.Stream stream;
@@ -349,7 +407,7 @@ namespace UniTimetable
                 streamReader.Close();
                 if (string.IsNullOrEmpty(ss))
                 {
-                    return null;    // HAVE YOU ENTERED YOUR USERNAME/PASSWORD (CORRECTLY)??? I BET NOT!
+                    return null; // HAVE YOU ENTERED YOUR USERNAME/PASSWORD (CORRECTLY)??? I BET NOT!
                 }
                 ss = ss.Replace("\n", "");
                 ss = ss.Replace("\r", "");
@@ -357,13 +415,13 @@ namespace UniTimetable
 
             webRequest =
                 (HttpWebRequest)
-                WebRequest.Create(
-                    "https://mytimetable.canterbury.ac.nz/aplus/apstudent?fun=ListEnrolment&ss=" + ss);
+                    WebRequest.Create(
+                        "https://mytimetable.canterbury.ac.nz/aplus/apstudent?fun=ListEnrolment&ss=" + ss);
             webRequest.CookieContainer = cookieContainer;
             webRequest.UserAgent = userAgent;
             webRequest.AllowAutoRedirect = true;
 
-            using (var webResponse = (HttpWebResponse)webRequest.GetResponse())
+            using (var webResponse = (HttpWebResponse) webRequest.GetResponse())
             {
                 System.IO.Stream s;
                 if ((s = webResponse.GetResponseStream()) == null)
@@ -371,7 +429,9 @@ namespace UniTimetable
                     return null;
                 }
                 var streamReader = new StreamReader(s);
-                var regex = new Regex("apstudent\\?ss=[a-f0-9]+&fun=show_a(uto_single|ctivity_group)&spos=[0-9]&gpos=[0-9]&disp=[^\"]*");
+                var regex =
+                    new Regex(
+                        "apstudent\\?ss=[a-f0-9]+&fun=show_a(uto_single|ctivity_group)&spos=[0-9]&gpos=[0-9]&disp=[^\"]*");
                 var links = new List<string>();
                 foreach (var res in regex.Matches(streamReader.ReadToEnd()))
                 {
@@ -385,7 +445,7 @@ namespace UniTimetable
                     webRequestTimetable.UserAgent = userAgent;
                     webRequestTimetable.AllowAutoRedirect = true;
                     webRequestTimetable.CookieContainer = cookieContainer;
-                    var webResponseTimetable = (HttpWebResponse)webRequestTimetable.GetResponse();
+                    var webResponseTimetable = (HttpWebResponse) webRequestTimetable.GetResponse();
                     using (var s1 = webResponseTimetable.GetResponseStream())
                     {
                         if (s1 == null)
@@ -400,28 +460,54 @@ namespace UniTimetable
 
                         var classExtractorRegex =
                             new Regex(
-                                      "<TD nowrap>(\r|\n|\r\n)([0-9]+(\r|\n|\r\n)</TD>((\r|\n|\r\n)<TD nowrap>(\r|\n|\r\n).*?(\r|\n|\r\n)</TD>|)(\r|\n|\r\n)<TD ALIGN=\"CENTER\" nowrap>(\r|\n|\r\n).*?(\r|\n|\r\n)</TD>(\r|\n|\r\n)<TD nowrap>(\r|\n|\r\n)[MTWFS][a-z]{2}(\r|\n|\r\n)</TD>(\r|\n|\r\n)<TD nowrap>(\r|\n|\r\n)[0-9]{2}[:][0-9]{2}(\r|\n|\r\n)</TD>(\r|\n|\r\n)<TD nowrap>(\r|\n|\r\n).*?(\r|\n|\r\n)</TD>(\r|\n|\r\n)<TD nowrap>(\r|\n|\r\n).*?(\r|\n|\r\n)</TD>(\r|\n|\r\n)<TD ALIGN=\"CENTER\" nowrap>(\r|\n|\r\n)[0-9]+(\r|\n|\r\n)</TD>(\r|\n|\r\n)<TD ALIGN=\"left\"( nowrap|)>(\r|\n|\r\n).*?(\r|\n|\r\n)</TD>(\r|\n|\r\n)<TD ALIGN=\"left\">(\r|\n|\r\n).*?(\r|\n|\r\n)(\r|\n|\r\n)</TD>)");
+                                "<TD nowrap>(\r|\n|\r\n)([0-9]+(\r|\n|\r\n)</TD>((\r|\n|\r\n)<TD nowrap>(\r|\n|\r\n).*?(\r|\n|\r\n)</TD>|)(\r|\n|\r\n)<TD ALIGN=\"CENTER\" nowrap>(\r|\n|\r\n).*?(\r|\n|\r\n)</TD>(\r|\n|\r\n)<TD nowrap>(\r|\n|\r\n)[MTWFS][a-z]{2}(\r|\n|\r\n)</TD>(\r|\n|\r\n)<TD nowrap>(\r|\n|\r\n)[0-9]{2}[:][0-9]{2}(\r|\n|\r\n)</TD>(\r|\n|\r\n)<TD nowrap>(\r|\n|\r\n).*?(\r|\n|\r\n)</TD>(\r|\n|\r\n)<TD nowrap>(\r|\n|\r\n).*?(\r|\n|\r\n)</TD>(\r|\n|\r\n)<TD ALIGN=\"CENTER\" nowrap>(\r|\n|\r\n)[0-9]+(\r|\n|\r\n)</TD>(\r|\n|\r\n)<TD ALIGN=\"left\"( nowrap|)>(\r|\n|\r\n).*?(\r|\n|\r\n)</TD>(\r|\n|\r\n)<TD ALIGN=\"left\">(\r|\n|\r\n).*?(\r|\n|\r\n)(\r|\n|\r\n)</TD>)");
                         foreach (var regmatch in classExtractorRegex.Matches(input))
                         {
-                            var regmatcha = Regex.Replace(regmatch.ToString(), "(\r|\n|\r\n)</TD>(\r|\n|\r\n)<TD.*?>(\r|\n|\r\n)", "|");
+                            var regmatcha = Regex.Replace(regmatch.ToString(),
+                                "(\r|\n|\r\n)</TD>(\r|\n|\r\n)<TD.*?>(\r|\n|\r\n)", "|");
                             regmatcha = Regex.Replace(regmatcha, "(<TD nowrap>|(\r|\n|\r\n))", "");
                             var det = regmatcha.Split('|');
-                            if (det.Length == 9) // Make sure that the correct number of values exists. If not add another.
+                            if (det.Length == 9)
+                                // Make sure that the correct number of values exists. If not add another.
                             {
                                 var day = det[2]; // add the day values to reduce the occurances of a bug
-                                switch (Regex.Matches(input, "(?<=(<B>))(Lecture|Computer|Lab|Tutorial|Test|Exam)(?=(</B>| ))")[0].ToString())
+                                switch (
+                                    Regex.Matches(input,
+                                        "(?<=(<B>))(Lecture|Computer|Lab|Tutorial|Test|Exam)(?=(</B>| ))")[0].ToString()
+                                    )
                                 {
-                                    case "Lecture": regmatcha = regmatcha.Insert(regmatcha.IndexOf("|", StringComparison.Ordinal), "|Lect " + day); break;
-                                    case "Computer": regmatcha = regmatcha.Insert(regmatcha.IndexOf("|", StringComparison.Ordinal), "|Com"); break;
-                                    case "Lab": regmatcha = regmatcha.Insert(regmatcha.IndexOf("|", StringComparison.Ordinal), "|Lab"); break;
-                                    case "Tutorial": regmatcha = regmatcha.Insert(regmatcha.IndexOf("|", StringComparison.Ordinal), "|Tut"); break;
-                                    case "Test": regmatcha = regmatcha.Insert(regmatcha.IndexOf("|", StringComparison.Ordinal), "|Test"); break;
-                                    case "Exam": regmatcha = regmatcha.Insert(regmatcha.IndexOf("|", StringComparison.Ordinal), "|Exam"); break;
-                                    default: regmatcha = regmatcha.Insert(regmatcha.IndexOf("|", StringComparison.Ordinal), "|Unkn " + day); break;
+                                    case "Lecture":
+                                        regmatcha = regmatcha.Insert(regmatcha.IndexOf("|", StringComparison.Ordinal),
+                                            "|Lect " + day);
+                                        break;
+                                    case "Computer":
+                                        regmatcha = regmatcha.Insert(regmatcha.IndexOf("|", StringComparison.Ordinal),
+                                            "|Com");
+                                        break;
+                                    case "Lab":
+                                        regmatcha = regmatcha.Insert(regmatcha.IndexOf("|", StringComparison.Ordinal),
+                                            "|Lab");
+                                        break;
+                                    case "Tutorial":
+                                        regmatcha = regmatcha.Insert(regmatcha.IndexOf("|", StringComparison.Ordinal),
+                                            "|Tut");
+                                        break;
+                                    case "Test":
+                                        regmatcha = regmatcha.Insert(regmatcha.IndexOf("|", StringComparison.Ordinal),
+                                            "|Test");
+                                        break;
+                                    case "Exam":
+                                        regmatcha = regmatcha.Insert(regmatcha.IndexOf("|", StringComparison.Ordinal),
+                                            "|Exam");
+                                        break;
+                                    default:
+                                        regmatcha = regmatcha.Insert(regmatcha.IndexOf("|", StringComparison.Ordinal),
+                                            "|Unkn " + day);
+                                        break;
                                 }
                             }
                             regmatcha = subjectTitle + "|" + regmatcha;
-                            regmatcha = regmatcha.TrimEnd(new[] { '|' });
+                            regmatcha = regmatcha.TrimEnd('|');
                             regmatcha = regmatcha.Substring(0, regmatcha.Length - 5);
                             cinfo.Add(regmatcha);
                         }
@@ -469,15 +555,18 @@ namespace UniTimetable
                 }
             }
             //*/
+
             #endregion
+
             #region TimetableParse
-            var timetable = new Timetable();
+
+            var timetable = new Timetable.Timetable();
 
             foreach (var match in cinfo)
             {
                 // Separate the values
                 var sessionInfo = match.Split('|');
-                
+
                 // Set the current day
                 int currentDay;
                 switch (sessionInfo[4])
@@ -531,19 +620,22 @@ namespace UniTimetable
 
                 // Set the session type
                 Type type;
-                if(subject.Types.Exists(types => types.Code == sessionInfo[2]))
+                if (subject.Types.Exists(types => types.Code == sessionInfo[2]))
                 {
-                    if(sessionInfo[2] == "Unknown")
+                    if (sessionInfo[2] == "Unknown")
                     {
                         var i = 1;
-                        while (subject.Types.Exists(types => types.Code == sessionInfo[2] + i.ToString(CultureInfo.InvariantCulture)))
+                        while (
+                            subject.Types.Exists(
+                                types => types.Code == sessionInfo[2] + i.ToString(CultureInfo.InvariantCulture)))
                         {
                             i++;
                         }
-                        type = new Type(sessionInfo[2]+i.ToString(CultureInfo.InvariantCulture), "Uno", subject)
-                        {
-                            Required = false // Allocate+ doesnt provide information as to if this class is required
-                        };
+                        type = new Type(sessionInfo[2] + i.ToString(CultureInfo.InvariantCulture), "Uno", subject)
+                               {
+                                   Required = false
+                                   // Allocate+ doesnt provide information as to if this class is required
+                               };
                         timetable.TypeList.Add(type);
                     }
                     else
@@ -562,15 +654,17 @@ namespace UniTimetable
                         case "lab":
                         case "lec":
                         case "tut":
-                            type.Required = true; break;
+                            type.Required = true;
+                            break;
                         /*case "exa": 
                         case "tes":
                         case "unk":*/
                         default:
-                            type.Required = false; break;
+                            type.Required = false;
+                            break;
                     }
                     timetable.TypeList.Add(type);
-                }               
+                }
 
                 // Set the session
                 Stream stream;
@@ -611,20 +705,27 @@ namespace UniTimetable
                 session.StartMinute = Convert.ToInt32(startTime.Substring(colonIndex + 1, 2));
 
                 // End Time
-                session.EndHour = ((int)((Convert.ToDouble(sessionInfo[8].Trim())) / 60.0) + session.StartHour);
-                session.EndHour = (session.EndHour >= 24)?session.EndHour - 24:session.EndHour;
-                session.EndMinute = (int) (Convert.ToInt32(sessionInfo[8].Trim()) - ((int)((Convert.ToDouble(sessionInfo[8].Trim())) / 60.0) * 60.0));
-                
+                session.EndHour = ((int) ((Convert.ToDouble(sessionInfo[8].Trim()))/60.0) + session.StartHour);
+                session.EndHour = (session.EndHour >= 24) ? session.EndHour - 24 : session.EndHour;
+                session.EndMinute =
+                    (int)
+                        (Convert.ToInt32(sessionInfo[8].Trim()) -
+                         ((int) ((Convert.ToDouble(sessionInfo[8].Trim()))/60.0)*60.0));
+
                 // Insert Building Location
                 var buildingRoom = sessionInfo[6].Trim().IndexOf(' ');
-                session.Location = (buildingRoom != -1) ? sessionInfo[6].Trim().Substring(0, buildingRoom).Trim() + " - " + sessionInfo[6].Trim().Substring(buildingRoom + 1).Trim() : sessionInfo[6];
+                session.Location = (buildingRoom != -1)
+                    ? sessionInfo[6].Trim().Substring(0, buildingRoom).Trim() + " - " +
+                      sessionInfo[6].Trim().Substring(buildingRoom + 1).Trim()
+                    : sessionInfo[6];
             }
+
             #endregion
 
             return timetable;
         }
 
-        public bool Export(Timetable timetable, Action<string, bool> modifyList)
+        public bool Export(Timetable.Timetable timetable, Action<string, bool> modifyList)
         {
             var response = true;
             try
@@ -632,7 +733,9 @@ namespace UniTimetable
                 var canterburyLoader = new CanterburyLoader(Username, Password);
                 foreach (var stream in timetable.StreamList.Where(stream => stream.Selected))
                 {
-                    modifyList("Setting " + stream.Type.Subject + ": " + stream.Type.Code + " to stream " + stream.Number, false);
+                    modifyList(
+                        "Setting " + stream.Type.Subject + ": " + stream.Type.Code + " to stream " + stream.Number,
+                        false);
                     var inrep = canterburyLoader.SetCourse(stream.Type.Subject, stream.Type.Code, stream.Number);
 
                     if (inrep != null)

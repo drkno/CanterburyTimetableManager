@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -6,30 +8,36 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
 
+#endregion
+
 namespace UniTimetable.CanterburyData
 {
     [DataContract]
     public class CanterburyData
     {
+        [DataMember] public string msg;
+        [DataMember] public bool success = true;
+
         [DataMember]
         public Subjectstream[] SubjectStreams { get; set; }
-        [DataMember]
-        public bool success = true;
-        [DataMember]
-        public string msg;
 
-        public static CanterburyData GetCanterburyData(string courseName, string activityName, ref string studentCode, ref string uniqueToken, ref CookieContainer cookieContainer, ref string userAgent)
+        public static CanterburyData GetCanterburyData(string courseName, string activityName, ref string studentCode,
+            ref string uniqueToken, ref CookieContainer cookieContainer, ref string userAgent)
         {
 #if DEBUG
             System.IO.Stream obj = null;
             return ParseJson(ref obj, courseName);
 #else
-            var webRequest = (HttpWebRequest)WebRequest.Create("https://mytimetable.canterbury.ac.nz/aplus/rest/student/"+studentCode+"/subject/"+courseName+"/group/"+activityName+"/activities/?ss=" + uniqueToken);
+            var webRequest =
+                (HttpWebRequest)
+                    WebRequest.Create("https://mytimetable.canterbury.ac.nz/aplus/rest/student/" + studentCode +
+                                      "/subject/" + courseName + "/group/" + activityName + "/activities/?ss=" +
+                                      uniqueToken);
             webRequest.UserAgent = userAgent;
             webRequest.CookieContainer = cookieContainer;
             webRequest.Headers.Add("X-Requested-With", "XMLHttpRequest");
             CanterburyData canterburyData;
-            using (var webResponse = (HttpWebResponse)webRequest.GetResponse())
+            using (var webResponse = (HttpWebResponse) webRequest.GetResponse())
             {
                 var stream = webResponse.GetResponseStream();
                 canterburyData = ParseJson(ref stream);
@@ -54,11 +62,11 @@ namespace UniTimetable.CanterburyData
             json = "{\"SubjectStreams\":[{\"Key\":" + json.Substring(1);
             json = json.Replace("\"Key\":\"success\":", "\"success\":");
             Debug.WriteLine("\n\n" + json + "\n\n");
-            var ser = new DataContractJsonSerializer(typeof(CanterburyData));
+            var ser = new DataContractJsonSerializer(typeof (CanterburyData));
             var streamN = new MemoryStream();
             streamN.Write(Encoding.ASCII.GetBytes(json), 0, json.Length);
             streamN.Position = 0;
-            var jsonSs = (CanterburyData)ser.ReadObject(streamN);
+            var jsonSs = (CanterburyData) ser.ReadObject(streamN);
             return jsonSs;
         }
     }
@@ -68,6 +76,7 @@ namespace UniTimetable.CanterburyData
     {
         [DataMember]
         public string Key { get; set; }
+
         [DataMember]
         public Value Value { get; set; }
     }
@@ -75,25 +84,28 @@ namespace UniTimetable.CanterburyData
     [DataContract]
     public class Value
     {
+        private string _start_date;
+        private string _start_time;
+
         [DataMember]
         public string subject_code { get; set; }
+
         [DataMember]
         public string activity_group_code { get; set; }
+
         [DataMember]
         public string activity_code { get; set; }
+
         [DataMember]
         public string campus { get; set; }
+
         [DataMember]
         public string day_of_week { get; set; }
 
-        private string _start_time;
         [DataMember]
         public string start_time
         {
-            get
-            {
-                return _start_time;
-            }
+            get { return _start_time; }
             set
             {
                 _start_time = value;
@@ -103,39 +115,47 @@ namespace UniTimetable.CanterburyData
                 }
             }
         }
+
         [DataMember]
         public string location { get; set; }
+
         [DataMember]
         public string staff { get; set; }
+
         [DataMember]
         public string duration { get; set; }
+
         [DataMember]
         public string selectable { get; set; }
+
         [DataMember]
         public int availability { get; set; }
+
         [DataMember]
         public string week_pattern { get; set; }
+
         [DataMember]
         public string description { get; set; }
+
         [DataMember]
         public string zone { get; set; }
+
         [DataMember]
         public string department { get; set; }
+
         [DataMember]
         public string semester { get; set; }
+
         [DataMember]
         public string activity_type { get; set; }
+
         [DataMember]
         public string message { get; set; }
 
-        private string _start_date;
         [DataMember]
         public string start_date
         {
-            get
-            {
-                return _start_date;
-            }
+            get { return _start_date; }
             set
             {
                 _start_date = value;
@@ -145,10 +165,13 @@ namespace UniTimetable.CanterburyData
                 }
             }
         }
+
         [DataMember]
         public string color { get; set; }
+
         [DataMember]
         public string lat { get; set; }
+
         [DataMember]
         public string lng { get; set; }
 

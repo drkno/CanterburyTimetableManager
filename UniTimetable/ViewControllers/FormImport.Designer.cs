@@ -1,4 +1,4 @@
-namespace UniTimetable
+namespace UniTimetable.ViewControllers
 {
     partial class FormImport
     {
@@ -54,7 +54,7 @@ namespace UniTimetable
             this.progressBarLoading = new System.Windows.Forms.ProgressBar();
             this.panelPreview = new System.Windows.Forms.Panel();
             this.boxStreamDetails = new System.Windows.Forms.GroupBox();
-            this.timetableControl1 = new UniTimetable.TimetableControl();
+            this.timetableControl1 = new TimetableControl();
             this.txtTreeDetails = new System.Windows.Forms.TextBox();
             this.treePreview = new System.Windows.Forms.TreeView();
             this.lblTitle3 = new System.Windows.Forms.Label();

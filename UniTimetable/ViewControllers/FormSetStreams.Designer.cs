@@ -1,4 +1,4 @@
-﻿namespace UniTimetable
+﻿namespace UniTimetable.ViewControllers
 {
     partial class FormSetStreams
     {

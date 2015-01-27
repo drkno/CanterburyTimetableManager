@@ -1,30 +1,32 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace UniTimetable
+namespace UniTimetable.Model.Solver
 {
     partial class Solver
     {
+        // compatible with SortOrder (None, Ascending, Descending)
+        public enum Preference
+        {
+            None = 0,
+            Minimise = 1,
+            Maximise = 2
+        }
+
         public class Criteria
         {
-            Solver.FieldIndex FieldIndex_;
-            Solver.Preference Preference_;
-
-            static readonly string[][] fieldPrefs = new string[][] {
+            private static readonly string[][] fieldPrefs =
+            {
                 // TimeOfDay
-                new string[] {"None", "Early", "Late"},
+                new[] {"None", "Early", "Late"},
                 // TimeLength
-                new string[] {"None", "Short", "Long"},
+                new[] {"None", "Short", "Long"},
                 // Int
-                new string[] {"None", "Less", "More"}
+                new[] {"None", "Less", "More"}
             };
 
             public static string FieldSpecificPreference(FieldType field, Preference preference)
             {
                 if (field == FieldType.Unknown)
                     return "";
-                return fieldPrefs[(int)field][(int)preference];
+                return fieldPrefs[(int) field][(int) preference];
             }
 
             public static string FieldSpecificPreference(Criteria criteria)
@@ -35,8 +37,8 @@ namespace UniTimetable
             public static string[] FieldSpecificPreferences(FieldType field)
             {
                 if (field == FieldType.Unknown)
-                    return new string[] { };
-                return fieldPrefs[(int)field];
+                    return new string[] {};
+                return fieldPrefs[(int) field];
             }
 
             public static string[] FieldSpecificPreferences(Criteria criteria)
@@ -44,27 +46,34 @@ namespace UniTimetable
                 return FieldSpecificPreferences(criteria.Field.Type);
             }
 
+            public override string ToString()
+            {
+                return Field.ToString();
+            }
+
             #region Constructors
 
             public Criteria()
-                : this(Solver.FieldIndex.Days) { }
+                : this(FieldIndex.Days)
+            {
+            }
 
             public Criteria(FieldIndex fieldIndex)
             {
-                FieldIndex_ = fieldIndex;
-                Preference_ = Fields[(int)FieldIndex_].DefaultPreference;
+                FieldIndex = fieldIndex;
+                Preference = Fields[(int) FieldIndex].DefaultPreference;
             }
 
             public Criteria(FieldIndex fieldIndex, Preference preference)
             {
-                FieldIndex_ = fieldIndex;
-                Preference_ = preference;
+                FieldIndex = fieldIndex;
+                Preference = preference;
             }
 
             public Criteria(Criteria other)
             {
-                this.FieldIndex_ = other.FieldIndex_;
-                this.Preference_ = other.Preference_;
+                FieldIndex = other.FieldIndex;
+                Preference = other.Preference;
             }
 
             public Criteria Clone()
@@ -82,60 +91,24 @@ namespace UniTimetable
             #region Accessors
 
             /// <summary>
-            /// Gets or sets the field index.
+            ///     Gets or sets the field index.
             /// </summary>
-            public FieldIndex FieldIndex
-            {
-                get
-                {
-                    return FieldIndex_;
-                }
-                set
-                {
-                    FieldIndex_ = value;
-                }
-            }
+            public FieldIndex FieldIndex { get; set; }
 
             /// <summary>
-            /// Gets the field.
+            ///     Gets the field.
             /// </summary>
             public Field Field
             {
-                get
-                {
-                    return Fields[(int)FieldIndex_];
-                }
+                get { return Fields[(int) FieldIndex]; }
             }
 
             /// <summary>
-            /// Gets or sets the criteria preference.
+            ///     Gets or sets the criteria preference.
             /// </summary>
-            public Preference Preference
-            {
-                get
-                {
-                    return Preference_;
-                }
-                set
-                {
-                    Preference_ = value;
-                }
-            }
+            public Preference Preference { get; set; }
 
             #endregion
-
-            public override string ToString()
-            {
-                return Field.ToString();
-            }
-        }
-
-        // compatible with SortOrder (None, Ascending, Descending)
-        public enum Preference
-        {
-            None = 0,
-            Minimise = 1,
-            Maximise = 2
         }
     }
 }

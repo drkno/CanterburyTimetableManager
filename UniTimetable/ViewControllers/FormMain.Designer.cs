@@ -1,7 +1,8 @@
 using System.Drawing;
 using System.Windows.Forms;
+using UniTimetable.Model.Timetable;
 
-namespace UniTimetable
+namespace UniTimetable.ViewControllers
 {
     public partial class FormMain
     {
@@ -96,12 +97,12 @@ namespace UniTimetable
             this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.timetableControl = new UniTimetable.TimetableControl();
+            this.timetableControl = new TimetableControl();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.btnShowHide = new System.Windows.Forms.Button();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.listBox2 = new UniTimetable.ListBoxBuffered();
-            this.listBox1 = new UniTimetable.ListBoxBuffered();
+            this.listBox2 = new ListBoxBuffered();
+            this.listBox1 = new ListBoxBuffered();
             this.lblRemaining = new System.Windows.Forms.Label();
             this.lblIgnored = new System.Windows.Forms.Label();
             this.contextMenuStrip1.SuspendLayout();
@@ -718,12 +719,12 @@ namespace UniTimetable
             this.timetableControl.TabIndex = 17;
             this.timetableControl.TimeslotUnavalibleColour = System.Drawing.Color.LightGray;
             this.timetableControl.Timetable = null;
-            this.timetableControl.TimetableMouseClick += new UniTimetable.TimetableEventHandler(this.TimetableControl1TimetableMouseClick);
-            this.timetableControl.TimetableMouseDoubleClick += new UniTimetable.TimetableEventHandler(this.TimetableControl1TimetableMouseClick);
-            this.timetableControl.TimetableMouseDown += new UniTimetable.TimetableEventHandler(this.TimetableControl1TimetableMouseDoubleClick);
-            this.timetableControl.TimetableChanged += new UniTimetable.TimetableChangedEventHandler(this.TimetableControlTimetableChanged);
-            this.timetableControl.ResizeCell += new UniTimetable.ResizeCellEventHandler(this.TimetableControl1ResizeCell);
-            this.timetableControl.BoundsClipped += new UniTimetable.BoundsClippedEventHandler(this.TimetableControl1BoundsClipped);
+            this.timetableControl.TimetableMouseClick += new TimetableEventHandler(this.TimetableControl1TimetableMouseClick);
+            this.timetableControl.TimetableMouseDoubleClick += new TimetableEventHandler(this.TimetableControl1TimetableMouseClick);
+            this.timetableControl.TimetableMouseDown += new TimetableEventHandler(this.TimetableControl1TimetableMouseDoubleClick);
+            this.timetableControl.TimetableChanged += new TimetableChangedEventHandler(this.TimetableControlTimetableChanged);
+            this.timetableControl.ResizeCell += new ResizeCellEventHandler(this.TimetableControl1ResizeCell);
+            this.timetableControl.BoundsClipped += new BoundsClippedEventHandler(this.TimetableControl1BoundsClipped);
             this.timetableControl.DragDrop += new System.Windows.Forms.DragEventHandler(this.TimetableControl1DragDrop);
             this.timetableControl.DragOver += new System.Windows.Forms.DragEventHandler(this.TimetableControl1DragOver);
             // 

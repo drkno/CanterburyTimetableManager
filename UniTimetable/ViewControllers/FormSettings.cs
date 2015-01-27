@@ -1,21 +1,26 @@
+#region
+
 using System;
 using System.Windows.Forms;
+using UniTimetable.Model;
 
-namespace UniTimetable
+#endregion
+
+namespace UniTimetable.ViewControllers
 {
     public partial class FormSettings : Form
     {
-        Settings _settings;
         private FormMain _form;
+        private Settings _settings;
 
         public FormSettings()
         {
             InitializeComponent();
             for (var i = 0; i <= 23; i++)
             {
-                var hr = i % 24;
+                var hr = i%24;
                 var time = (hr < 12 ? "am" : "pm");
-                hr = i % 12;
+                hr = i%12;
                 time = (hr == 0 ? 12 : hr) + time;
 
                 ddStart.Items.Add(time);
@@ -59,19 +64,22 @@ namespace UniTimetable
         {
             if (ddStart.SelectedIndex == -1)
             {
-                MessageBox.Show("Please select a start time!", "Settings", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Please select a start time!", "Settings", MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation);
                 ddStart.Focus();
                 return;
             }
             if (ddEnd.SelectedIndex == -1)
             {
-                MessageBox.Show("Please select an end time!", "Settings", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Please select an end time!", "Settings", MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation);
                 ddEnd.Focus();
                 return;
             }
             if (ddStart.SelectedIndex >= ddEnd.SelectedIndex)
             {
-                MessageBox.Show("Start time must be before end time!", "Settings", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Start time must be before end time!", "Settings", MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation);
                 return;
             }
 

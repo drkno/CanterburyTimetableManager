@@ -1,14 +1,45 @@
+#region
+
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Xml.Serialization;
 
-namespace UniTimetable
+#endregion
+
+namespace UniTimetable.Model.Time
 {
     public class TimeOfDay : IComparable<TimeOfDay>
     {
         protected int Hour_;
         protected int Minute_;
+
+        public static TimeOfDay Minimum
+        {
+            get { return new TimeOfDay(0, 0); }
+        }
+
+        public static TimeOfDay Maximum
+        {
+            get { return new TimeOfDay(23, 59); }
+        }
+
+        #region IComparable<TimeOfDay> Members
+
+        public int CompareTo(TimeOfDay other)
+        {
+            return DayMinutes - other.DayMinutes;
+        }
+
+        #endregion
+
+        public static TimeOfDay FromDateTime(DateTime dateTime)
+        {
+            return new TimeOfDay(dateTime.Hour, dateTime.Minute);
+        }
+
+        public static explicit operator int(TimeOfDay time)
+        {
+            return time.DayMinutes;
+        }
 
         #region Constructors
 
@@ -20,8 +51,8 @@ namespace UniTimetable
 
         public TimeOfDay(TimeOfDay other)
         {
-            this.Hour_ = other.Hour_;
-            this.Minute_ = other.Minute_;
+            Hour_ = other.Hour_;
+            Minute_ = other.Minute_;
         }
 
         public TimeOfDay(int hour, int minute)
@@ -37,27 +68,6 @@ namespace UniTimetable
 
         #endregion
 
-        public static TimeOfDay Minimum
-        {
-            get
-            {
-                return new TimeOfDay(0, 0);
-            }
-        }
-
-        public static TimeOfDay Maximum
-        {
-            get
-            {
-                return new TimeOfDay(23, 59);
-            }
-        }
-
-        public static TimeOfDay FromDateTime(DateTime dateTime)
-        {
-            return new TimeOfDay(dateTime.Hour, dateTime.Minute);
-        }
-
         #region Accessors
 
         [XmlIgnore]
@@ -66,10 +76,7 @@ namespace UniTimetable
         /// </summary>
         public int Hour
         {
-            get
-            {
-                return Hour_;
-            }
+            get { return Hour_; }
             set
             {
                 if (value < 0 || value > 23)
@@ -86,10 +93,7 @@ namespace UniTimetable
         /// </summary>
         public int Minute
         {
-            get
-            {
-                return Minute_;
-            }
+            get { return Minute_; }
             set
             {
                 if (value < 0 || value > 59)
@@ -106,29 +110,26 @@ namespace UniTimetable
         /// </summary>
         public int DayMinutes
         {
-            get
-            {
-                return 60 * Hour_ + Minute_;
-            }
+            get { return 60*Hour_ + Minute_; }
             set
             {
-                if (value < 0 || value >= 60 * 24)
+                if (value < 0 || value >= 60*24)
                 {
                     throw new Exception("Number of minutes is not within range of a single day.");
                 }
-                Hour_ = value / 60;
-                Minute = value % 60;
+                Hour_ = value/60;
+                Minute = value%60;
             }
         }
 
         /// <summary>
-        /// Adds a number of minutes.
+        ///     Adds a number of minutes.
         /// </summary>
         /// <param name="minutes">Number of minutes.</param>
         public void AddMinutes(int minutes)
         {
             int newTotalMinutes = DayMinutes + minutes;
-            if (newTotalMinutes < 0 || newTotalMinutes >= 60 * 24)
+            if (newTotalMinutes < 0 || newTotalMinutes >= 60*24)
             {
                 throw new Exception("Time is not within range of a single day.");
             }
@@ -136,12 +137,12 @@ namespace UniTimetable
         }
 
         /// <summary>
-        /// Adds a number of hours.
+        ///     Adds a number of hours.
         /// </summary>
         /// <param name="hours">Number of hours.</param>
         public void AddHours(int hours)
         {
-            AddMinutes(hours * 60);
+            AddMinutes(hours*60);
         }
 
         public void RoundToNearestHour()
@@ -206,25 +207,11 @@ namespace UniTimetable
 
         #endregion
 
-        public static explicit operator int(TimeOfDay time)
-        {
-            return time.DayMinutes;
-        }
-
-        #region IComparable<TimeOfDay> Members
-
-        public int CompareTo(TimeOfDay other)
-        {
-            return this.DayMinutes - other.DayMinutes;
-        }
-
-        #endregion
-
         #region Base methods
 
         public override bool Equals(object obj)
         {
-            return this.CompareTo((TimeOfDay)obj) == 0;
+            return CompareTo((TimeOfDay) obj) == 0;
         }
 
         public override int GetHashCode()

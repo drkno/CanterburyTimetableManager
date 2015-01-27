@@ -5,10 +5,11 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using UniTimetable.Model.Time;
 
 #endregion
 
-namespace UniTimetable
+namespace UniTimetable.Model.Timetable
 {
     [XmlRoot("timetable")]
     public class Timetable
@@ -16,6 +17,8 @@ namespace UniTimetable
         public static List<string> Days =
             new List<string>(new[] {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"});
 
+        private bool[][] _streamClashTable;
+        private bool[][] _typeClashTable;
         [XmlIgnore] public List<Session> ClassList = new List<Session>();
         [XmlIgnore] public bool RecomputeSolutions = true;
         [XmlIgnore] public List<Stream> StreamList = new List<Stream>();
@@ -28,8 +31,57 @@ namespace UniTimetable
         [XmlArray("unavailabilities"), XmlArrayItem("unavailability")] public List<Unavailability> UnavailableList =
             new List<Unavailability>();
 
-        private bool[][] _streamClashTable;
-        private bool[][] _typeClashTable;
+        public bool StreamClashTable(Stream stream1, Stream stream2)
+        {
+            return _streamClashTable[stream1.ID][stream2.ID];
+        }
+
+        public bool TypeClashTable(Type type1, Type type2)
+        {
+            return _typeClashTable[type1.ID][type2.ID];
+        }
+
+        /// <summary>
+        ///     Checks if a full set of timetable data is loaded.
+        /// </summary>
+        public bool HasData()
+        {
+            return (SubjectList.Count > 0 && TypeList.Count > 0 && StreamList.Count > 0 && ClassList.Count > 0);
+        }
+
+        /// <summary>
+        ///     Checks if an option has been selected for each required set of streams.
+        /// </summary>
+        public bool IsFull()
+        {
+            return TypeList.All(type => !type.Required || type.SelectedStream != null);
+        }
+
+        public TimeOfDay EarlyBound()
+        {
+            TimeOfDay min = null;
+            foreach (var session in ClassList)
+            {
+                if (ReferenceEquals(min, null) || session.StartTime < min)
+                {
+                    min = session.StartTime;
+                }
+            }
+            return min;
+        }
+
+        public TimeOfDay LateBound()
+        {
+            TimeOfDay max = null;
+            foreach (var session in ClassList)
+            {
+                if (ReferenceEquals(max, null) || session.EndTime > max)
+                {
+                    max = session.EndTime;
+                }
+            }
+            return max;
+        }
 
         #region Constructors
 
@@ -230,7 +282,7 @@ namespace UniTimetable
         }*/
 
         // construct a new timetable object with enough information to render a preview
-        public Timetable PreviewSolution(Solver.Solution solution)
+        public Timetable PreviewSolution(Solver.Solver.Solution solution)
         {
             var t = new Timetable();
             for (var i = 0; i < StreamList.Count; i++)
@@ -280,58 +332,6 @@ namespace UniTimetable
         }
 
         #endregion
-
-        public bool StreamClashTable(Stream stream1, Stream stream2)
-        {
-            return _streamClashTable[stream1.ID][stream2.ID];
-        }
-
-        public bool TypeClashTable(Type type1, Type type2)
-        {
-            return _typeClashTable[type1.ID][type2.ID];
-        }
-
-        /// <summary>
-        ///     Checks if a full set of timetable data is loaded.
-        /// </summary>
-        public bool HasData()
-        {
-            return (SubjectList.Count > 0 && TypeList.Count > 0 && StreamList.Count > 0 && ClassList.Count > 0);
-        }
-
-        /// <summary>
-        ///     Checks if an option has been selected for each required set of streams.
-        /// </summary>
-        public bool IsFull()
-        {
-            return TypeList.All(type => !type.Required || type.SelectedStream != null);
-        }
-
-        public TimeOfDay EarlyBound()
-        {
-            TimeOfDay min = null;
-            foreach (var session in ClassList)
-            {
-                if (ReferenceEquals(min, null) || session.StartTime < min)
-                {
-                    min = session.StartTime;
-                }
-            }
-            return min;
-        }
-
-        public TimeOfDay LateBound()
-        {
-            TimeOfDay max = null;
-            foreach (var session in ClassList)
-            {
-                if (ReferenceEquals(max, null) || session.EndTime > max)
-                {
-                    max = session.EndTime;
-                }
-            }
-            return max;
-        }
 
         #region Modifying timetable
 
@@ -462,7 +462,7 @@ namespace UniTimetable
             return false;
         }
 
-        public bool LoadSolution(Solver.Solution solution)
+        public bool LoadSolution(Solver.Solver.Solution solution)
         {
             var result = true;
             foreach (var stream in solution.Streams)
@@ -557,7 +557,9 @@ namespace UniTimetable
         /// <returns>The first class found, or null if none were found.</returns>
         public Session FindClassAt(TimeOfWeek time, bool selected)
         {
-            return ClassList.Where(session => !selected || session.Stream.Selected).FirstOrDefault(session => time >= session.Start && time <= session.End);
+            return
+                ClassList.Where(session => !selected || session.Stream.Selected)
+                    .FirstOrDefault(session => time >= session.Start && time <= session.End);
         }
 
         /// <summary>
@@ -566,7 +568,10 @@ namespace UniTimetable
         public List<Session> FindAllClassesAt(TimeOfWeek time, bool selected)
         {
             // examine every class
-            return ClassList.Where(session => !selected || session.Stream.Selected).Where(session => time >= session.Start && time <= session.End).ToList();
+            return
+                ClassList.Where(session => !selected || session.Stream.Selected)
+                    .Where(session => time >= session.Start && time <= session.End)
+                    .ToList();
         }
 
         /// <summary>
@@ -627,7 +632,9 @@ namespace UniTimetable
         /// <returns>The first class found, or null if none were found.</returns>
         public Session FindClassDuring(Timeslot timeslot, bool selected)
         {
-            return ClassList.Where(session => !selected || session.Stream.Selected).FirstOrDefault(session => session.ClashesWith(timeslot));
+            return
+                ClassList.Where(session => !selected || session.Stream.Selected)
+                    .FirstOrDefault(session => session.ClashesWith(timeslot));
         }
 
         /// <summary>
@@ -686,7 +693,11 @@ namespace UniTimetable
         public Stream FindStreamClash(Stream stream, bool enabled)
         {
             // check each class in the given stream
-            return (from session in stream.Classes select FindClassClash(session, enabled) into other where other != null select other.Stream).FirstOrDefault();
+            return (from session in stream.Classes
+                select FindClassClash(session, enabled)
+                into other
+                where other != null
+                select other.Stream).FirstOrDefault();
         }
 
         /// <summary>
@@ -695,7 +706,10 @@ namespace UniTimetable
         /// <returns>A list of clashing streams.</returns>
         public List<Stream> FindStreamClashes(Stream stream, bool selected)
         {
-            return StreamList.Where(other => !selected || !other.Selected).Where(other => other.ClashesWith(stream)).ToList();
+            return
+                StreamList.Where(other => !selected || !other.Selected)
+                    .Where(other => other.ClashesWith(stream))
+                    .ToList();
         }
 
         #endregion
@@ -796,7 +810,10 @@ namespace UniTimetable
             foreach (var subject in SubjectList)
             {
                 tree += subject.Name + "\n";
-                tree = subject.Types.Aggregate(tree, (current, type) => current + ("  " + type.Name + " (" + type.Streams.Count.ToString(CultureInfo.InvariantCulture) + ")\n"));
+                tree = subject.Types.Aggregate(tree,
+                    (current, type) =>
+                        current +
+                        ("  " + type.Name + " (" + type.Streams.Count.ToString(CultureInfo.InvariantCulture) + ")\n"));
             }
             return tree;
         }
@@ -819,7 +836,8 @@ namespace UniTimetable
                     var typeNode = new TreeNode(type.Name) {Tag = type};
                     subjectNode.Nodes.Add(typeNode);
                     // do streams in each type
-                    foreach (var streamNode in type.Streams.Select(stream => new TreeNode(stream.ToString()) {Tag = stream}))
+                    foreach (
+                        var streamNode in type.Streams.Select(stream => new TreeNode(stream.ToString()) {Tag = stream}))
                     {
                         typeNode.Nodes.Add(streamNode);
                     }

@@ -1,4 +1,4 @@
-namespace UniTimetable
+namespace UniTimetable.ViewControllers
 {
     partial class FormCriteria
     {
@@ -45,7 +45,7 @@ namespace UniTimetable
             this.label1 = new System.Windows.Forms.Label();
             this.ddPresets = new System.Windows.Forms.ComboBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.etchedLine = new UniTimetable.EtchedLine();
+            this.etchedLine = new EtchedLine();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 

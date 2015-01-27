@@ -1,17 +1,37 @@
+#region
+
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
 using System.Xml.Serialization;
 
-namespace UniTimetable
+#endregion
+
+namespace UniTimetable.Model.Timetable
 {
     public class Subject : IComparable<Subject>
     {
-        string Name_ = "";
-        Color Color_ = Color.White;
+        private Color Color_ = Color.White;
+        private string Name_ = "";
+        private List<Type> Types_ = new List<Type>();
 
-        List<Type> Types_ = new List<Type>();
+        #region IComparable<Subject> Members
+
+        public int CompareTo(Subject other)
+        {
+            return Name_.CompareTo(other.Name_);
+        }
+
+        #endregion
+
+        #region Base methods
+
+        public override string ToString()
+        {
+            return Name_;
+        }
+
+        #endregion
 
         #region Constructors
 
@@ -26,9 +46,9 @@ namespace UniTimetable
 
         public Subject(Subject other)
         {
-            this.Name_ = other.Name_;
-            this.Color_ = other.Color_;
-            this.Types_ = new List<Type>(other.Types_);
+            Name_ = other.Name_;
+            Color_ = other.Color_;
+            Types_ = new List<Type>(other.Types_);
         }
 
         public Subject(string name, Color color)
@@ -49,27 +69,15 @@ namespace UniTimetable
         [XmlAttribute("name")]
         public string Name
         {
-            get
-            {
-                return Name_;
-            }
-            set
-            {
-                Name_ = value;
-            }
+            get { return Name_; }
+            set { Name_ = value; }
         }
 
         [XmlIgnore]
         public Color Color
         {
-            get
-            {
-                return Color_;
-            }
-            set
-            {
-                Color_ = value;
-            }
+            get { return Color_; }
+            set { Color_ = value; }
         }
 
         [XmlAttribute("color")]
@@ -82,32 +90,8 @@ namespace UniTimetable
         [XmlArray("types"), XmlArrayItem("type")]
         public List<Type> Types
         {
-            get
-            {
-                return Types_;
-            }
-            set
-            {
-                Types_ = value;
-            }
-        }
-
-        #endregion
-
-        #region IComparable<Subject> Members
-
-        public int CompareTo(Subject other)
-        {
-            return this.Name_.CompareTo(other.Name_);
-        }
-
-        #endregion
-
-        #region Base methods
-
-        public override string ToString()
-        {
-            return Name_;
+            get { return Types_; }
+            set { Types_ = value; }
         }
 
         #endregion

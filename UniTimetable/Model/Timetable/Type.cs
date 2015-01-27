@@ -1,51 +1,74 @@
+#region
+
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Xml.Serialization;
 
-namespace UniTimetable
+#endregion
+
+namespace UniTimetable.Model.Timetable
 {
     public class Type : IComparable<Type>
     {
-        int ID_ = -1;
-        string Name_ = "";
-        string Code_ = "?";
-        bool Required_ = true;
+        private string Code_ = "?";
+        private int ID_ = -1;
+        private string Name_ = "";
+        private bool Required_ = true;
+        private List<Stream> Streams_ = new List<Stream>();
+        private List<Stream> UniqueStreams_ = new List<Stream>();
 
-        Subject Subject_ = null;
-        List<Stream> Streams_ = new List<Stream>();
+        #region IComparable<Type> Members
 
-        bool[] ClashTable_ = null;
-        List<Stream> UniqueStreams_ = new List<Stream>();
+        public int CompareTo(Type other)
+        {
+            return Name_.CompareTo(other.Name_);
+        }
+
+        #endregion
+
+        #region Base methods
+
+        public override string ToString()
+        {
+            return Name_ + " (" + Code_ + ")";
+        }
+
+        #endregion
 
         #region Constructors
 
         public Type()
         {
+            ClashTable = null;
+            Subject = null;
         }
 
         public Type(string name, string code)
         {
+            ClashTable = null;
+            Subject = null;
             Name_ = name;
             Code_ = code;
         }
 
         public Type(string name, string code, Subject subject)
         {
+            ClashTable = null;
             Name_ = name;
             Code_ = code;
-            Subject_ = subject;
+            Subject = subject;
         }
 
         public Type(Type other)
         {
-            this.Name_ = other.Name_;
-            this.Code_ = other.Code_;
-            this.Required_ = other.Required_;
-            this.Subject_ = other.Subject_;
-            this.Streams_ = new List<Stream>(other.Streams_);
+            ClashTable = null;
+            Name_ = other.Name_;
+            Code_ = other.Code_;
+            Required_ = other.Required_;
+            Subject = other.Subject;
+            Streams_ = new List<Stream>(other.Streams_);
             //this.State_ = other.State_;
-            this.UniqueStreams_ = new List<Stream>(other.UniqueStreams_);
+            UniqueStreams_ = new List<Stream>(other.UniqueStreams_);
         }
 
         public Type Clone()
@@ -60,53 +83,29 @@ namespace UniTimetable
         [XmlIgnore]
         public int ID
         {
-            get
-            {
-                return ID_;
-            }
-            set
-            {
-                ID_ = value;
-            }
+            get { return ID_; }
+            set { ID_ = value; }
         }
 
         [XmlAttribute("name")]
         public string Name
         {
-            get
-            {
-                return Name_;
-            }
-            set
-            {
-                Name_ = value;
-            }
+            get { return Name_; }
+            set { Name_ = value; }
         }
 
         [XmlAttribute("code")]
         public string Code
         {
-            get
-            {
-                return Code_;
-            }
-            set
-            {
-                Code_ = value;
-            }
+            get { return Code_; }
+            set { Code_ = value; }
         }
 
         [XmlAttribute("required")]
         public bool Required
         {
-            get
-            {
-                return Required_;
-            }
-            set
-            {
-                Required_ = value;
-            }
+            get { return Required_; }
+            set { Required_ = value; }
         }
 
         /*public TypeState State
@@ -122,57 +121,25 @@ namespace UniTimetable
         }*/
 
         [XmlIgnore]
-        public Subject Subject
-        {
-            get
-            {
-                return Subject_;
-            }
-            set
-            {
-                Subject_ = value;
-            }
-        }
+        public Subject Subject { get; set; }
 
-        [XmlArray("streams"), XmlArrayItem("stream", typeof(Stream))]
+        [XmlArray("streams"), XmlArrayItem("stream", typeof (Stream))]
         public List<Stream> Streams
         {
-            get
-            {
-                return Streams_;
-            }
-            set
-            {
-                Streams_ = value;
-            }
+            get { return Streams_; }
+            set { Streams_ = value; }
         }
 
         [XmlIgnore]
-        public bool[] ClashTable
-        {
-            get
-            {
-                return ClashTable_;
-            }
-            set
-            {
-                ClashTable_ = value;
-            }
-        }
+        public bool[] ClashTable { get; set; }
 
         [XmlIgnore]
         public List<Stream> UniqueStreams
         {
-            get
-            {
-                return UniqueStreams_;
-            }
-            set
-            {
-                UniqueStreams_ = value;
-            }
+            get { return UniqueStreams_; }
+            set { UniqueStreams_ = value; }
         }
-        
+
         [XmlIgnore]
         /// <summary>
         /// Gets the enabled stream in the type.
@@ -232,11 +199,11 @@ namespace UniTimetable
 
         public bool ClashesWith(Type other)
         {
-            if (ClashTable_ != null)
-                return ClashTable_[other.ID_];
-            
+            if (ClashTable != null)
+                return ClashTable[other.ID_];
+
             // if there exists a stream in type a and a stream in type b that don't clash, the types are compatible
-            foreach (Stream a in this.Streams)
+            foreach (Stream a in Streams)
             {
                 foreach (Stream b in other.Streams)
                 {
@@ -293,24 +260,6 @@ namespace UniTimetable
                     Streams[i].Equivalent.Remove(Streams[i]);
                 }
             }
-        }
-
-        #endregion
-
-        #region IComparable<Type> Members
-
-        public int CompareTo(Type other)
-        {
-            return this.Name_.CompareTo(other.Name_);
-        }
-
-        #endregion
-
-        #region Base methods
-
-        public override string ToString()
-        {
-            return Name_ + " (" + Code_.ToString() + ")";
         }
 
         #endregion

@@ -1,11 +1,17 @@
+#region
+
 using System;
 using System.Windows.Forms;
+using UniTimetable.Model.Solver;
+using UniTimetable.Model.Time;
 
-namespace UniTimetable
+#endregion
+
+namespace UniTimetable.ViewControllers
 {
     partial class FormFilterDetails : Form
     {
-        Solver.Filter Filter_;
+        private Solver.Filter Filter_;
 
         public FormFilterDetails()
         {
@@ -53,14 +59,82 @@ namespace UniTimetable
             }
             else
             {
-                ddField.SelectedIndex = (int)Filter_.FieldIndex;
+                ddField.SelectedIndex = (int) Filter_.FieldIndex;
                 ddExclude.SelectedIndex = Filter_.Exclude ? 1 : 0;
                 UpdateTestItems();
-                ddTest.SelectedIndex = (int)Filter_.Test;
+                ddTest.SelectedIndex = (int) Filter_.Test;
 
                 ShowValueControls();
                 LoadValue();
             }
+        }
+
+        private void ddField_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ShowValueControls();
+            UpdateTestItems();
+        }
+
+        private void UpdateTestItems()
+        {
+            int index = ddTest.SelectedIndex;
+            ddTest.Items.Clear();
+            if (ddField.SelectedIndex == -1)
+                return;
+            Solver.Field field = Solver.Fields[ddField.SelectedIndex];
+            if (field.Type == Solver.FieldType.Unknown)
+                return;
+            ddTest.Items.AddRange(Solver.Filter.FieldSpecificTests(field.Type));
+            ddTest.SelectedIndex = index;
+        }
+
+        private void btnRevert_Click(object sender, EventArgs e)
+        {
+            LoadFromFilter();
+        }
+
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+            if (ddField.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select which criteria the filter applies to.", "Filter Details",
+                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                ddField.Focus();
+                return;
+            }
+            if (ddExclude.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select the filter type.", "Filter Details", MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation);
+                ddExclude.Focus();
+                return;
+            }
+            if (ddTest.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select the filter test.", "Filter Details", MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation);
+                ddTest.Focus();
+                return;
+            }
+
+            int value = ParseValue();
+            if (value == -1)
+                return;
+
+            Filter_ = new Solver.Filter(
+                ddExclude.SelectedIndex == 1,
+                (Solver.FieldIndex) ddField.SelectedIndex,
+                value,
+                (Solver.FilterTest) ddTest.SelectedIndex);
+
+            DialogResult = DialogResult.OK;
+            Close();
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
 
         #region Show/load/parse different value types
@@ -149,7 +223,8 @@ namespace UniTimetable
                     }
                     catch
                     {
-                        MessageBox.Show("Invalid value specified.", "Filter Details", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        MessageBox.Show("Invalid value specified.", "Filter Details", MessageBoxButtons.OK,
+                            MessageBoxIcon.Exclamation);
                         txtInteger.Focus();
                         return -1;
                     }
@@ -167,7 +242,8 @@ namespace UniTimetable
                     }
                     catch
                     {
-                        MessageBox.Show("Invalid hour value specified.", "Filter Details", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        MessageBox.Show("Invalid hour value specified.", "Filter Details", MessageBoxButtons.OK,
+                            MessageBoxIcon.Exclamation);
                         txtTimeLength.Focus();
                         return -1;
                     }
@@ -185,17 +261,18 @@ namespace UniTimetable
                         }
                         catch
                         {
-                            MessageBox.Show("Invalid minute value specified.", "Filter Details", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            MessageBox.Show("Invalid minute value specified.", "Filter Details", MessageBoxButtons.OK,
+                                MessageBoxIcon.Exclamation);
                             txtTimeLength.Focus();
                             return -1;
                         }
                     }
 
-                    value = hour * 60 + min;
+                    value = hour*60 + min;
                     break;
 
                 case Solver.FieldType.TimeOfDay:
-                    value = (int)timeOfDayPicker.Value.TimeOfDay.TotalMinutes;
+                    value = (int) timeOfDayPicker.Value.TimeOfDay.TotalMinutes;
                     break;
 
                 default:
@@ -205,70 +282,5 @@ namespace UniTimetable
         }
 
         #endregion
-
-        private void ddField_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ShowValueControls();
-            UpdateTestItems();
-        }
-
-        private void UpdateTestItems()
-        {
-            int index = ddTest.SelectedIndex;
-            ddTest.Items.Clear();
-            if (ddField.SelectedIndex == -1)
-                return;
-            Solver.Field field = Solver.Fields[ddField.SelectedIndex];
-            if (field.Type == Solver.FieldType.Unknown)
-                return;
-            ddTest.Items.AddRange(Solver.Filter.FieldSpecificTests(field.Type));
-            ddTest.SelectedIndex = index;
-        }
-
-        private void btnRevert_Click(object sender, EventArgs e)
-        {
-            LoadFromFilter();
-        }
-
-        private void btnOK_Click(object sender, EventArgs e)
-        {
-            if (ddField.SelectedIndex == -1)
-            {
-                MessageBox.Show("Please select which criteria the filter applies to.", "Filter Details", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                ddField.Focus();
-                return;
-            }
-            if (ddExclude.SelectedIndex == -1)
-            {
-                MessageBox.Show("Please select the filter type.", "Filter Details", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                ddExclude.Focus();
-                return;
-            }
-            if (ddTest.SelectedIndex == -1)
-            {
-                MessageBox.Show("Please select the filter test.", "Filter Details", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                ddTest.Focus();
-                return;
-            }
-
-            int value = ParseValue();
-            if (value == -1)
-                return;
-            
-            Filter_ = new Solver.Filter(
-                ddExclude.SelectedIndex == 1,
-                (Solver.FieldIndex)ddField.SelectedIndex,
-                value,
-                (Solver.FilterTest)ddTest.SelectedIndex);
-
-            DialogResult = DialogResult.OK;
-            Close();
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
-            Close();
-        }
     }
 }

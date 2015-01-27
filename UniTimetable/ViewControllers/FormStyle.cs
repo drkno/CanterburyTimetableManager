@@ -1,15 +1,19 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using UniTimetable.Model.Timetable;
 
-namespace UniTimetable
+#endregion
+
+namespace UniTimetable.ViewControllers
 {
     partial class FormStyle : Form
     {
-        Timetable Timetable_;
-
-        List<Color> ColorList_ = new List<Color>();
+        private readonly List<Color> ColorList_ = new List<Color>();
+        private Timetable Timetable_;
 
         public FormStyle()
         {
@@ -103,9 +107,10 @@ namespace UniTimetable
             e.DrawFocusRectangle();
 
             Graphics g = e.Graphics;
-            Subject subject = (Subject)listBox1.Items[e.Index];
+            Subject subject = (Subject) listBox1.Items[e.Index];
 
-            Rectangle r = new Rectangle(e.Bounds.X + margin, e.Bounds.Y + margin, e.Bounds.Width - 2 * margin - 1, e.Bounds.Height - 2 * margin - 1);
+            Rectangle r = new Rectangle(e.Bounds.X + margin, e.Bounds.Y + margin, e.Bounds.Width - 2*margin - 1,
+                e.Bounds.Height - 2*margin - 1);
             g.FillRectangle(TimetableControl.LinearGradient(r.Location, r.Width, r.Height, ColorList_[e.Index]), r);
 
             StringFormat format = new StringFormat();
@@ -120,7 +125,7 @@ namespace UniTimetable
         {
             if (ddSchemes.SelectedIndex == -1)
                 return;
-            ColorScheme scheme = (ColorScheme)ddSchemes.SelectedItem;
+            ColorScheme scheme = (ColorScheme) ddSchemes.SelectedItem;
             LoadScheme(scheme);
         }
 
@@ -129,60 +134,65 @@ namespace UniTimetable
             int n = scheme.Colors.Count;
             for (int i = 0; i < ColorList_.Count; i++)
             {
-                ColorList_[i] = scheme.Colors[i % n];
+                ColorList_[i] = scheme.Colors[i%n];
             }
             listBox1.Invalidate();
         }
-
     }
 
     public class ColorScheme
     {
-        public string Name;
-        public List<Color> Colors;
-
-        public static readonly ColorScheme[] Schemes = {
-            new ColorScheme("Default", new Color[] {
-                Color.Red,
-                Color.Blue,
-                Color.Green,
-                Color.Gold,
-                Color.Purple,
-                Color.Orange,
-                Color.SeaGreen
-            }),
-            new ColorScheme("Bushfire", new Color[] {
-                Color.Gold,
-                Color.Orange,
-                Color.OrangeRed,
-                Color.Red,
-                Color.Maroon
-            }),
-            new ColorScheme("Forest", new Color[] {
-                Color.FromArgb(127, 142, 43),
-                Color.FromArgb(94, 119, 3),
-                Color.FromArgb(114, 105, 77),
-                Color.FromArgb(70, 77, 38),
-                Color.FromArgb(129, 95, 62)
-            }),
-            new ColorScheme("Mellow", new Color[] {
-                Color.FromArgb(146, 115, 101),
-                Color.FromArgb(147, 104, 117),
-                Color.FromArgb(132, 112, 134),
-                Color.FromArgb(92, 123, 142),
-                Color.FromArgb(106, 139, 137),
-                Color.FromArgb(121, 137, 109)
-            }),
-            new ColorScheme("Rainbow", new Color[] {
-                Color.FromArgb(0, 167, 216),
-                Color.FromArgb(90, 221, 69),
-                Color.FromArgb(255, 232, 5),
-                Color.FromArgb(255, 162, 67),
-                Color.FromArgb(255, 87, 94),
-                Color.FromArgb(255, 28, 172),
-                Color.FromArgb(215, 8, 178)
-            })
+        public static readonly ColorScheme[] Schemes =
+        {
+            new ColorScheme("Default", new[]
+                                       {
+                                           Color.Red,
+                                           Color.Blue,
+                                           Color.Green,
+                                           Color.Gold,
+                                           Color.Purple,
+                                           Color.Orange,
+                                           Color.SeaGreen
+                                       }),
+            new ColorScheme("Bushfire", new[]
+                                        {
+                                            Color.Gold,
+                                            Color.Orange,
+                                            Color.OrangeRed,
+                                            Color.Red,
+                                            Color.Maroon
+                                        }),
+            new ColorScheme("Forest", new[]
+                                      {
+                                          Color.FromArgb(127, 142, 43),
+                                          Color.FromArgb(94, 119, 3),
+                                          Color.FromArgb(114, 105, 77),
+                                          Color.FromArgb(70, 77, 38),
+                                          Color.FromArgb(129, 95, 62)
+                                      }),
+            new ColorScheme("Mellow", new[]
+                                      {
+                                          Color.FromArgb(146, 115, 101),
+                                          Color.FromArgb(147, 104, 117),
+                                          Color.FromArgb(132, 112, 134),
+                                          Color.FromArgb(92, 123, 142),
+                                          Color.FromArgb(106, 139, 137),
+                                          Color.FromArgb(121, 137, 109)
+                                      }),
+            new ColorScheme("Rainbow", new[]
+                                       {
+                                           Color.FromArgb(0, 167, 216),
+                                           Color.FromArgb(90, 221, 69),
+                                           Color.FromArgb(255, 232, 5),
+                                           Color.FromArgb(255, 162, 67),
+                                           Color.FromArgb(255, 87, 94),
+                                           Color.FromArgb(255, 28, 172),
+                                           Color.FromArgb(215, 8, 178)
+                                       })
         };
+
+        public List<Color> Colors;
+        public string Name;
 
         public ColorScheme()
         {

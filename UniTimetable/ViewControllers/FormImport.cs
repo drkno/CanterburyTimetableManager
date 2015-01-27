@@ -1,16 +1,22 @@
+#region
+
 using System;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using UniTimetable.Model;
+using UniTimetable.Model.Timetable;
+using Type = UniTimetable.Model.Timetable.Type;
 
-namespace UniTimetable
+#endregion
+
+namespace UniTimetable.ViewControllers
 {
     partial class FormImport : FormModel
     {
-        Timetable _timetable;
-
         private readonly Importer _importer;
+        private Timetable _timetable;
 
         public FormImport()
         {
@@ -34,7 +40,10 @@ namespace UniTimetable
             {
                 DialogResult = DialogResult.OK;
             }
-            if (DialogResult == DialogResult.Cancel) { Close(); }
+            if (DialogResult == DialogResult.Cancel)
+            {
+                Close();
+            }
         }
 
         public new Timetable ShowDialog()
@@ -51,33 +60,163 @@ namespace UniTimetable
         private void ImportThread()
         {
             _timetable = _importer.Import();
-            Invoke(new MethodInvoker(delegate 
-                   {
-                       if (_timetable != null)
-                       {
-                           panelLoading.Visible = false;
-                           panelStreams.Visible = false;
-                           btnNext.Enabled = true;
+            Invoke(new MethodInvoker(delegate
+                                     {
+                                         if (_timetable != null)
+                                         {
+                                             panelLoading.Visible = false;
+                                             panelStreams.Visible = false;
+                                             btnNext.Enabled = true;
 
-                           // build relational data
-                           _timetable.BuildEquivalency();
-                           _timetable.BuildCompatibility();
-                           //Timetable_.UpdateStates();
+                                             // build relational data
+                                             _timetable.BuildEquivalency();
+                                             _timetable.BuildCompatibility();
+                                             //Timetable_.UpdateStates();
 
-                           // build tree
-                           _timetable.BuildTreeView(treePreview);
-                           // and scroll back to the top
-                           treePreview.Nodes[0].EnsureVisible();
-                           // clear details box
-                           txtTreeDetails.Text = "";
-                           timetableControl1.Clear();
-                       }
-                       else
-                       {
-                           MessageBox.Show("Failed to import/retrieve timetable data.", "Import", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                           Close();
-                       }
-                   }));
+                                             // build tree
+                                             _timetable.BuildTreeView(treePreview);
+                                             // and scroll back to the top
+                                             treePreview.Nodes[0].EnsureVisible();
+                                             // clear details box
+                                             txtTreeDetails.Text = "";
+                                             timetableControl1.Clear();
+                                         }
+                                         else
+                                         {
+                                             MessageBox.Show("Failed to import/retrieve timetable data.", "Import",
+                                                 MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                                             Close();
+                                         }
+                                     }));
+        }
+
+        #region Page 3 Event Handlers
+
+        private void TreePreviewAfterSelect(object sender, TreeViewEventArgs e)
+        {
+            // clear textbox
+            txtTreeDetails.Text = "";
+            // if nothing selected, done already
+            if (treePreview.SelectedNode == null)
+                return;
+
+            // level 0: subject
+            if (treePreview.SelectedNode.Level == 0)
+            {
+                // get subject
+                var subject = (Subject) treePreview.SelectedNode.Tag;
+                // print subject name
+                txtTreeDetails.Text += subject.Name + "\r\n";
+                // print all the types within the subject
+                foreach (var type in subject.Types)
+                {
+                    txtTreeDetails.Text += "\r\n\t" + type.Name + " (" + type.Streams.Count + ")";
+                }
+                // preview pane
+                timetableControl1.Timetable = Timetable.From(subject);
+            }
+            // level 1: type
+            else if (treePreview.SelectedNode.Level == 1)
+            {
+                // get type
+                var type = (Type) treePreview.SelectedNode.Tag;
+                // print type name
+                txtTreeDetails.Text += type.Subject.Name + " " + type.Name + "\r\n";
+                // print all the streams within the type
+                foreach (var stream in type.Streams)
+                {
+                    txtTreeDetails.Text += "\r\n\t" + stream;
+                }
+                // preview pane
+                timetableControl1.Timetable = Timetable.From(type);
+            }
+            // level 2: stream
+            else
+            {
+                // get stream
+                var stream = (Stream) treePreview.SelectedNode.Tag;
+                // print stream name
+                txtTreeDetails.Text += stream.Type.Subject.Name + " " + stream;
+                // print all the classes within the type
+                foreach (var session in stream.Classes)
+                {
+                    txtTreeDetails.Text += "\r\n\t\r\n\t" + session;
+                }
+                // preview pane
+                timetableControl1.Timetable = Timetable.From(stream);
+            }
+        }
+
+        #endregion
+
+        private void CheckBoxTestCheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxTest.Checked)
+            {
+                foreach (
+                    var item in
+                        listViewIgnored.Items.Cast<ListViewItem>().Where(item => item.SubItems[1].Text.Contains("Test"))
+                    )
+                {
+                    item.Selected = true;
+                    MoveRight();
+                }
+            }
+            else
+            {
+                foreach (
+                    var item in
+                        listViewRequired.Items.Cast<ListViewItem>()
+                            .Where(item => item.SubItems[1].Text.Contains("Test")))
+                {
+                    item.Selected = true;
+                    MoveLeft();
+                }
+            }
+        }
+
+        private void CheckBoxS1CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxS1.Checked)
+            {
+                foreach (ListViewItem item in listViewIgnored.Items)
+                {
+                    if (!item.Group.ToString().Contains("S1")) continue;
+                    item.Selected = true;
+                    MoveRight();
+                }
+            }
+            else
+            {
+                foreach (ListViewItem item in listViewRequired.Items)
+                {
+                    if (!item.Group.ToString().Contains("S1")) continue;
+                    item.Selected = true;
+                    MoveLeft();
+                }
+            }
+        }
+
+        private void CheckBoxS2CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxS2.Checked)
+            {
+                foreach (ListViewItem item in listViewIgnored.Items)
+                {
+                    if (!item.Group.ToString().Contains("S2")) continue;
+                    item.Selected = true;
+                    MoveRight();
+                }
+            }
+            else
+            {
+                foreach (ListViewItem item in listViewRequired.Items)
+                {
+                    if (!item.Group.ToString().Contains("S2")) continue;
+                    item.Selected = true;
+                    MoveLeft();
+                }
+            }
         }
 
         #region Wizard Control Flow Buttons
@@ -115,17 +254,17 @@ namespace UniTimetable
                 foreach (var subject in _timetable.SubjectList)
                 {
                     // create and add groups for the subjects
-                    var ignoredSubjectGroup = new ListViewGroup(subject.Name) { Tag = subject };
+                    var ignoredSubjectGroup = new ListViewGroup(subject.Name) {Tag = subject};
                     listViewIgnored.Groups.Add(ignoredSubjectGroup);
 
-                    var requiredSubjectGroup = new ListViewGroup(subject.Name) { Tag = subject };
+                    var requiredSubjectGroup = new ListViewGroup(subject.Name) {Tag = subject};
                     listViewRequired.Groups.Add(requiredSubjectGroup);
 
                     // add stream types to subject groups
                     foreach (var type in subject.Types)
                     {
                         // create ListViewItem without group
-                        var item = new ListViewItem(new[] { type.Code, type.Name }) { Tag = type };
+                        var item = new ListViewItem(new[] {type.Code, type.Name}) {Tag = type};
 
                         // add it to the current group in the correct box
                         if (type.Required)
@@ -158,7 +297,7 @@ namespace UniTimetable
                 // bring up panel 4
                 panelLoading.Visible = false;
                 panelPreview.Visible = false;
-                
+
                 // swap next button for finish
                 btnNext.Visible = false;
                 btnFinish.Visible = true;
@@ -347,65 +486,6 @@ namespace UniTimetable
 
         #endregion
 
-        #region Page 3 Event Handlers
-
-        private void TreePreviewAfterSelect(object sender, TreeViewEventArgs e)
-        {
-            // clear textbox
-            txtTreeDetails.Text = "";
-            // if nothing selected, done already
-            if (treePreview.SelectedNode == null)
-                return;
-
-            // level 0: subject
-            if (treePreview.SelectedNode.Level == 0)
-            {
-                // get subject
-                var subject = (Subject)treePreview.SelectedNode.Tag;
-                // print subject name
-                txtTreeDetails.Text += subject.Name + "\r\n";
-                // print all the types within the subject
-                foreach (var type in subject.Types)
-                {
-                    txtTreeDetails.Text += "\r\n\t" + type.Name + " (" + type.Streams.Count + ")";
-                }
-                // preview pane
-                timetableControl1.Timetable = Timetable.From(subject);
-            }
-            // level 1: type
-            else if (treePreview.SelectedNode.Level == 1)
-            {
-                // get type
-                var type = (Type)treePreview.SelectedNode.Tag;
-                // print type name
-                txtTreeDetails.Text += type.Subject.Name + " " + type.Name + "\r\n";
-                // print all the streams within the type
-                foreach (var stream in type.Streams)
-                {
-                    txtTreeDetails.Text += "\r\n\t" + stream;
-                }
-                // preview pane
-                timetableControl1.Timetable = Timetable.From(type);
-            }
-            // level 2: stream
-            else
-            {
-                // get stream
-                var stream = (Stream)treePreview.SelectedNode.Tag;
-                // print stream name
-                txtTreeDetails.Text += stream.Type.Subject.Name + " " + stream;
-                // print all the classes within the type
-                foreach (var session in stream.Classes)
-                {
-                    txtTreeDetails.Text += "\r\n\t\r\n\t" + session;
-                }
-                // preview pane
-                timetableControl1.Timetable = Timetable.From(stream);
-            }
-        }
-        
-        #endregion
-
         #region Page 4 Event Handlers
 
         private void ListViewRequiredSelectedIndexChanged(object sender, EventArgs e)
@@ -451,7 +531,7 @@ namespace UniTimetable
             var clash = false;
             foreach (ListViewItem item in listViewRequired.Items)
             {
-                var type = (Type)item.Tag;
+                var type = (Type) item.Tag;
                 if (_timetable.CheckDirectClash(type))
                 {
                     clash = true;
@@ -495,7 +575,7 @@ namespace UniTimetable
 
             var item = listViewRequired.SelectedItems[0];
             item.BackColor = SystemColors.Window;
-            var type = (Type)item.Tag;
+            var type = (Type) item.Tag;
             type.Required = false;
             _timetable.BuildCompatibility();
 
@@ -536,7 +616,7 @@ namespace UniTimetable
                 return;
 
             var item = listViewIgnored.SelectedItems[0];
-            var type = (Type)item.Tag;
+            var type = (Type) item.Tag;
             type.Required = true;
             _timetable.BuildCompatibility();
 
@@ -572,69 +652,5 @@ namespace UniTimetable
         }
 
         #endregion
-
-        private void CheckBoxTestCheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBoxTest.Checked)
-            {
-                foreach (var item in listViewIgnored.Items.Cast<ListViewItem>().Where(item => item.SubItems[1].Text.Contains("Test")))
-                {
-                    item.Selected = true;
-                    MoveRight();
-                }
-            }
-            else
-            {
-                foreach (var item in listViewRequired.Items.Cast<ListViewItem>().Where(item => item.SubItems[1].Text.Contains("Test")))
-                {
-                    item.Selected = true;
-                    MoveLeft();
-                }
-            }
-        }
-
-        private void CheckBoxS1CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBoxS1.Checked)
-            {
-                foreach (ListViewItem item in listViewIgnored.Items)
-                {
-                    if (!item.Group.ToString().Contains("S1")) continue;
-                    item.Selected = true;
-                    MoveRight();
-                }
-            }
-            else
-            {
-                foreach (ListViewItem item in listViewRequired.Items)
-                {
-                    if (!item.Group.ToString().Contains("S1")) continue;
-                    item.Selected = true;
-                    MoveLeft();
-                }
-            }
-        }
-
-        private void CheckBoxS2CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBoxS2.Checked)
-            {
-                foreach (ListViewItem item in listViewIgnored.Items)
-                {
-                    if (!item.Group.ToString().Contains("S2")) continue;
-                    item.Selected = true;
-                    MoveRight();
-                }
-            }
-            else
-            {
-                foreach (ListViewItem item in listViewRequired.Items)
-                {
-                    if (!item.Group.ToString().Contains("S2")) continue;
-                    item.Selected = true;
-                    MoveLeft();
-                }
-            }
-        }
     }
 }

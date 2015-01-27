@@ -1,4 +1,4 @@
-namespace UniTimetable
+namespace UniTimetable.ViewControllers
 {
     partial class FormCriteriaDetails
     {
@@ -35,7 +35,7 @@ namespace UniTimetable
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnRevert = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
-            this.etchedLine1 = new UniTimetable.EtchedLine();
+            this.etchedLine1 = new EtchedLine();
             this.SuspendLayout();
             // 
             // ddField

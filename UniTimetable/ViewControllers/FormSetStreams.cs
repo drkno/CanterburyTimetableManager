@@ -1,12 +1,19 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Threading;
 using System.Windows.Forms;
+using UniTimetable.Model;
+using UniTimetable.Model.Timetable;
 
-namespace UniTimetable
+#endregion
+
+namespace UniTimetable.ViewControllers
 {
     public partial class FormSetStreams : FormModel
     {
         private readonly Timetable _timetable;
+
         public FormSetStreams(ref Timetable timetable)
         {
             InitializeComponent();
@@ -17,7 +24,6 @@ namespace UniTimetable
 
         private void SetThread()
         {
-            
             var importer = new UnocImporter();
             if (importer.RequiresPassword)
             {
@@ -32,7 +38,9 @@ namespace UniTimetable
             var res = importer.Export(_timetable, ModifyList);
             if (!res)
             {
-                MessageBox.Show("One or more errors occured while setting the desired timetable.\nPlease review the log for details.","Error(s)",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "One or more errors occured while setting the desired timetable.\nPlease review the log for details.",
+                    "Error(s)", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             ModifyList("Complete!");
             EnableOkButton();
@@ -55,10 +63,7 @@ namespace UniTimetable
 
         private void EnableOkButton()
         {
-            Invoke(new MethodInvoker(delegate
-                                     {
-                                         buttonOK.Enabled = true;
-                                     }));
+            Invoke(new MethodInvoker(delegate { buttonOK.Enabled = true; }));
         }
 
         private void ButtonOkClick(object sender, EventArgs e)

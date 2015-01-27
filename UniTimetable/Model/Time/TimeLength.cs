@@ -1,26 +1,44 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
+#region
 
-namespace UniTimetable
+using System;
+
+#endregion
+
+namespace UniTimetable.Model.Time
 {
     public class TimeLength : IComparable<TimeLength>
     {
-        int Hours_;
-        int Minutes_;
+        #region IComparable<TimeLength> Members
+
+        public int CompareTo(TimeLength other)
+        {
+            return TotalMinutes - other.TotalMinutes;
+        }
+
+        #endregion
+
+        public static TimeLength FromTimeSpan(TimeSpan timeSpan)
+        {
+            return new TimeLength(timeSpan.Hours, timeSpan.Minutes);
+        }
+
+        public static explicit operator int(TimeLength time)
+        {
+            return time.TotalMinutes;
+        }
 
         #region Constructors
 
         public TimeLength()
         {
-            Hours_ = 0;
-            Minutes_ = 0;
+            Hours = 0;
+            Minutes = 0;
         }
 
         public TimeLength(TimeLength other)
         {
-            this.Hours_ = other.Hours_;
-            this.Minutes_ = other.Minutes_;
+            Hours = other.Hours;
+            Minutes = other.Minutes;
         }
 
         public TimeLength(int hours, int minutes)
@@ -36,61 +54,33 @@ namespace UniTimetable
 
         #endregion
 
-        public static TimeLength FromTimeSpan(TimeSpan timeSpan)
-        {
-            return new TimeLength(timeSpan.Hours, timeSpan.Minutes);
-        }
-
         #region Accessors
 
         /// <summary>
-        /// Gets or sets the hour.
+        ///     Gets or sets the hour.
         /// </summary>
-        public int Hours
-        {
-            get
-            {
-                return Hours_;
-            }
-            set
-            {
-                Hours_ = value;
-            }
-        }
+        public int Hours { get; set; }
 
         /// <summary>
-        /// Gets or sets the minute.
+        ///     Gets or sets the minute.
         /// </summary>
-        public int Minutes
-        {
-            get
-            {
-                return Minutes_;
-            }
-            set
-            {
-                Minutes_ = value;
-            }
-        }
+        public int Minutes { get; set; }
 
         /// <summary>
-        /// Gets or sets the total number of minutes.
+        ///     Gets or sets the total number of minutes.
         /// </summary>
         public int TotalMinutes
         {
-            get
-            {
-                return 60 * Hours_ + Minutes_;
-            }
+            get { return 60*Hours + Minutes; }
             set
             {
-                Hours_ = value / 60;
-                Minutes_ = value % 60;
+                Hours = value/60;
+                Minutes = value%60;
             }
         }
 
         /// <summary>
-        /// Adds a number of minutes.
+        ///     Adds a number of minutes.
         /// </summary>
         /// <param name="minutes">Number of minutes.</param>
         public void AddMinutes(int minutes)
@@ -99,12 +89,12 @@ namespace UniTimetable
         }
 
         /// <summary>
-        /// Adds a number of hours.
+        ///     Adds a number of hours.
         /// </summary>
         /// <param name="hours">Number of hours.</param>
         public void AddHours(int hours)
         {
-            Hours_ += hours;
+            Hours += hours;
         }
 
         #endregion
@@ -157,26 +147,12 @@ namespace UniTimetable
 
         public static TimeLength operator /(TimeLength length, int divisor)
         {
-            return new TimeLength(length.TotalMinutes / divisor);
+            return new TimeLength(length.TotalMinutes/divisor);
         }
 
         public static TimeLength operator *(TimeLength length, int scalar)
         {
-            return new TimeLength(length.TotalMinutes * scalar);
-        }
-
-        #endregion
-
-        public static explicit operator int(TimeLength time)
-        {
-            return time.TotalMinutes;
-        }
-
-        #region IComparable<TimeLength> Members
-
-        public int CompareTo(TimeLength other)
-        {
-            return this.TotalMinutes - other.TotalMinutes;
+            return new TimeLength(length.TotalMinutes*scalar);
         }
 
         #endregion
@@ -185,17 +161,17 @@ namespace UniTimetable
 
         public override bool Equals(object obj)
         {
-            return this.CompareTo((TimeLength)obj) == 0;
+            return CompareTo((TimeLength) obj) == 0;
         }
 
         public override int GetHashCode()
         {
-            return Minutes_;
+            return Minutes;
         }
 
         public override string ToString()
         {
-            return Hours_.ToString() +  ":" + Minutes_.ToString("00");
+            return Hours + ":" + Minutes.ToString("00");
         }
 
         #endregion

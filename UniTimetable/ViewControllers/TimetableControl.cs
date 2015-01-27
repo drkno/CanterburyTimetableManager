@@ -10,10 +10,13 @@ using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Linq;
 using System.Windows.Forms;
+using UniTimetable.Model.Time;
+using UniTimetable.Model.Timetable;
+using Type = UniTimetable.Model.Timetable.Type;
 
 #endregion
 
-namespace UniTimetable
+namespace UniTimetable.ViewControllers
 {
     public sealed partial class TimetableControl : UserControl
     {
@@ -25,22 +28,20 @@ namespace UniTimetable
             "Saturday"
         };
 
+        private readonly List<AnimatedSession> _animation = new List<AnimatedSession>();
+        private readonly Timer _timer = new Timer();
         private Stream _activeStream;
         private Unavailability _activeUnavail;
         private Stream _altStream;
-        private readonly List<AnimatedSession> _animation = new List<AnimatedSession>();
-        private Size _cell;
         private Cursor _dragCursor;
         private Session _dragSession;
         private bool _easterEgg;
         private bool _enableDrag = true;
         private Stream _equivStream;
         private bool _grayscale;
-
         private int _hourEnd = 21;
         private int _hourStart = 8;
         private Timeslot _hoverUnavail;
-
         private Type _optionsType;
         private bool _showAll;
         private bool _showDays = true;
@@ -50,10 +51,7 @@ namespace UniTimetable
         private bool _showText = true;
         private bool _showTimes = true;
         private bool _showWeekend = true;
-
         private Rectangle _table;
-
-        private readonly Timer _timer = new Timer();
         private Timetable _timetable;
 
         public TimetableControl()
@@ -217,10 +215,7 @@ namespace UniTimetable
             set { _showDragGhost = value; }
         }
 
-        public Size CellSize
-        {
-            get { return _cell; }
-        }
+        public Size CellSize { get; private set; }
 
         public Rectangle Table
         {
@@ -231,9 +226,9 @@ namespace UniTimetable
         {
             set
             {
-                if (_cell != value)
+                if (CellSize != value)
                 {
-                    _cell = value;
+                    CellSize = value;
                     if (ResizeCell != null)
                         ResizeCell(this);
                 }
@@ -394,22 +389,22 @@ namespace UniTimetable
         #region Events
 
         [Category("Action")]
-        public event TimetableEventHandler TimetableMouseClick = null;
+        public event TimetableEventHandler TimetableMouseClick;
 
         [Category("Action")]
-        public event TimetableEventHandler TimetableMouseDoubleClick = null;
+        public event TimetableEventHandler TimetableMouseDoubleClick;
 
         [Category("Mouse")]
-        public event TimetableEventHandler TimetableMouseDown = null;
+        public event TimetableEventHandler TimetableMouseDown;
 
         [Category("Action")]
-        public event TimetableChangedEventHandler TimetableChanged = null;
+        public event TimetableChangedEventHandler TimetableChanged;
 
         [Category("Layout")]
-        public event ResizeCellEventHandler ResizeCell = null;
+        public event ResizeCellEventHandler ResizeCell;
 
         [Category("Layout")]
-        public event BoundsClippedEventHandler BoundsClipped = null;
+        public event BoundsClippedEventHandler BoundsClipped;
 
         protected override void OnMouseClick(MouseEventArgs e)
         {
@@ -522,7 +517,7 @@ namespace UniTimetable
                     PreviewEquiv(session.Stream);
                 }
             }
-                // dragging an unavailability
+            // dragging an unavailability
             else if (drgevent.Data.GetDataPresent(typeof (Unavailability)))
             {
                 var dragUnavail = (Unavailability) drgevent.Data.GetData(typeof (Unavailability));
@@ -653,9 +648,9 @@ namespace UniTimetable
             if (y < 0 || y > _table.Height)
                 return null;
 
-            var hour = y/_cell.Height + _hourStart;
-            var minute = (y%_cell.Height)*60/_cell.Height;
-            var day = x/_cell.Width;
+            var hour = y/CellSize.Height + _hourStart;
+            var minute = (y%CellSize.Height)*60/CellSize.Height;
+            var day = x/CellSize.Width;
             if (!_showWeekend)
                 day++;
 
@@ -670,7 +665,7 @@ namespace UniTimetable
         {
             get
             {
-                var scale = Math.Min(_cell.Width, _cell.Height*TextAspect)/100f;
+                var scale = Math.Min(CellSize.Width, CellSize.Height*TextAspect)/100f;
                 if (scale == 0f)
                     scale = 1f;
                 return new Font(base.Font.FontFamily, base.Font.Size*scale);
@@ -749,18 +744,18 @@ namespace UniTimetable
 
             Cell = new Size(w/nx, h/ny);
 
-            var outer = new Rectangle {Width = _cell.Width*nx, Height = _cell.Height*ny};
+            var outer = new Rectangle {Width = CellSize.Width*nx, Height = CellSize.Height*ny};
             outer.X = (w - outer.Width)/2;
             outer.Y = (h - outer.Height)/2;
 
-            _table.Width = _cell.Width*(_showWeekend ? 7 : 5);
-            _table.Height = _cell.Height*(_hourEnd - _hourStart);
+            _table.Width = CellSize.Width*(_showWeekend ? 7 : 5);
+            _table.Height = CellSize.Height*(_hourEnd - _hourStart);
             _table.X = outer.X;
             _table.Y = outer.Y;
             if (_showTimes)
-                _table.X += _cell.Width/2;
+                _table.X += CellSize.Width/2;
             if (_showDays)
-                _table.Y += _cell.Height;
+                _table.Y += CellSize.Height;
         }
 
         private void DrawBackground(Graphics g)
@@ -772,14 +767,8 @@ namespace UniTimetable
 
         public Color OutlineColour
         {
-            get
-            {
-                return _outlinePen.Color;
-            }
-            set
-            {
-                _outlinePen = new Pen(value);
-            }
+            get { return _outlinePen.Color; }
+            set { _outlinePen = new Pen(value); }
         }
 
         private void DrawOutline(Graphics g)
@@ -788,20 +777,20 @@ namespace UniTimetable
             for (var i = 0; i <= (_showWeekend ? 7 : 5); i++)
             {
                 g.DrawLine(_outlinePen, x, _table.Top, x, _table.Bottom);
-                x += _cell.Width;
+                x += CellSize.Width;
             }
             var y = _table.Y;
             for (var i = 0; i <= (_hourEnd - _hourStart); i++)
             {
                 g.DrawLine(_outlinePen, _table.Left, y, _table.Right, y);
-                y += _cell.Height;
+                y += CellSize.Height;
             }
         }
 
         private void DrawDays(Graphics g)
         {
             var format = new StringFormat {Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center};
-            var cell = _cell;
+            var cell = CellSize;
             cell.Height /= 2;
             var r = new Rectangle(_table.Location, cell);
             r.Offset(0, -cell.Height);
@@ -817,9 +806,9 @@ namespace UniTimetable
         {
             var format = new StringFormat {Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Near};
 
-            var l = new Rectangle(_table.Location, _cell);
-            var r = new Rectangle(_table.Location, _cell);
-            l.Offset(-_cell.Width/2, 0);
+            var l = new Rectangle(_table.Location, CellSize);
+            var r = new Rectangle(_table.Location, CellSize);
+            l.Offset(-CellSize.Width/2, 0);
             r.Offset(_table.Width, 0);
             l.Width /= 2;
             r.Width /= 2;
@@ -834,8 +823,8 @@ namespace UniTimetable
                 g.DrawString(time, Font, Brushes.Black, l, format);
                 g.DrawString(time, Font, Brushes.Black, r, format);
 
-                l.Offset(0, _cell.Height);
-                r.Offset(0, _cell.Height);
+                l.Offset(0, CellSize.Height);
+                r.Offset(0, CellSize.Height);
             }
         }
 
@@ -858,16 +847,11 @@ namespace UniTimetable
         }
 
         private Color _timeslotUnavalibleColor = Color.LightGray;
+
         public Color TimeslotUnavalibleColour
         {
-            get
-            {
-                return _timeslotUnavalibleColor;
-            }
-            set
-            {
-                _timeslotUnavalibleColor = value;
-            }
+            get { return _timeslotUnavalibleColor; }
+            set { _timeslotUnavalibleColor = value; }
         }
 
         private void DrawUnavailable(Graphics g)
@@ -976,12 +960,12 @@ namespace UniTimetable
             // solid color
             g.FillRectangle(new SolidBrush(color), r);
             // gradient
-            var brush = LinearGradient(r.Location, _cell.Width, _cell.Height, color);
+            var brush = LinearGradient(r.Location, CellSize.Width, CellSize.Height, color);
 
             var q = new Rectangle(r.X, r.Y, r.Width, r.Height);
 
-            if (r.Height > _cell.Height*2)
-                r.Height = _cell.Height*2;
+            if (r.Height > CellSize.Height*2)
+                r.Height = CellSize.Height*2;
             g.FillRectangle(brush, r);
 
             g.DrawRectangle(Pens.Black, q);
@@ -994,12 +978,12 @@ namespace UniTimetable
             // solid color
             g.FillRectangle(new SolidBrush(color), r);
             // gradient
-            var brush = LinearGradientActive(r.Location, _cell.Width, _cell.Height, color);
+            var brush = LinearGradientActive(r.Location, CellSize.Width, CellSize.Height, color);
 
             var q = new Rectangle(r.X, r.Y, r.Width, r.Height);
 
-            if (r.Height > _cell.Height*2)
-                r.Height = _cell.Height*2;
+            if (r.Height > CellSize.Height*2)
+                r.Height = CellSize.Height*2;
             g.FillRectangle(brush, r);
 
             g.DrawRectangle(Pens.Black, q);
@@ -1056,15 +1040,16 @@ namespace UniTimetable
 
         public Rectangle TimeslotRectangle(Timeslot t)
         {
-            var r = new Rectangle(_table.Location, _cell);
-            r.Offset(_cell.Width*(t.Day - (_showWeekend ? 0 : 1)), _cell.Height*(t.Start.DayMinutes - HourStart*60)/60);
-            r.Height = (int) Math.Ceiling(t.TotalMinutes/60f*_cell.Height);
+            var r = new Rectangle(_table.Location, CellSize);
+            r.Offset(CellSize.Width*(t.Day - (_showWeekend ? 0 : 1)),
+                CellSize.Height*(t.Start.DayMinutes - HourStart*60)/60);
+            r.Height = (int) Math.Ceiling(t.TotalMinutes/60f*CellSize.Height);
             return r;
         }
 
         public Rectangle TimeLengthRectangle(TimeLength t)
         {
-            return new Rectangle(0, 0, _cell.Width, (int) (t.TotalMinutes/60.0f*_cell.Height));
+            return new Rectangle(0, 0, CellSize.Width, (int) (t.TotalMinutes/60.0f*CellSize.Height));
         }
 
         #endregion
