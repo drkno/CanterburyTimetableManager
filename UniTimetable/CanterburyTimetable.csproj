@@ -49,131 +49,131 @@
   <ItemGroup>
     <Compile Include="CanterburyData\CanterburyData.cs" />
     <Compile Include="CanterburyData\CanterburyLoader.cs" />
-    <Compile Include="EtchedLine.cs">
+    <Compile Include="ViewControllers\EtchedLine.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="EtchedLine.Designer.cs">
+    <Compile Include="ViewControllers\EtchedLine.Designer.cs">
       <DependentUpon>EtchedLine.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormLogin.cs">
+    <Compile Include="ViewControllers\FormLogin.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormLogin.Designer.cs">
+    <Compile Include="ViewControllers\FormLogin.Designer.cs">
       <DependentUpon>FormLogin.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormModel.cs">
+    <Compile Include="ViewControllers\FormModel.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormModel.Designer.cs">
+    <Compile Include="ViewControllers\FormModel.Designer.cs">
       <DependentUpon>FormModel.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormSetStreams.cs">
+    <Compile Include="ViewControllers\FormSetStreams.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormSetStreams.Designer.cs">
+    <Compile Include="ViewControllers\FormSetStreams.Designer.cs">
       <DependentUpon>FormSetStreams.cs</DependentUpon>
     </Compile>
-    <Compile Include="Solver.Filter.cs" />
-    <Compile Include="FormImport.cs">
+    <Compile Include="Model\Solver.Filter.cs" />
+    <Compile Include="ViewControllers\FormImport.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormImport.Designer.cs">
+    <Compile Include="ViewControllers\FormImport.Designer.cs">
       <DependentUpon>FormImport.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormMain.cs">
+    <Compile Include="ViewControllers\FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormMain.Designer.cs">
+    <Compile Include="ViewControllers\FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormFilterDetails.cs">
+    <Compile Include="ViewControllers\FormFilterDetails.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormFilterDetails.Designer.cs">
+    <Compile Include="ViewControllers\FormFilterDetails.Designer.cs">
       <DependentUpon>FormFilterDetails.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormProgress.cs">
+    <Compile Include="ViewControllers\FormProgress.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormProgress.Designer.cs">
+    <Compile Include="ViewControllers\FormProgress.Designer.cs">
       <DependentUpon>FormProgress.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormSolution.cs">
+    <Compile Include="ViewControllers\FormSolution.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormSolution.Designer.cs">
+    <Compile Include="ViewControllers\FormSolution.Designer.cs">
       <DependentUpon>FormSolution.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormStyle.cs">
+    <Compile Include="ViewControllers\FormStyle.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormStyle.Designer.cs">
+    <Compile Include="ViewControllers\FormStyle.Designer.cs">
       <DependentUpon>FormStyle.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormUnavailability.cs">
+    <Compile Include="ViewControllers\FormUnavailability.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormUnavailability.Designer.cs">
+    <Compile Include="ViewControllers\FormUnavailability.Designer.cs">
       <DependentUpon>FormUnavailability.cs</DependentUpon>
     </Compile>
-    <Compile Include="Heap.cs" />
-    <Compile Include="Importer.cs" />
-    <Compile Include="ListViewColumnSorter.cs" />
-    <Compile Include="OrderedList.cs" />
-    <Compile Include="Solver.Criteria.cs" />
+    <Compile Include="Model\Heap.cs" />
+    <Compile Include="Model\Importer.cs" />
+    <Compile Include="ViewControllers\ListViewColumnSorter.cs" />
+    <Compile Include="Model\OrderedList.cs" />
+    <Compile Include="Model\Solver.Criteria.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="EtchedLine.resx">
+    <EmbeddedResource Include="ViewControllers\EtchedLine.resx">
       <SubType>Designer</SubType>
       <DependentUpon>EtchedLine.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormCriteria.resx">
+    <EmbeddedResource Include="ViewControllers\FormCriteria.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormCriteria.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormCriteriaDetails.resx">
+    <EmbeddedResource Include="ViewControllers\FormCriteriaDetails.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormCriteriaDetails.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormImport.resx">
+    <EmbeddedResource Include="ViewControllers\FormImport.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormImport.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormMain.resx">
+    <EmbeddedResource Include="ViewControllers\FormMain.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormFilterDetails.resx">
+    <EmbeddedResource Include="ViewControllers\FormFilterDetails.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormFilterDetails.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormModel.resx">
+    <EmbeddedResource Include="ViewControllers\FormModel.resx">
       <DependentUpon>FormModel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormProgress.resx">
+    <EmbeddedResource Include="ViewControllers\FormProgress.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormProgress.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormSetStreams.resx">
+    <EmbeddedResource Include="ViewControllers\FormSetStreams.resx">
       <DependentUpon>FormSetStreams.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormSettings.resx">
+    <EmbeddedResource Include="ViewControllers\FormSettings.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormSettings.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormSolution.resx">
+    <EmbeddedResource Include="ViewControllers\FormSolution.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormSolution.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormStyle.resx">
+    <EmbeddedResource Include="ViewControllers\FormStyle.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormStyle.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormUnavailability.resx">
+    <EmbeddedResource Include="ViewControllers\FormUnavailability.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormUnavailability.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormLogin.resx">
+    <EmbeddedResource Include="ViewControllers\FormLogin.resx">
       <DependentUpon>FormLogin.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -181,7 +181,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="TimetableControl.resx">
+    <EmbeddedResource Include="ViewControllers\TimetableControl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>TimetableControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -199,18 +199,18 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Solver.Solution.cs" />
-    <Compile Include="Solver.SolutionComparer.cs" />
-    <Compile Include="Stream.cs" />
-    <Compile Include="Session.cs" />
-    <Compile Include="Subject.cs" />
-    <Compile Include="TimeLength.cs" />
-    <Compile Include="TimeOfDay.cs" />
-    <Compile Include="Timeslot.cs" />
-    <Compile Include="Timetable.cs" />
-    <Compile Include="Solver.cs" />
-    <Compile Include="Type.cs" />
-    <Compile Include="Unavailability.cs" />
+    <Compile Include="Model\Solver.Solution.cs" />
+    <Compile Include="Model\Solver.SolutionComparer.cs" />
+    <Compile Include="Model\Stream.cs" />
+    <Compile Include="Model\Session.cs" />
+    <Compile Include="Model\Subject.cs" />
+    <Compile Include="Model\TimeLength.cs" />
+    <Compile Include="Model\TimeOfDay.cs" />
+    <Compile Include="Model\Timeslot.cs" />
+    <Compile Include="Model\Timetable.cs" />
+    <Compile Include="Model\Solver.cs" />
+    <Compile Include="Model\Type.cs" />
+    <Compile Include="Model\Unavailability.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -228,36 +228,36 @@
     <None Include="Resources\Symbol-Check.png" />
     <None Include="Resources\Symbol-Delete.png" />
     <None Include="Resources\DeStar.png" />
-    <Compile Include="FormCriteria.cs">
+    <Compile Include="ViewControllers\FormCriteria.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormCriteria.Designer.cs">
+    <Compile Include="ViewControllers\FormCriteria.Designer.cs">
       <DependentUpon>FormCriteria.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormCriteriaDetails.cs">
+    <Compile Include="ViewControllers\FormCriteriaDetails.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormCriteriaDetails.Designer.cs">
+    <Compile Include="ViewControllers\FormCriteriaDetails.Designer.cs">
       <DependentUpon>FormCriteriaDetails.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormSettings.cs">
+    <Compile Include="ViewControllers\FormSettings.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormSettings.Designer.cs">
+    <Compile Include="ViewControllers\FormSettings.Designer.cs">
       <DependentUpon>FormSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="History.cs" />
-    <Compile Include="ListBoxBuffered.cs">
+    <Compile Include="Model\History.cs" />
+    <Compile Include="ViewControllers\ListBoxBuffered.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Settings.cs" />
-    <Compile Include="Solver.Field.cs" />
-    <Compile Include="Solver.Preset.cs" />
-    <Compile Include="TimeOfWeek.cs" />
-    <Compile Include="TimetableControl.cs">
+    <Compile Include="Model\Settings.cs" />
+    <Compile Include="Model\Solver.Field.cs" />
+    <Compile Include="Model\Solver.Preset.cs" />
+    <Compile Include="Model\TimeOfWeek.cs" />
+    <Compile Include="ViewControllers\TimetableControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="TimetableControl.Designer.cs">
+    <Compile Include="ViewControllers\TimetableControl.Designer.cs">
       <DependentUpon>TimetableControl.cs</DependentUpon>
     </Compile>
     <None Include="Resources\Unknown.png" />
