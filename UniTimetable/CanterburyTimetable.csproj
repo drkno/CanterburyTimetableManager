@@ -14,11 +14,25 @@
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
-    <ApplicationRevision>0</ApplicationRevision>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -73,7 +87,7 @@
     <Compile Include="ViewControllers\FormSetStreams.Designer.cs">
       <DependentUpon>FormSetStreams.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model\Solver.Filter.cs" />
+    <Compile Include="Model\Solver\Solver.Filter.cs" />
     <Compile Include="ViewControllers\FormImport.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -120,7 +134,7 @@
     <Compile Include="Model\Importer.cs" />
     <Compile Include="ViewControllers\ListViewColumnSorter.cs" />
     <Compile Include="Model\OrderedList.cs" />
-    <Compile Include="Model\Solver.Criteria.cs" />
+    <Compile Include="Model\Solver\Solver.Criteria.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="ViewControllers\EtchedLine.resx">
@@ -199,18 +213,18 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Model\Solver.Solution.cs" />
-    <Compile Include="Model\Solver.SolutionComparer.cs" />
-    <Compile Include="Model\Stream.cs" />
-    <Compile Include="Model\Session.cs" />
-    <Compile Include="Model\Subject.cs" />
-    <Compile Include="Model\TimeLength.cs" />
-    <Compile Include="Model\TimeOfDay.cs" />
-    <Compile Include="Model\Timeslot.cs" />
-    <Compile Include="Model\Timetable.cs" />
-    <Compile Include="Model\Solver.cs" />
-    <Compile Include="Model\Type.cs" />
-    <Compile Include="Model\Unavailability.cs" />
+    <Compile Include="Model\Solver\Solver.Solution.cs" />
+    <Compile Include="Model\Solver\Solver.SolutionComparer.cs" />
+    <Compile Include="Model\Timetable\Stream.cs" />
+    <Compile Include="Model\Timetable\Session.cs" />
+    <Compile Include="Model\Timetable\Subject.cs" />
+    <Compile Include="Model\Time\TimeLength.cs" />
+    <Compile Include="Model\Time\TimeOfDay.cs" />
+    <Compile Include="Model\Timetable\Timeslot.cs" />
+    <Compile Include="Model\Timetable\Timetable.cs" />
+    <Compile Include="Model\Solver\Solver.cs" />
+    <Compile Include="Model\Timetable\Type.cs" />
+    <Compile Include="Model\Timetable\Unavailability.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -251,9 +265,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Model\Settings.cs" />
-    <Compile Include="Model\Solver.Field.cs" />
-    <Compile Include="Model\Solver.Preset.cs" />
-    <Compile Include="Model\TimeOfWeek.cs" />
+    <Compile Include="Model\Solver\Solver.Field.cs" />
+    <Compile Include="Model\Solver\Solver.Preset.cs" />
+    <Compile Include="Model\Time\TimeOfWeek.cs" />
     <Compile Include="ViewControllers\TimetableControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -298,6 +312,23 @@
     <Content Include="Resources\UNOC.png" />
     <None Include="Resources\WhiteLogo.png" />
     <Content Include="TimeTable.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5.1 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
