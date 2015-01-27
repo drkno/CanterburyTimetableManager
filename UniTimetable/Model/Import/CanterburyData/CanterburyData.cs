@@ -10,7 +10,7 @@ using System.Text;
 
 #endregion
 
-namespace UniTimetable.CanterburyData
+namespace UniTimetable.Model.Import.CanterburyData
 {
     [DataContract]
     public class CanterburyData

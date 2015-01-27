@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using UniTimetable.Model;
+using UniTimetable.Model.Import;
 using UniTimetable.Model.Timetable;
 using Type = UniTimetable.Model.Timetable.Type;
 

@@ -4,6 +4,7 @@ using System;
 using System.Threading;
 using System.Windows.Forms;
 using UniTimetable.Model;
+using UniTimetable.Model.Import;
 using UniTimetable.Model.Timetable;
 
 #endregion

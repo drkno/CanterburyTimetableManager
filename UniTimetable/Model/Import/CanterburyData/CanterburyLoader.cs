@@ -14,7 +14,7 @@ using UniTimetable.Model.Timetable;
 
 #endregion
 
-namespace UniTimetable.CanterburyData
+namespace UniTimetable.Model.Import.CanterburyData
 {
     internal class CanterburyLoader
     {

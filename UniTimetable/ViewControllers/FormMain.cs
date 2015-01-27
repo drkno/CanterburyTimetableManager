@@ -7,7 +7,6 @@ using System.Drawing.Imaging;
 using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
-using System.Media;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Xml.Serialization;
@@ -134,11 +133,6 @@ namespace UniTimetable.ViewControllers
         private void TimetableControlTimetableChanged(object sender)
         {
             MadeChanges(true);
-        }
-
-        private bool TimetableLoaded()
-        {
-            return (Timetable != null && Timetable.HasData());
         }
 
         private bool AreYouSure(string caption)
@@ -849,48 +843,6 @@ namespace UniTimetable.ViewControllers
         #endregion
 
         #region Undo and redo
-
-        private void UndoToolStripMenuItemClick(object sender, EventArgs e)
-        {
-            Undo();
-        }
-
-        private void Undo()
-        {
-            var t = _history.Back();
-            if (t == null)
-            {
-                SystemSounds.Beep.Play();
-                return;
-            }
-
-            _changes--;
-            Timetable = t.DeepCopy();
-            timetableControl.Timetable = Timetable;
-            Timetable.RecomputeSolutions = true;
-            UpdateRemaining();
-        }
-
-        private void RedoToolStripMenuItemClick(object sender, EventArgs e)
-        {
-            Redo();
-        }
-
-        private void Redo()
-        {
-            var t = _history.Forward();
-            if (t == null)
-            {
-                SystemSounds.Beep.Play();
-                return;
-            }
-
-            _changes++;
-            Timetable = t.DeepCopy();
-            timetableControl.Timetable = Timetable;
-            UpdateRemaining();
-        }
-
         private void ClearHistory()
         {
             _changes = 0;
@@ -975,11 +927,6 @@ namespace UniTimetable.ViewControllers
                 return;
 
             MadeChanges(true);
-        }
-
-        private void EditSolutionCriteriaToolStripMenuItemClick(object sender, EventArgs e)
-        {
-            EditCriteria();
         }
 
         private void EditCriteria()
