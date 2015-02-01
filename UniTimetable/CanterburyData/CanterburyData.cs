@@ -141,7 +141,7 @@ namespace UniTimetable.CanterburyData
                 _start_date = value;
                 if (!string.IsNullOrWhiteSpace(start_time))
                 {
-                    Date = DateTime.Parse(value + " " + start_time);
+                    Date = DateTime.ParseExact(value + " " + start_time, "dd/MM/yyyy HH:mm", System.Globalization.CultureInfo.InvariantCulture);
                 }
             }
         }
