@@ -8,7 +8,7 @@ Latest Stable Release
 [Download Binary 1.0.0.3](https://github.com/mrkno/CanterburyTimetableManager/releases/download/1.0.0.3/CanterburyTimetable.exe)<br/>
 [Download Source 1.0.0.3](https://github.com/mrkno/CanterburyTimetableManager/archive/1.0.0.3.zip)
 
-Version 1.0.0.2:
+Version 1.0.0.3:
 -----------------
 Fixes a bug with importing 2015 timetables.
 
