@@ -1134,44 +1134,39 @@ namespace UniTimetable.ViewControllers
 
     public class TimetableEventArgs : MouseEventArgs
     {
-        private readonly TimeOfWeek _time;
-
         #region Constructors
 
         public TimetableEventArgs(MouseButtons button, int clicks, int x, int y, int delta, TimeOfWeek time)
             : base(button, clicks, x, y, delta)
         {
-            _time = time;
+            Time = time;
         }
 
         public TimetableEventArgs(MouseEventArgs e, TimeOfWeek time)
             : base(e.Button, e.Clicks, e.X, e.Y, e.Delta)
         {
-            _time = time;
+            Time = time;
         }
 
         #endregion
 
         #region Accessors
 
-        public TimeOfWeek Time
-        {
-            get { return _time; }
-        }
+        public TimeOfWeek Time { get; private set; }
 
         public int Day
         {
-            get { return _time.Day; }
+            get { return Time.Day; }
         }
 
         public int Hour
         {
-            get { return _time.Hour; }
+            get { return Time.Hour; }
         }
 
         public int Minute
         {
-            get { return _time.Minute; }
+            get { return Time.Minute; }
         }
 
         #endregion

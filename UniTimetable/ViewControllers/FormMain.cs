@@ -43,7 +43,6 @@ namespace UniTimetable.ViewControllers
         private TimeOfWeek _clickTime;
         private Unavailability _clickUnavail;
         private Cursor _dragCursor;
-        private int _egg;
         private Settings _settings = new Settings();
         private bool _sidePaneEnabled = true;
         public Timetable Timetable;
