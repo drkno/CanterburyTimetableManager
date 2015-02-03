@@ -26,13 +26,6 @@ namespace UniTimetable.ViewControllers
     {
         private const int ListBoxMargin = 2;
         private readonly Size _defaultSize;
-
-        private readonly Keys[] _easter =
-        {
-            Keys.Up, Keys.Up, Keys.Down, Keys.Down, Keys.Left, Keys.Right, Keys.Left,
-            Keys.Right, Keys.B, Keys.A, Keys.Enter
-        };
-
         private readonly TimetableControl _export = new TimetableControl();
         private readonly FormSettings _formSettings = new FormSettings();
         private readonly FormUnavailability _formUnavail = new FormUnavailability();
@@ -857,7 +850,6 @@ namespace UniTimetable.ViewControllers
         {
             _changes++;
             _history.Add(Timetable.DeepCopy());
-            timetableControl.NoCrazy();
             timetableControl.Invalidate();
             if (recompute)
                 Timetable.RecomputeSolutions = true;
@@ -1042,49 +1034,6 @@ namespace UniTimetable.ViewControllers
             timetableControl.EndPreviewStream();
             timetableControl.EndPreviewOptions();
             MadeChanges(true);
-        }
-
-        #endregion
-
-        #region Keyboard input
-
-        private void EasterEggStep(Keys key)
-        {
-            if (key == _easter[_egg])
-            {
-                _egg++;
-                if (_egg != _easter.Length) return;
-                timetableControl.GoCrazy();
-                _egg = 0;
-                return;
-            }
-            _egg = 0;
-            timetableControl.NoCrazy();
-        }
-
-        protected override bool ProcessKeyPreview(ref Message m)
-        {
-            /*if ((int)m.WParam >= (int)'a' && (int)m.WParam <= (int)'z')
-                return base.ProcessKeyPreview(ref m);*/
-
-            var keyData = (Keys) (int) m.WParam;
-            switch (keyData)
-            {
-                case Keys.Up:
-                case Keys.Down:
-                case Keys.Left:
-                case Keys.Right:
-                    EasterEggStep(keyData);
-                    break;
-            }
-            return base.ProcessKeyPreview(ref m);
-        }
-
-        // override required to process arrow keys for easter egg
-        protected override bool ProcessDialogKey(Keys keyData)
-        {
-            EasterEggStep(keyData);
-            return base.ProcessDialogKey(keyData);
         }
 
         #endregion
