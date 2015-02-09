@@ -28,14 +28,11 @@ namespace UniTimetable.ViewControllers
             "Saturday"
         };
 
-        private readonly List<AnimatedSession> _animation = new List<AnimatedSession>();
-        private readonly Timer _timer = new Timer();
         private Stream _activeStream;
         private Unavailability _activeUnavail;
         private Stream _altStream;
         private Cursor _dragCursor;
         private Session _dragSession;
-        private bool _easterEgg;
         private bool _enableDrag = true;
         private Stream _equivStream;
         private bool _grayscale;
@@ -58,10 +55,6 @@ namespace UniTimetable.ViewControllers
         {
             InitializeComponent();
             DoubleBuffered = true;
-
-            _timer.Stop();
-            _timer.Interval = 10;
-            _timer.Tick += delegate { Timestep(); };
         }
 
         #region Accessors
@@ -681,11 +674,7 @@ namespace UniTimetable.ViewControllers
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-
-            if (!_easterEgg)
-                DrawTimetable(e.Graphics);
-            else
-                DrawCrazytable(e.Graphics);
+            DrawTimetable(e.Graphics);
         }
 
         protected override void OnResize(EventArgs e)
@@ -715,24 +704,6 @@ namespace UniTimetable.ViewControllers
             DrawUnavailableTarget(g);
             DrawPreview(g);
             DrawOptions(g);
-        }
-
-        private void DrawCrazytable(Graphics g)
-        {
-            FindDimensions();
-
-            DrawBackground(g);
-
-            if (_showDays)
-                DrawDays(g);
-            if (_showTimes)
-                DrawTimes(g);
-            if (_showGrayArea)
-                DrawGrayArea(g);
-
-            DrawOutline(g);
-
-            DrawAnimation(g);
         }
 
         private void FindDimensions()
@@ -1151,168 +1122,6 @@ namespace UniTimetable.ViewControllers
         }
 
         #endregion
-
-        #region Easter egg
-
-        public void GoCrazy()
-        {
-            if (_timetable == null)
-                return;
-
-            _easterEgg = true;
-            _animation.Clear();
-            foreach (var stream in _timetable.StreamList)
-            {
-                if (!stream.Selected) continue;
-                foreach (var session in stream.Classes)
-                {
-                    var r = TimeslotRectangle(session);
-                    var b = new Bitmap(r.Width + 1, r.Height + 1, PixelFormat.Format24bppRgb);
-                    var g = Graphics.FromImage(b);
-                    g.TranslateTransform(-r.X, -r.Y);
-                    DrawSession(g, session);
-                    _animation.Add(new AnimatedSession(b, r.Location, r.Size));
-                }
-            }
-            Invalidate();
-            _timer.Start();
-        }
-
-        public void NoCrazy()
-        {
-            _timer.Stop();
-            _easterEgg = false;
-            Invalidate();
-        }
-
-        private void Timestep()
-        {
-            const float g = 0.0005f;
-
-            var area = _animation.Sum(session => session.Area);
-            var centre = new PointF(Width/2f, Height/2f);
-
-            foreach (var session1 in _animation)
-            {
-                // keep everything centred
-                var b = UnitGravitationOn(session1.Centroid, centre);
-                var a = new PointF(0f, 0f);
-                a.X += b.X*area;
-                a.Y += b.Y*area;
-                // find contribution of each other object
-                foreach (var session2 in _animation)
-                {
-                    b = UnitGravitationOn(session1.Centroid, session2.Centroid);
-                    a.X += b.X*session2.Area;
-                    a.Y += b.Y*session2.Area;
-                }
-                a.X *= g;
-                a.Y *= g;
-                session1.Timestep(a);
-            }
-
-            Invalidate();
-        }
-
-        private PointF UnitGravitationOn(PointF p, PointF q)
-        {
-            var dx = q.X - p.X;
-            var dy = q.Y - p.Y;
-            var r2 = dx*dx + dy*dy;
-            if (r2 < 50)
-                r2 = 50;
-            //if (r2 == 0)
-            //    return new PointF(0, 0);
-            return new PointF(dx/r2, dy/r2);
-        }
-
-        private void DrawAnimation(Graphics g)
-        {
-            var offScreen = 0;
-            foreach (var session in _animation)
-            {
-                if (session.Rectangle.IntersectsWith(new Rectangle(0, 0, Width, Height)))
-                {
-                    try
-                    {
-                        g.DrawImageUnscaled(session.Bitmap, session.IntegerPosition);
-                    }
-                    catch
-                    {
-                        NoCrazy();
-                        return;
-                    }
-                }
-                else
-                {
-                    offScreen++;
-                }
-            }
-            if (offScreen == _animation.Count)
-            {
-                NoCrazy();
-            }
-        }
-
-        public class AnimatedSession
-        {
-            private readonly Bitmap _bitmap;
-            private PointF _position = new PointF(0, 0);
-            private Size _size = new Size(0, 0);
-            private PointF _velocity = new PointF(0, 0);
-
-            public AnimatedSession(Bitmap b, Point pos, Size size)
-            {
-                _bitmap = b;
-                _position = pos;
-                _size = size;
-            }
-
-            public PointF Position
-            {
-                get { return _position; }
-            }
-
-            public Point IntegerPosition
-            {
-                get { return new Point((int) _position.X, (int) _position.Y); }
-            }
-
-            public PointF Centroid
-            {
-                get { return new PointF(_position.X + (float) _size.Width/2, _position.Y + (float) _size.Height/2); }
-            }
-
-            public Size Size
-            {
-                get { return _size; }
-            }
-
-            public float Area
-            {
-                get { return _size.Width*_size.Height; }
-            }
-
-            public Rectangle Rectangle
-            {
-                get { return new Rectangle(IntegerPosition, _size); }
-            }
-
-            public Bitmap Bitmap
-            {
-                get { return _bitmap; }
-            }
-
-            public void Timestep(PointF acceleration)
-            {
-                _velocity.X += acceleration.X;
-                _velocity.Y += acceleration.Y;
-                _position.X += _velocity.X;
-                _position.Y += _velocity.Y;
-            }
-        }
-
-        #endregion
     }
 
     public delegate void TimetableEventHandler(object sender, TimetableEventArgs e);
@@ -1325,44 +1134,39 @@ namespace UniTimetable.ViewControllers
 
     public class TimetableEventArgs : MouseEventArgs
     {
-        private readonly TimeOfWeek _time;
-
         #region Constructors
 
         public TimetableEventArgs(MouseButtons button, int clicks, int x, int y, int delta, TimeOfWeek time)
             : base(button, clicks, x, y, delta)
         {
-            _time = time;
+            Time = time;
         }
 
         public TimetableEventArgs(MouseEventArgs e, TimeOfWeek time)
             : base(e.Button, e.Clicks, e.X, e.Y, e.Delta)
         {
-            _time = time;
+            Time = time;
         }
 
         #endregion
 
         #region Accessors
 
-        public TimeOfWeek Time
-        {
-            get { return _time; }
-        }
+        public TimeOfWeek Time { get; private set; }
 
         public int Day
         {
-            get { return _time.Day; }
+            get { return Time.Day; }
         }
 
         public int Hour
         {
-            get { return _time.Hour; }
+            get { return Time.Hour; }
         }
 
         public int Minute
         {
-            get { return _time.Minute; }
+            get { return Time.Minute; }
         }
 
         #endregion
