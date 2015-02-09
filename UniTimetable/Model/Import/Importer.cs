@@ -1,6 +1,7 @@
 #region
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -229,6 +230,8 @@ namespace UniTimetable.Model.Import
                 var timetable = new Timetable.Timetable();
                 foreach (var data in cantaLoader.CanterburyDatas)
                 {
+                    var streamMap = new Dictionary<string, int>();
+                    var streamNo = 1;
                     foreach (var subs in data.SubjectStreams)
                     {
                         var endTime = subs.Value.Date.AddMinutes(double.Parse(subs.Value.duration));
@@ -295,14 +298,27 @@ namespace UniTimetable.Model.Import
                         }
 
                         // Set the session
-                        Stream stream;
-                        if (type.Streams.Exists(x => x.Number == int.Parse(subs.Value.activity_code)))
+                        int streamNumber;
+                        if (!int.TryParse(subs.Value.activity_code, out streamNumber))
                         {
-                            stream = type.Streams.Find(x => x.Number == int.Parse(subs.Value.activity_code));
+                            if (streamMap.ContainsKey(subs.Value.activity_code))
+                            {
+                                streamNumber = streamMap[subs.Value.activity_code];
+                            }
+                            else
+                            {
+                                streamMap[subs.Value.activity_code] = streamNo;
+                                streamNumber = streamNo++;
+                            }
+                        }
+                        Stream stream;
+                        if (type.Streams.Exists(x => x.Number == streamNumber))
+                        {
+                            stream = type.Streams.Find(x => x.Number == streamNumber);
                         }
                         else
                         {
-                            stream = new Stream(int.Parse(subs.Value.activity_code));
+                            stream = new Stream(streamNumber);
                             timetable.StreamList.Add(stream); // Add it to the stream list
                         }
 
