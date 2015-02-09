@@ -5,8 +5,12 @@ Designed for University of Canterbury students to select the best possible timet
 
 Latest Stable Release
 ----------------------
-[Download Binary 1.0.0.3](https://github.com/mrkno/CanterburyTimetableManager/releases/download/1.0.0.3/CanterburyTimetable.exe)<br/>
-[Download Source 1.0.0.3](https://github.com/mrkno/CanterburyTimetableManager/archive/1.0.0.3.zip)
+[Download Binary 1.0.1.0 (09/02/15)](https://github.com/mrkno/CanterburyTimetableManager/releases/download/v1.0.1.0/CanterburyTimetable.exe)<br/>
+[Download Source 1.0.1.0 (09/02/15)](https://github.com/mrkno/CanterburyTimetableManager/archive/v1.0.1.0.zip)
+
+Version 1.0.1.0:
+-----------------
+Significant refactoring and 2015 timetable fix.
 
 Version 1.0.0.3:
 -----------------
