@@ -5,6 +5,7 @@ using System.Threading;
 using System.Windows.Forms;
 using UniTimetable.Model;
 using UniTimetable.Model.Import;
+using UniTimetable.Model.Import.CanterburyData;
 using UniTimetable.Model.Timetable;
 
 #endregion
@@ -25,7 +26,7 @@ namespace UniTimetable.ViewControllers
 
         private void SetThread()
         {
-            var importer = new UnocImporter();
+            var importer = new CanterburyImporter();
             if (importer.RequiresPassword)
             {
                 /* Login */

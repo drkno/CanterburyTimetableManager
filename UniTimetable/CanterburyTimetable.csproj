@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="Model\Import\CanterburyData\CanterburyData.cs" />
     <Compile Include="Model\Import\CanterburyData\CanterburyLoader.cs" />
+    <Compile Include="Model\Import\CanterburyData\CanterburyImporter.cs" />
     <Compile Include="ViewControllers\EtchedLine.cs">
       <SubType>UserControl</SubType>
     </Compile>

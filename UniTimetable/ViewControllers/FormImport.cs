@@ -7,6 +7,7 @@ using System.Threading;
 using System.Windows.Forms;
 using UniTimetable.Model;
 using UniTimetable.Model.Import;
+using UniTimetable.Model.Import.CanterburyData;
 using UniTimetable.Model.Timetable;
 using Type = UniTimetable.Model.Timetable.Type;
 
@@ -24,7 +25,7 @@ namespace UniTimetable.ViewControllers
             InitializeComponent();
 
             // Set Importer Type
-            _importer = new UnocImporter();
+            _importer = new CanterburyImporter();
 
             if (_importer.RequiresPassword)
             {
