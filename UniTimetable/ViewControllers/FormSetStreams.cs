@@ -3,9 +3,9 @@
 using System;
 using System.Threading;
 using System.Windows.Forms;
-using UniTimetable.Model;
-using UniTimetable.Model.Import;
-using UniTimetable.Model.Import.CanterburyData;
+using UniTimetable.Model.ImportExport;
+using UniTimetable.Model.ImportExport.Login;
+using UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury;
 using UniTimetable.Model.Timetable;
 
 #endregion
@@ -26,10 +26,36 @@ namespace UniTimetable.ViewControllers
 
         private void SetThread()
         {
-            var importer = new CanterburyImporter();
+            IExporter exporter = new CanterburyExporter();
+            ILoginRequired loginRequired = exporter as ILoginRequired;
+            if (loginRequired != null)
+            {
+                ModifyList("Logging In...");
+                var loginHandle = loginRequired.CreateNewLoginHandle();
+                var login = new FormLogin();
+                string username, password;
+                login.ShowDialog(out username, out password, "Login", "Set Course");
+                var loginFields = loginHandle.GetLoginFields();
+                foreach (var loginField in loginFields)
+                {
+                    switch (loginField.Name)
+                    {
+                        case "Username":
+                            loginField.Value = username; break;
+                        case "Password":
+                            loginField.Value = password; break;
+                    }
+                }
+                loginHandle.SetLoginFields(loginFields);
+                loginRequired.SetLoginHandle(ref loginHandle);
+            }
+
+            var res = exporter.Export(_timetable, ModifyList);
+
+            /*var importer = new CanterburyImporterOld();
             if (importer.RequiresPassword)
             {
-                /* Login */
+                /* Login * /
                 ModifyList("Logging In...");
                 string username, password;
                 var login = new FormLogin();
@@ -37,7 +63,7 @@ namespace UniTimetable.ViewControllers
                 importer.SetLogin(username, password);
             }
 
-            var res = importer.Export(_timetable, ModifyList);
+            var res = importer.Export(_timetable, ModifyList);*/
             if (!res)
             {
                 MessageBox.Show(

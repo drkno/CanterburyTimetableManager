@@ -16,11 +16,11 @@ namespace UniTimetable.ViewControllers
     {
         private const string StarText_ = "Star It!";
         private const string DeStarText_ = "De-Star It!";
-        private readonly Image DeStarImage_ = Resources.DeStar;
+        private readonly Image DeStarImage_ = Image.FromStream(Resources.Resources.GetEmbeddedResourceStream("UniTimetable.Resources.DeStar.png"));
         private readonly Color SolutionColor1_ = Color.White;
         private readonly Color SolutionColor2_ = Color.LightGray;
         private readonly Color StarColor_ = Color.Yellow;
-        private readonly Image StarImage_ = Resources.Favorites;
+        private readonly Image StarImage_ = Image.FromStream(Resources.Resources.GetEmbeddedResourceStream("UniTimetable.Resources.Favorites"));
         private ListViewItem[] FullListBackup_;
         private Color[] OriginalColors_;
         private Solver Solver_;

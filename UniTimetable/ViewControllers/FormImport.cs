@@ -5,9 +5,9 @@ using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using UniTimetable.Model;
-using UniTimetable.Model.Import;
-using UniTimetable.Model.Import.CanterburyData;
+using UniTimetable.Model.ImportExport;
+using UniTimetable.Model.ImportExport.Login;
+using UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury;
 using UniTimetable.Model.Timetable;
 using Type = UniTimetable.Model.Timetable.Type;
 
@@ -17,17 +17,45 @@ namespace UniTimetable.ViewControllers
 {
     partial class FormImport : FormModel
     {
-        private readonly Importer _importer;
+        private IImporter importer;
+        //private readonly ImporterOld _importerOld;
         private Timetable _timetable;
 
         public FormImport()
         {
             InitializeComponent();
 
-            // Set Importer Type
-            _importer = new CanterburyImporter();
+            importer = new CanterburyImporter();
+            ILoginRequired loginRequired = importer as ILoginRequired;
+            if (loginRequired != null)
+            {
+                var loginHandle = loginRequired.CreateNewLoginHandle();
+                var login = new FormLogin();
+                string username, password;
+                var result = login.ShowDialog(out username, out password);
+                if (result == DialogResult.Cancel)
+                {
+                    DialogResult = DialogResult.Cancel;
+                }
+                var loginFields = loginHandle.GetLoginFields();
+                foreach (var loginField in loginFields)
+                {
+                    switch (loginField.Name)
+                    {
+                        case "Username":
+                            loginField.Value = username; break;
+                        case "Password":
+                            loginField.Value = password; break;
+                    }
+                }
+                loginHandle.SetLoginFields(loginFields);
+                loginRequired.SetLoginHandle(ref loginHandle);
+            }
+            /*
 
-            if (_importer.RequiresPassword)
+            _importerOld = new CanterburyImporterOld();
+
+            if (_importerOld.RequiresPassword)
             {
                 string username, password;
                 var loginForm = new FormLogin();
@@ -36,8 +64,8 @@ namespace UniTimetable.ViewControllers
                 {
                     DialogResult = DialogResult.Cancel;
                 }
-                _importer.SetLogin(username, password);
-            }
+                _importerOld.SetLogin(username, password);
+            }*/
             else
             {
                 DialogResult = DialogResult.OK;
@@ -61,7 +89,8 @@ namespace UniTimetable.ViewControllers
 
         private void ImportThread()
         {
-            _timetable = _importer.Import();
+            _timetable = importer.ImportTimetable();
+            //_timetable = _importerOld.Import();
             Invoke(new MethodInvoker(delegate
                                      {
                                          if (_timetable != null)
@@ -316,17 +345,17 @@ namespace UniTimetable.ViewControllers
                     return;
 
                 // load selected importer
-                _importer = (Importer)listBoxFormats.SelectedItem;
+                _importerOld = (ImporterOld)listBoxFormats.SelectedItem;
                 // clear importer files
-                _importer.File1Dialog.FileName = "";
-                _importer.File2Dialog.FileName = "";
-                _importer.File3Dialog.FileName = "";
+                _importerOld.File1Dialog.FileName = "";
+                _importerOld.File2Dialog.FileName = "";
+                _importerOld.File3Dialog.FileName = "";
 
                 // bring up panel 2 (file import) information
                 // file 1
-                /*if (_importer.File1Description != null)
+                /*if (_importerOld.File1Description != null)
                 {
-                    lblFile1.Text = _importer.File1Description;
+                    lblFile1.Text = _importerOld.File1Description;
                     lblFile1.Visible = true;
                     btnBrowse1.Visible = true;
                     txtFile1.Visible = true;
@@ -338,9 +367,9 @@ namespace UniTimetable.ViewControllers
                     txtFile1.Visible = false;
                 }
                 // file 2
-                if (_importer.File2Description != null)
+                if (_importerOld.File2Description != null)
                 {
-                    lblFile2.Text = _importer.File2Description;
+                    lblFile2.Text = _importerOld.File2Description;
                     lblFile2.Visible = true;
                     btnBrowse2.Visible = true;
                     txtFile2.Visible = true;
@@ -352,9 +381,9 @@ namespace UniTimetable.ViewControllers
                     txtFile2.Visible = false;
                 }
                 // file 3
-                if (_importer.File3Description != null)
+                if (_importerOld.File3Description != null)
                 {
-                    lblFile3.Text = _importer.File3Description;
+                    lblFile3.Text = _importerOld.File3Description;
                     lblFile3.Visible = true;
                     btnBrowse3.Visible = true;
                     txtFile3.Visible = true;
@@ -366,13 +395,13 @@ namespace UniTimetable.ViewControllers
                     txtFile3.Visible = false;
                 }
                 // file instructions
-                if (_importer.FileInstructions != null)
+                if (_importerOld.FileInstructions != null)
                 {
-                    txtFileInstructions.Text = _importer.FileInstructions;
+                    txtFileInstructions.Text = _importerOld.FileInstructions;
                 }
                 else
                 {
-                    txtFileInstructions.Text = "No instructions provided for " + _importer.FormatName + ".";
+                    txtFileInstructions.Text = "No instructions provided for " + _importerOld.FormatName + ".";
                 }
 
                 // bring up panel 2
@@ -390,11 +419,11 @@ namespace UniTimetable.ViewControllers
                 // internet login specifics
                 labelWait.Visible = true;
                 panelLogin.Cursor = Cursors.WaitCursor;
-                _importer.SetLogin(textBoxUsername.Text, textBoxPassword.Text);
+                _importerOld.SetLogin(textBoxUsername.Text, textBoxPassword.Text);
                 panelLogin.Refresh();
 
                 // try and parse files
-                _timetable = _importer.Import();
+                _timetable = _importerOld.Import();
 
                 // if it failed, alert the user and stay on the current page
                 if (_timetable == null)

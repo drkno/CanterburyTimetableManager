@@ -10,11 +10,11 @@ namespace UniTimetable.Model.Timetable
 {
     public class Stream : IComparable<Stream>
     {
-        private List<Session> Classes_ = new List<Session>();
-        private List<Stream> Equivalent_ = new List<Stream>();
-        private int ID_ = -1;
-        private List<Stream> Incompatible_ = new List<Stream>();
-        private int Number_ = -1;
+        private List<Session> _classes = new List<Session>();
+        private List<Stream> _equivalent = new List<Stream>();
+        private int _id = -1;
+        private List<Stream> _incompatible = new List<Stream>();
+        private string _number;
 
         #region IComparable<Stream> Members
 
@@ -23,10 +23,8 @@ namespace UniTimetable.Model.Timetable
             // sort by name
             int result;
             // compare type codes
-            if ((result = Type.Code.CompareTo(other.Type.Code)) != 0)
-                return result;
+            return (result = String.Compare(Type.Code, other.Type.Code, StringComparison.Ordinal)) != 0 ? result : String.Compare(Number, other.Number, StringComparison.Ordinal);
             // then compare stream numbers
-            return Number.CompareTo(other.Number);
         }
 
         #endregion
@@ -36,9 +34,9 @@ namespace UniTimetable.Model.Timetable
         // TODO: provide some way of handling null => ""?
         public override string ToString()
         {
-            string text = Type.Code;
-            if (Number_ > 0)
-                text += Number_.ToString();
+            var text = Type.Code;
+            if (string.IsNullOrWhiteSpace(_number))
+                text += _number;
             return text;
         }
 
@@ -51,38 +49,38 @@ namespace UniTimetable.Model.Timetable
             ClashTable = null;
             Type = null;
             Selected = false;
-            Classes_ = new List<Session>();
+            _classes = new List<Session>();
             //State_ = StreamState.Null;
-            Incompatible_ = new List<Stream>();
-            Equivalent_ = new List<Stream>();
+            _incompatible = new List<Stream>();
+            _equivalent = new List<Stream>();
         }
 
-        public Stream(int number)
+        public Stream(string number)
         {
             ClashTable = null;
             Type = null;
             Selected = false;
-            Number_ = number;
+            _number = number;
         }
 
-        public Stream(int number, Type type)
+        public Stream(string number, Type type)
         {
             ClashTable = null;
             Selected = false;
-            Number_ = number;
+            _number = number;
             Type = type;
         }
 
         public Stream(Stream other)
         {
             ClashTable = null;
-            ID_ = other.ID_;
-            Number_ = other.Number_;
+            _id = other._id;
+            _number = other._number;
             Selected = other.Selected;
             Type = other.Type;
-            Classes_ = new List<Session>(other.Classes_);
-            Incompatible_ = new List<Stream>(other.Incompatible_);
-            Equivalent_ = new List<Stream>(other.Equivalent_);
+            _classes = new List<Session>(other._classes);
+            _incompatible = new List<Stream>(other._incompatible);
+            _equivalent = new List<Stream>(other._equivalent);
             //this.State_ = other.State_;
         }
 
@@ -96,30 +94,18 @@ namespace UniTimetable.Model.Timetable
         #region Accessors
 
         [XmlIgnore]
-        public int ID
+        public int Id
         {
-            get { return ID_; }
-            set { ID_ = value; }
+            get { return _id; }
+            set { _id = value; }
         }
 
         [XmlAttribute("number")]
-        public int Number
+        public string Number
         {
-            get { return Number_; }
-            set { Number_ = value; }
+            get { return _number; }
+            set { _number = value; }
         }
-
-        /*public StreamState State
-        {
-            get
-            {
-                return State_;
-            }
-            set
-            {
-                State_ = value;
-            }
-        }*/
 
         [XmlAttribute("selected")]
         public bool Selected { get; set; }
@@ -130,8 +116,8 @@ namespace UniTimetable.Model.Timetable
         [XmlArray("sessions"), XmlArrayItem("session", typeof (Session))]
         public List<Session> Classes
         {
-            get { return Classes_; }
-            set { Classes_ = value; }
+            get { return _classes; }
+            set { _classes = value; }
         }
 
         [XmlIgnore]
@@ -140,15 +126,15 @@ namespace UniTimetable.Model.Timetable
         [XmlIgnore]
         public List<Stream> Incompatible
         {
-            get { return Incompatible_; }
-            set { Incompatible_ = value; }
+            get { return _incompatible; }
+            set { _incompatible = value; }
         }
 
         [XmlIgnore]
         public List<Stream> Equivalent
         {
-            get { return Equivalent_; }
-            set { Equivalent_ = value; }
+            get { return _equivalent; }
+            set { _equivalent = value; }
         }
 
         #endregion
@@ -158,7 +144,7 @@ namespace UniTimetable.Model.Timetable
         public bool ClashesWith(Stream other)
         {
             if (ClashTable != null)
-                return ClashTable[other.ID_];
+                return ClashTable[other._id];
 
             if (other == this)
                 return false;

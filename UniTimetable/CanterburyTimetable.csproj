@@ -61,9 +61,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\Import\CanterburyData\CanterburyData.cs" />
-    <Compile Include="Model\Import\CanterburyData\CanterburyLoader.cs" />
-    <Compile Include="Model\Import\CanterburyData\CanterburyImporter.cs" />
+    <Compile Include="Model\ImportExport\IExporter.cs" />
+    <Compile Include="Model\ImportExport\IUniversity.cs" />
+    <Compile Include="Model\ImportExport\Login\ILoginRequired.cs" />
+    <Compile Include="Model\ImportExport\UniversityDefinitions\Canterbury\Canterbury.cs" />
+    <Compile Include="Model\ImportExport\UniversityDefinitions\Canterbury\CanterburyExporter.cs" />
+    <Compile Include="Model\ImportExport\UniversityDefinitions\Canterbury\CanterburyImporter.cs" />
+    <Compile Include="Model\ImportExport\IImporter.cs" />
+    <Compile Include="Model\ImportExport\Login\LoginExceptions.cs" />
+    <Compile Include="Model\ImportExport\Login\LoginField.cs" />
+    <Compile Include="Model\ImportExport\Login\LoginFieldType.cs" />
+    <Compile Include="Model\ImportExport\Login\ILoginHandle.cs" />
+    <Compile Include="Model\ImportExport\UniversityDefinitions\Canterbury\CanterburyLoginHandle.cs" />
+    <Compile Include="Model\ImportExport\UniversityDefinitions\Canterbury\JsonObjects\CommonRequest.cs" />
+    <Compile Include="Model\ImportExport\UniversityDefinitions\Canterbury\JsonObjects\EnrolledSubjectStreams.cs" />
+    <Compile Include="Model\ImportExport\UniversityDefinitions\Canterbury\JsonObjects\KeySubjectStreamPair.cs" />
+    <Compile Include="Model\ImportExport\UniversityDefinitions\Canterbury\JsonObjects\SubjectStream.cs" />
+    <Compile Include="Model\ImportExport\UniversityDefinitions\Canterbury\JsonObjects\SubjectStreamContainer.cs" />
+    <Compile Include="Resources\Resources.cs" />
+    <Compile Include="Model\ColorScheme.cs" />
     <Compile Include="ViewControllers\EtchedLine.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -132,7 +148,6 @@
       <DependentUpon>FormUnavailability.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\Heap.cs" />
-    <Compile Include="Model\Import\Importer.cs" />
     <Compile Include="ViewControllers\ListViewColumnSorter.cs" />
     <Compile Include="Model\OrderedList.cs" />
     <Compile Include="Model\Solver\Solver.Criteria.cs" />
@@ -331,6 +346,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>

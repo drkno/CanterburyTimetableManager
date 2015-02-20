@@ -33,7 +33,7 @@ namespace UniTimetable.Model.Timetable
 
         public bool StreamClashTable(Stream stream1, Stream stream2)
         {
-            return _streamClashTable[stream1.ID][stream2.ID];
+            return _streamClashTable[stream1.Id][stream2.Id];
         }
 
         public bool TypeClashTable(Type type1, Type type2)
@@ -736,7 +736,7 @@ namespace UniTimetable.Model.Timetable
             _streamClashTable = new bool[StreamList.Count][];
             for (var i = 0; i < StreamList.Count; i++)
             {
-                StreamList[i].ID = i;
+                StreamList[i].Id = i;
                 _streamClashTable[i] = new bool[StreamList.Count];
                 StreamList[i].ClashTable = null;
             }
