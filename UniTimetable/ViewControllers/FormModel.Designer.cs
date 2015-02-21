@@ -95,6 +95,6 @@
 
         private System.Windows.Forms.Panel panelHeader;
         private System.Windows.Forms.PictureBox pictureBoxLogo;
-        private System.Windows.Forms.Label labelTitle;
+        protected System.Windows.Forms.Label labelTitle;
     }
 }

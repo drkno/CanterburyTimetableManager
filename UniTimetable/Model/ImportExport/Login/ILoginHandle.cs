@@ -8,6 +8,7 @@ namespace UniTimetable.Model.ImportExport.Login
         void Login();
         void Logout();
         string GetLoginPrompt();
+        string GetLoginAction();
         string GetPrivacyPromise();
         IEnumerable<LoginField> GetLoginFields();
         void SetLoginFields(IEnumerable<LoginField> loginFields);

@@ -51,7 +51,7 @@ namespace UniTimetable.ViewControllers
             this.btnColor.Text = "Pick a Colour";
             this.btnColor.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnColor.UseVisualStyleBackColor = true;
-            this.btnColor.Click += new System.EventHandler(this.btnColor_Click);
+            this.btnColor.Click += new System.EventHandler(this.BtnColorClick);
             // 
             // btnOK
             // 
@@ -64,7 +64,7 @@ namespace UniTimetable.ViewControllers
             this.btnOK.Text = "OK";
             this.btnOK.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+            this.btnOK.Click += new System.EventHandler(this.BtnOkClick);
             // 
             // btnCancel
             // 
@@ -79,7 +79,7 @@ namespace UniTimetable.ViewControllers
             this.btnCancel.Text = "Cancel";
             this.btnCancel.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            this.btnCancel.Click += new System.EventHandler(this.BtnCancelClick);
             // 
             // tableLayoutPanel1
             // 
@@ -116,8 +116,8 @@ namespace UniTimetable.ViewControllers
             this.tableLayoutPanel1.SetRowSpan(this.listBox1, 4);
             this.listBox1.Size = new System.Drawing.Size(164, 309);
             this.listBox1.TabIndex = 3;
-            this.listBox1.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBox1_DrawItem);
-            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
+            this.listBox1.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.ListBox1DrawItem);
+            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.ListBox1SelectedIndexChanged);
             // 
             // ddSchemes
             // 
@@ -129,7 +129,7 @@ namespace UniTimetable.ViewControllers
             this.ddSchemes.Name = "ddSchemes";
             this.ddSchemes.Size = new System.Drawing.Size(164, 21);
             this.ddSchemes.TabIndex = 4;
-            this.ddSchemes.SelectedIndexChanged += new System.EventHandler(this.ddSchemes_SelectedIndexChanged);
+            this.ddSchemes.SelectedIndexChanged += new System.EventHandler(this.DdSchemesSelectedIndexChanged);
             // 
             // FormStyle
             // 
@@ -148,7 +148,7 @@ namespace UniTimetable.ViewControllers
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Styles";
-            this.Load += new System.EventHandler(this.FormStyle_Load);
+            this.Load += new System.EventHandler(this.FormStyleLoad);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 

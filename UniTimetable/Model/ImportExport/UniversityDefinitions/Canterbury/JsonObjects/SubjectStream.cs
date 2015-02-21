@@ -98,6 +98,6 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury.JsonO
         [DataMember(Name = "lng")]
         public string Longitude { get;set; }
 
-        public DateTime Date { get;set; }
+        public DateTime Date { get; set; }
     }
 }

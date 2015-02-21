@@ -148,7 +148,6 @@
       <DependentUpon>FormUnavailability.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\Heap.cs" />
-    <Compile Include="ViewControllers\ListViewColumnSorter.cs" />
     <Compile Include="Model\OrderedList.cs" />
     <Compile Include="Model\Solver\Solver.Criteria.cs" />
     <Compile Include="Program.cs" />

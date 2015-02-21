@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using UniTimetable.Model.Solver;
 using UniTimetable.Model.Timetable;
-using UniTimetable.Properties;
 
 #endregion
 
@@ -14,16 +13,16 @@ namespace UniTimetable.ViewControllers
 {
     partial class FormSolution : Form
     {
-        private const string StarText_ = "Star It!";
-        private const string DeStarText_ = "De-Star It!";
-        private readonly Image DeStarImage_ = Image.FromStream(Resources.Resources.GetEmbeddedResourceStream("UniTimetable.Resources.DeStar.png"));
-        private readonly Color SolutionColor1_ = Color.White;
-        private readonly Color SolutionColor2_ = Color.LightGray;
-        private readonly Color StarColor_ = Color.Yellow;
-        private readonly Image StarImage_ = Image.FromStream(Resources.Resources.GetEmbeddedResourceStream("UniTimetable.Resources.Favorites"));
-        private ListViewItem[] FullListBackup_;
-        private Color[] OriginalColors_;
-        private Solver Solver_;
+        private const string StarText = "Star It!";
+        private const string DeStarText = "De-Star It!";
+        private readonly Image _deStarImage = Image.FromStream(Resources.Resources.GetEmbeddedResourceStream("UniTimetable.Resources.DeStar.png"));
+        private readonly Color _solutionColor1 = Color.White;
+        private readonly Color _solutionColor2 = Color.LightGray;
+        private readonly Color _starColor = Color.Yellow;
+        private readonly Image _starImage = Image.FromStream(Resources.Resources.GetEmbeddedResourceStream("UniTimetable.Resources.Favorites"));
+        private ListViewItem[] _fullListBackup;
+        private Color[] _originalColors;
+        private Solver _solver;
 
         public FormSolution()
         {
@@ -32,16 +31,11 @@ namespace UniTimetable.ViewControllers
 
         public DialogResult ShowDialog(Solver solver)
         {
-            Solver_ = solver;
+            _solver = solver;
             return base.ShowDialog();
         }
 
-        public new DialogResult ShowDialog()
-        {
-            throw new Exception("No input was provided.");
-        }
-
-        private void FormSolution_Load(object sender, EventArgs e)
+        private void FormSolutionLoad(object sender, EventArgs e)
         {
             Reset();
         }
@@ -63,7 +57,7 @@ namespace UniTimetable.ViewControllers
         /// <summary>
         ///     Update preview and information for a new selected solution
         /// </summary>
-        private void lvbSolutions_SelectedIndexChanged(object sender, EventArgs e)
+        private void LvbSolutionsSelectedIndexChanged(object sender, EventArgs e)
         {
             // update preview panel
             UpdatePreview();
@@ -83,10 +77,7 @@ namespace UniTimetable.ViewControllers
             btnStar.Enabled = true;
             btnUse.Enabled = true;
             // set star button text accordingly
-            if (lvbSolutions.SelectedItems[0].BackColor == StarColor_)
-                SetStarButton(true);
-            else
-                SetStarButton(false);
+            SetStarButton(lvbSolutions.SelectedItems[0].BackColor == _starColor);
 
             // set the currently selected solution
             Solver.Solution solution = (Solver.Solution) lvbSolutions.SelectedItems[0].Tag;
@@ -96,7 +87,7 @@ namespace UniTimetable.ViewControllers
             // an ordered list of subjects
             List<Subject> orderedSubjects = new List<Subject>();
             // fill the lists
-            foreach (Subject subject in Solver_.Timetable.SubjectList)
+            foreach (Subject subject in _solver.Timetable.SubjectList)
             {
                 groupedStreams.Add(new List<Stream>());
                 orderedSubjects.Add(subject);
@@ -143,7 +134,7 @@ namespace UniTimetable.ViewControllers
             }
         }
 
-        private void btnUse_Click(object sender, EventArgs e)
+        private void BtnUseClick(object sender, EventArgs e)
         {
             // nothing selected
             if (lvbSolutions.SelectedIndices.Count <= 0 || lvbSolutions.SelectedIndices[0] == -1)
@@ -151,26 +142,26 @@ namespace UniTimetable.ViewControllers
 
             // set the currently selected solution
             Solver.Solution solution = (Solver.Solution) lvbSolutions.SelectedItems[0].Tag;
-            Solver_.Timetable.LoadSolution(solution);
+            _solver.Timetable.LoadSolution(solution);
             DialogResult = DialogResult.OK;
             Close();
         }
 
-        private void btnCriteria_Click(object sender, EventArgs e)
+        private void BtnCriteriaClick(object sender, EventArgs e)
         {
-            FormCriteria formCriteria = new FormCriteria();
+            var formCriteria = new FormCriteria();
             // if the criteria dialog was shown and nothing changed, all good
-            if (formCriteria.ShowDialog(Solver_) != DialogResult.OK)
+            if (formCriteria.ShowDialog(_solver) != DialogResult.OK)
                 return;
 
-            Solver_.Timetable.RecomputeSolutions = true;
-            FormProgress formProgress = new FormProgress();
-            formProgress.ShowDialog(Solver_);
+            _solver.Timetable.RecomputeSolutions = true;
+            var formProgress = new FormProgress();
+            formProgress.ShowDialog(_solver);
 
             Reset();
         }
 
-        private void btnStar_Click(object sender, EventArgs e)
+        private void BtnStarClick(object sender, EventArgs e)
         {
             // nothing selected
             if (lvbSolutions.SelectedIndices.Count == 0 || lvbSolutions.SelectedIndices[0] == -1)
@@ -186,28 +177,28 @@ namespace UniTimetable.ViewControllers
                 // remove the item from the list
                 lvbSolutions.Items.RemoveAt(lvbSolutions.SelectedIndices[0]);
                 // search for the item in the backup list and destar it
-                for (int i = 0; i < FullListBackup_.Length; i++)
+                for (int i = 0; i < _fullListBackup.Length; i++)
                 {
-                    if ((Solver.Solution) FullListBackup_[i].Tag == solution)
+                    if ((Solver.Solution) _fullListBackup[i].Tag == solution)
                     {
-                        FullListBackup_[i].ImageIndex = -1;
-                        FullListBackup_[i].BackColor = OriginalColors_[i];
+                        _fullListBackup[i].ImageIndex = -1;
+                        _fullListBackup[i].BackColor = _originalColors[i];
                         break;
                     }
                 }
             }
             // if it is starred already
-            if (item.BackColor == StarColor_)
+            if (item.BackColor == _starColor)
             {
                 lvbSolutions.SelectedItems[0].ImageIndex = -1;
-                lvbSolutions.SelectedItems[0].BackColor = OriginalColors_[lvbSolutions.SelectedIndices[0]];
+                lvbSolutions.SelectedItems[0].BackColor = _originalColors[lvbSolutions.SelectedIndices[0]];
                 // set button text
                 SetStarButton(false);
             }
             else
             {
                 item.ImageIndex = 0;
-                item.BackColor = StarColor_;
+                item.BackColor = _starColor;
                 // set button text
                 SetStarButton(true);
             }
@@ -224,60 +215,55 @@ namespace UniTimetable.ViewControllers
             textBox1.Clear();
             lvbProperties.Items.Clear();
             lvbSolutions.Columns.Clear();
-            OriginalColors_ = new Color[Solver_.Solutions.Count];
+            _originalColors = new Color[_solver.Solutions.Count];
             int i;
 
             // create a dummy column - first column must be left-aligned
-            ColumnHeader dummy = new ColumnHeader();
-            dummy.Text = "";
-            dummy.Width = 24;
+            var dummy = new ColumnHeader {Text = "", Width = 24};
             lvbSolutions.Columns.Add(dummy);
             // redo all the columns
-            for (i = 0; i < Solver_.Comparer.Criteria.Count; i++)
+            for (i = 0; i < _solver.Comparer.Criteria.Count; i++)
             {
-                ColumnHeader columnHeader = new ColumnHeader();
-                columnHeader.Text = Solver_.Comparer.Criteria[i].Field.Name;
-                columnHeader.TextAlign = HorizontalAlignment.Right;
-                columnHeader.Width = 100;
+                var columnHeader = new ColumnHeader
+                                            {
+                                                Text = _solver.Comparer.Criteria[i].Field.Name,
+                                                TextAlign = HorizontalAlignment.Right,
+                                                Width = 100
+                                            };
                 lvbSolutions.Columns.Add(columnHeader);
             }
 
             // rebuild the list of solutions
             Solver.Solution prevSolution = null;
-            Color prevColor = SolutionColor1_;
+            Color prevColor = _solutionColor1;
             i = 0;
-            foreach (Solver.Solution solution in Solver_.Solutions)
+            foreach (Solver.Solution solution in _solver.Solutions)
             {
                 // make a list of data for each entry
-                string[] data = new string[Solver_.Comparer.Criteria.Count + 1];
+                string[] data = new string[_solver.Comparer.Criteria.Count + 1];
                 data[0] = "";
                 // for each field we're using
-                for (int j = 0; j < Solver_.Comparer.Criteria.Count; j++)
+                for (int j = 0; j < _solver.Comparer.Criteria.Count; j++)
                 {
                     // get a string representing the value for that criteria in the solution
-                    data[j + 1] = solution.FieldValueToString(Solver_.Comparer.Criteria[j].FieldIndex);
+                    data[j + 1] = solution.FieldValueToString(_solver.Comparer.Criteria[j].FieldIndex);
                 }
                 // create the item
-                ListViewItem item = new ListViewItem(data);
-                item.Tag = solution;
-                item.ImageIndex = -1;
+                var item = new ListViewItem(data) {Tag = solution, ImageIndex = -1};
 
                 // make the first result white
                 if (prevSolution == null)
                 {
-                    prevColor = SolutionColor1_;
+                    prevColor = _solutionColor1;
                 }
                 // else if the following solution is different (by the current criteria)
-                else if (!(solution.CompareTo(prevSolution, Solver_.Comparer) == 0))
+                else if (solution.CompareTo(prevSolution, _solver.Comparer) != 0)
                 {
                     // switch colours
-                    if (prevColor == SolutionColor1_)
-                        prevColor = SolutionColor2_;
-                    else
-                        prevColor = SolutionColor1_;
+                    prevColor = prevColor == _solutionColor1 ? _solutionColor2 : _solutionColor1;
                 }
                 item.BackColor = prevColor;
-                OriginalColors_[i++] = item.BackColor;
+                _originalColors[i++] = item.BackColor;
 
                 // add the item to the list
                 lvbSolutions.Items.Add(item);
@@ -295,7 +281,7 @@ namespace UniTimetable.ViewControllers
             }
 
             Solver.Solution solution = (Solver.Solution) lvbSolutions.SelectedItems[0].Tag;
-            timetableControl.Timetable = Solver_.Timetable.PreviewSolution(solution);
+            timetableControl.Timetable = _solver.Timetable.PreviewSolution(solution);
         }
 
         private void SetStarButton(bool destar)
@@ -303,17 +289,17 @@ namespace UniTimetable.ViewControllers
             // if starring is disabled
             if (chkOnlyStarred.Checked || destar)
             {
-                btnStar.Image = DeStarImage_;
-                btnStar.Text = DeStarText_;
+                btnStar.Image = _deStarImage;
+                btnStar.Text = DeStarText;
             }
             else
             {
-                btnStar.Image = StarImage_;
-                btnStar.Text = StarText_;
+                btnStar.Image = _starImage;
+                btnStar.Text = StarText;
             }
         }
 
-        private void chkOnlyStarred_CheckedChanged(object sender, EventArgs e)
+        private void ChkOnlyStarredCheckedChanged(object sender, EventArgs e)
         {
             // checkbox just got checked
             if (chkOnlyStarred.Checked)
@@ -321,15 +307,15 @@ namespace UniTimetable.ViewControllers
                 // disable star button
                 btnStar.Enabled = false;
                 // back-up full list
-                FullListBackup_ = new ListViewItem[lvbSolutions.Items.Count];
-                lvbSolutions.Items.CopyTo(FullListBackup_, 0);
+                _fullListBackup = new ListViewItem[lvbSolutions.Items.Count];
+                lvbSolutions.Items.CopyTo(_fullListBackup, 0);
                 // start with fresh list
                 lvbSolutions.Items.Clear();
                 // add starred items to ListView
-                foreach (ListViewItem item in FullListBackup_)
+                foreach (ListViewItem item in _fullListBackup)
                 {
                     // if it is starred
-                    if (item.BackColor == StarColor_)
+                    if (item.BackColor == _starColor)
                     {
                         // clone the item and add to the list
                         lvbSolutions.Items.Add((ListViewItem) item.Clone());
@@ -338,7 +324,7 @@ namespace UniTimetable.ViewControllers
                 // now set the colours
                 foreach (ListViewItem item in lvbSolutions.Items)
                 {
-                    item.BackColor = SolutionColor1_;
+                    item.BackColor = _solutionColor1;
                 }
             }
             // checkbox just got unchecked
@@ -348,7 +334,7 @@ namespace UniTimetable.ViewControllers
                 btnStar.Enabled = true;
                 // refer back to the backup
                 lvbSolutions.Items.Clear();
-                lvbSolutions.Items.AddRange(FullListBackup_);
+                lvbSolutions.Items.AddRange(_fullListBackup);
                 // restore selection
                 lvbSolutions.Select();
             }

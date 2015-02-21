@@ -76,7 +76,7 @@ namespace UniTimetable.ViewControllers
             this.lvbSolutions.TabIndex = 0;
             this.lvbSolutions.UseCompatibleStateImageBehavior = false;
             this.lvbSolutions.View = System.Windows.Forms.View.Details;
-            this.lvbSolutions.SelectedIndexChanged += new System.EventHandler(this.lvbSolutions_SelectedIndexChanged);
+            this.lvbSolutions.SelectedIndexChanged += new System.EventHandler(this.LvbSolutionsSelectedIndexChanged);
             // 
             // imageList1
             // 
@@ -203,7 +203,7 @@ namespace UniTimetable.ViewControllers
             this.btnCriteria.Text = "Solution Criteria";
             this.btnCriteria.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnCriteria.UseVisualStyleBackColor = true;
-            this.btnCriteria.Click += new System.EventHandler(this.btnCriteria_Click);
+            this.btnCriteria.Click += new System.EventHandler(this.BtnCriteriaClick);
             // 
             // btnUse
             // 
@@ -215,7 +215,7 @@ namespace UniTimetable.ViewControllers
             this.btnUse.Text = "Use Solution";
             this.btnUse.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnUse.UseVisualStyleBackColor = true;
-            this.btnUse.Click += new System.EventHandler(this.btnUse_Click);
+            this.btnUse.Click += new System.EventHandler(this.BtnUseClick);
             // 
             // btnStar
             // 
@@ -227,7 +227,7 @@ namespace UniTimetable.ViewControllers
             this.btnStar.Text = "Star It!";
             this.btnStar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnStar.UseVisualStyleBackColor = true;
-            this.btnStar.Click += new System.EventHandler(this.btnStar_Click);
+            this.btnStar.Click += new System.EventHandler(this.BtnStarClick);
             // 
             // chkOnlyStarred
             // 
@@ -238,7 +238,7 @@ namespace UniTimetable.ViewControllers
             this.chkOnlyStarred.TabIndex = 4;
             this.chkOnlyStarred.Text = "Only show starred solutions";
             this.chkOnlyStarred.UseVisualStyleBackColor = true;
-            this.chkOnlyStarred.CheckedChanged += new System.EventHandler(this.chkOnlyStarred_CheckedChanged);
+            this.chkOnlyStarred.CheckedChanged += new System.EventHandler(this.ChkOnlyStarredCheckedChanged);
             // 
             // FormSolution
             // 
@@ -263,7 +263,7 @@ namespace UniTimetable.ViewControllers
             this.Name = "FormSolution";
             this.ShowInTaskbar = false;
             this.Text = "Timetable Solver";
-            this.Load += new System.EventHandler(this.FormSolution_Load);
+            this.Load += new System.EventHandler(this.FormSolutionLoad);
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);

@@ -14,6 +14,7 @@ namespace UniTimetable.Model.Timetable
     [XmlRoot("timetable")]
     public class Timetable
     {
+        
         public static List<string> Days =
             new List<string>(new[] {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"});
 

@@ -2,7 +2,7 @@
 using System.Reflection;
 namespace UniTimetable.Resources
 {
-    public class Resources
+    public static class Resources
     {
         public static Stream GetEmbeddedResourceStream(string name)
         {

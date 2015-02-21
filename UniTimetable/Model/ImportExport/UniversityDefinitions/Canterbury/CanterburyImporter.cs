@@ -5,7 +5,6 @@ using System.Net;
 using System.Text;
 using UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury.JsonObjects;
 using UniTimetable.Model.Timetable;
-using UniTimetable.ViewControllers;
 using Stream = System.IO.Stream;
 using Type = UniTimetable.Model.Timetable.Type;
 
@@ -148,7 +147,7 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
             var scheme = ColorScheme.Schemes[0];
             for (var i = 0; i < timetable.SubjectList.Count; i++)
             {
-                timetable.SubjectList[i].Color = scheme.Colors[i % scheme.Colors.Count];
+                timetable.SubjectList[i].Color = ((ColorScheme)scheme).Colours[i % ((ColorScheme)scheme).Colours.Count];
             }
         }
         #endregion

@@ -17,59 +17,31 @@ namespace UniTimetable.ViewControllers
 {
     partial class FormImport : FormModel
     {
-        private IImporter importer;
-        //private readonly ImporterOld _importerOld;
+        private readonly IImporter _importer;
         private Timetable _timetable;
 
         public FormImport()
         {
             InitializeComponent();
 
-            importer = new CanterburyImporter();
-            ILoginRequired loginRequired = importer as ILoginRequired;
+            _importer = new CanterburyImporter();
+            ILoginRequired loginRequired = _importer as ILoginRequired;
             if (loginRequired != null)
             {
                 var loginHandle = loginRequired.CreateNewLoginHandle();
-                var login = new FormLogin();
-                string username, password;
-                var result = login.ShowDialog(out username, out password);
+                var login = new FormLogin(ref loginHandle, "Import Timetable");
+                var result = login.ShowDialog();
                 if (result == DialogResult.Cancel)
                 {
                     DialogResult = DialogResult.Cancel;
                 }
-                var loginFields = loginHandle.GetLoginFields();
-                foreach (var loginField in loginFields)
-                {
-                    switch (loginField.Name)
-                    {
-                        case "Username":
-                            loginField.Value = username; break;
-                        case "Password":
-                            loginField.Value = password; break;
-                    }
-                }
-                loginHandle.SetLoginFields(loginFields);
                 loginRequired.SetLoginHandle(ref loginHandle);
             }
-            /*
-
-            _importerOld = new CanterburyImporterOld();
-
-            if (_importerOld.RequiresPassword)
-            {
-                string username, password;
-                var loginForm = new FormLogin();
-                var result = loginForm.ShowDialog(out username, out password);
-                if (result == DialogResult.Cancel)
-                {
-                    DialogResult = DialogResult.Cancel;
-                }
-                _importerOld.SetLogin(username, password);
-            }*/
             else
             {
                 DialogResult = DialogResult.OK;
             }
+
             if (DialogResult == DialogResult.Cancel)
             {
                 Close();
@@ -89,7 +61,7 @@ namespace UniTimetable.ViewControllers
 
         private void ImportThread()
         {
-            _timetable = importer.ImportTimetable();
+            _timetable = _importer.ImportTimetable();
             //_timetable = _importerOld.Import();
             Invoke(new MethodInvoker(delegate
                                      {

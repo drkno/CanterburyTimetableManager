@@ -32,38 +32,12 @@ namespace UniTimetable.ViewControllers
             {
                 ModifyList("Logging In...");
                 var loginHandle = loginRequired.CreateNewLoginHandle();
-                var login = new FormLogin();
-                string username, password;
-                login.ShowDialog(out username, out password, "Login", "Set Course");
-                var loginFields = loginHandle.GetLoginFields();
-                foreach (var loginField in loginFields)
-                {
-                    switch (loginField.Name)
-                    {
-                        case "Username":
-                            loginField.Value = username; break;
-                        case "Password":
-                            loginField.Value = password; break;
-                    }
-                }
-                loginHandle.SetLoginFields(loginFields);
+                var login = new FormLogin(ref loginHandle, "Export Timetable");
+                login.ShowDialog();
                 loginRequired.SetLoginHandle(ref loginHandle);
             }
 
             var res = exporter.Export(_timetable, ModifyList);
-
-            /*var importer = new CanterburyImporterOld();
-            if (importer.RequiresPassword)
-            {
-                /* Login * /
-                ModifyList("Logging In...");
-                string username, password;
-                var login = new FormLogin();
-                login.ShowDialog(out username, out password, "Login", "Set Course");
-                importer.SetLogin(username, password);
-            }
-
-            var res = importer.Export(_timetable, ModifyList);*/
             if (!res)
             {
                 MessageBox.Show(

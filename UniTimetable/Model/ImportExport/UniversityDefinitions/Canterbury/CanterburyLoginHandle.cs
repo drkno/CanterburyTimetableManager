@@ -117,6 +117,11 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
             return "Import Timetable";
         }
 
+        public string GetLoginAction()
+        {
+            return "Login";
+        }
+
         public string GetPrivacyPromise()
         {
             return "Your details will not be stored or used outside of this application session.";
