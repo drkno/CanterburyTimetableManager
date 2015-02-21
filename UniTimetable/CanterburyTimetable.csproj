@@ -248,7 +248,7 @@
     <None Include="Resources\Config-Tools.png" />
     <None Include="Resources\Find.png" />
     <None Include="Resources\Document.png" />
-    <None Include="Resources\Favorites.png" />
+    <EmbeddedResource Include="Resources\Favorites.png" />
     <None Include="Resources\Symbol-Add.png" />
     <None Include="Resources\Symbol-Add-Stream.png" />
     <None Include="Resources\Symbol-Add-Time.png" />
@@ -256,7 +256,7 @@
     <None Include="Resources\TimeTable.ico" />
     <None Include="Resources\Symbol-Check.png" />
     <None Include="Resources\Symbol-Delete.png" />
-    <None Include="Resources\DeStar.png" />
+    <EmbeddedResource Include="Resources\DeStar.png" />
     <Compile Include="ViewControllers\FormCriteria.cs">
       <SubType>Form</SubType>
     </Compile>

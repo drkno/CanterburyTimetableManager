@@ -19,7 +19,7 @@ namespace UniTimetable.ViewControllers
         private readonly Color _solutionColor1 = Color.White;
         private readonly Color _solutionColor2 = Color.LightGray;
         private readonly Color _starColor = Color.Yellow;
-        private readonly Image _starImage = Image.FromStream(Resources.Resources.GetEmbeddedResourceStream("UniTimetable.Resources.Favorites"));
+        private readonly Image _starImage = Image.FromStream(Resources.Resources.GetEmbeddedResourceStream("UniTimetable.Resources.Favorites.png"));
         private ListViewItem[] _fullListBackup;
         private Color[] _originalColors;
         private Solver _solver;
