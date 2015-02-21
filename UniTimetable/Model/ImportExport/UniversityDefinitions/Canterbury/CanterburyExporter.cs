@@ -32,7 +32,7 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
                             stream.Number, true);
                         modifyList("ERRO: No data was returned so the status is unknown", false);
                     }
-                    else if (!inrep.ReturnedSuccess)
+                    else if (!inrep.ReturnedSuccess && !inrep.ReturnedMessage.EndsWith("is already in this activity."))
                     {
                         modifyList(
                             "FAIL: Setting " + stream.Type.Subject + ": " + stream.Type.Code + " to stream " +
@@ -56,7 +56,7 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
             return response;
         }
 
-        public CommonRequest SetCourse(Subject subject, string code, string streamNumber)
+        private CommonRequest SetCourse(Subject subject, string code, string streamNumber)
         {
             try
             {
