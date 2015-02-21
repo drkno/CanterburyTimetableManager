@@ -3,6 +3,8 @@ Canterbury Timetable Manager
 
 Designed for University of Canterbury students to select the best possible timetable for your course based on a set of selectable criteria. Updated to add automatic downloading of your specific timetable and to allow automatic setting of your courses back on MyTimetable. Allows exporting your timetable as different types of images or setting it as your desktop background. Can detect timetable conflicts within your course which is useful as the University will not warn you of these.
 
+![Screenshot of Canterbury Timetable Manager](./Example.png)
+
 Latest Stable Release
 ----------------------
 [Download Binary 1.1.0.2 (21/02/15)](https://github.com/mrkno/CanterburyTimetableManager/releases/download/v1.1.0.2/CanterburyTimetable.exe)<br/>
