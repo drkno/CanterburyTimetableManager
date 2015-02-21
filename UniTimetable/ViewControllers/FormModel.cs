@@ -13,7 +13,7 @@ namespace UniTimetable.ViewControllers
     {
         private static readonly Pen OutlinePen = new Pen(Color.Red, 2);
 
-        public FormModel()
+        protected FormModel()
         {
             InitializeComponent();
         }
@@ -34,10 +34,10 @@ namespace UniTimetable.ViewControllers
         }
 
         [DllImport("user32.dll")]
-        public static extern int SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
+        private static extern int SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
 
         [DllImport("user32.dll")]
-        public static extern bool ReleaseCapture();
+        private static extern bool ReleaseCapture();
 
         private void ModelFormMouseDown(object sender, MouseEventArgs e)
         {

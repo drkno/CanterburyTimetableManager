@@ -62,7 +62,6 @@ namespace UniTimetable.ViewControllers
         private void ImportThread()
         {
             _timetable = _importer.ImportTimetable();
-            //_timetable = _importerOld.Import();
             Invoke(new MethodInvoker(delegate
                                      {
                                          if (_timetable != null)
@@ -243,248 +242,70 @@ namespace UniTimetable.ViewControllers
 
         private void Next()
         {
-            if (!panelLoading.Visible && panelPreview.Visible)
+            if (panelLoading.Visible || !panelPreview.Visible) return;
+            panelStreams.Visible = true;
+
+            // clear ignored/required lists
+            listViewIgnored.Items.Clear();
+            listViewIgnored.Groups.Clear();
+            listViewRequired.Items.Clear();
+            listViewRequired.Groups.Clear();
+
+            // populate ignored/required lists
+            foreach (var subject in _timetable.SubjectList)
             {
-                panelStreams.Visible = true;
+                // create and add groups for the subjects
+                var ignoredSubjectGroup = new ListViewGroup(subject.Name) {Tag = subject};
+                listViewIgnored.Groups.Add(ignoredSubjectGroup);
 
-                // clear ignored/required lists
-                listViewIgnored.Items.Clear();
-                listViewIgnored.Groups.Clear();
-                listViewRequired.Items.Clear();
-                listViewRequired.Groups.Clear();
+                var requiredSubjectGroup = new ListViewGroup(subject.Name) {Tag = subject};
+                listViewRequired.Groups.Add(requiredSubjectGroup);
 
-                // populate ignored/required lists
-                foreach (var subject in _timetable.SubjectList)
+                // add stream types to subject groups
+                foreach (var type in subject.Types)
                 {
-                    // create and add groups for the subjects
-                    var ignoredSubjectGroup = new ListViewGroup(subject.Name) {Tag = subject};
-                    listViewIgnored.Groups.Add(ignoredSubjectGroup);
+                    // create ListViewItem without group
+                    var item = new ListViewItem(new[] {type.Code, type.Name}) {Tag = type};
 
-                    var requiredSubjectGroup = new ListViewGroup(subject.Name) {Tag = subject};
-                    listViewRequired.Groups.Add(requiredSubjectGroup);
-
-                    // add stream types to subject groups
-                    foreach (var type in subject.Types)
+                    // add it to the current group in the correct box
+                    if (type.Required)
                     {
-                        // create ListViewItem without group
-                        var item = new ListViewItem(new[] {type.Code, type.Name}) {Tag = type};
-
-                        // add it to the current group in the correct box
-                        if (type.Required)
-                        {
-                            // set group and add to list
-                            item.Group = requiredSubjectGroup;
-                            listViewRequired.Items.Add(item);
-                        }
-                        else
-                        {
-                            // set group and add to list
-                            item.Group = ignoredSubjectGroup;
-                            listViewIgnored.Items.Add(item);
-                        }
+                        // set group and add to list
+                        item.Group = requiredSubjectGroup;
+                        listViewRequired.Items.Add(item);
+                    }
+                    else
+                    {
+                        // set group and add to list
+                        item.Group = ignoredSubjectGroup;
+                        listViewIgnored.Items.Add(item);
                     }
                 }
-
-                checkBoxS2.Checked = DateTime.Now.Month > 6;
-                checkBoxS1.Checked = !checkBoxS2.Checked;
-
-                CheckBoxS1CheckedChanged(null, null);
-                CheckBoxS2CheckedChanged(null, null);
-                CheckBoxTestCheckedChanged(null, null);
-
-                UpdateClashHighlight();
-
-                btnRequire.Enabled = false;
-                btnIgnore.Enabled = false;
-
-                // bring up panel 4
-                panelLoading.Visible = false;
-                panelPreview.Visible = false;
-
-                // swap next button for finish
-                btnNext.Visible = false;
-                btnFinish.Visible = true;
-
-                // need to refresh to get red highlighter
-                listViewIgnored.Refresh();
-                listViewRequired.Refresh();
             }
 
-            /*if (_currentPage == 1)
-            {
-                // if there's no selected format, skip
-                if (listBoxFormats.SelectedItem == null)
-                    return;
+            checkBoxS2.Checked = DateTime.Now.Month > 6;
+            checkBoxS1.Checked = !checkBoxS2.Checked;
 
-                // load selected importer
-                _importerOld = (ImporterOld)listBoxFormats.SelectedItem;
-                // clear importer files
-                _importerOld.File1Dialog.FileName = "";
-                _importerOld.File2Dialog.FileName = "";
-                _importerOld.File3Dialog.FileName = "";
+            CheckBoxS1CheckedChanged(null, null);
+            CheckBoxS2CheckedChanged(null, null);
+            CheckBoxTestCheckedChanged(null, null);
 
-                // bring up panel 2 (file import) information
-                // file 1
-                /*if (_importerOld.File1Description != null)
-                {
-                    lblFile1.Text = _importerOld.File1Description;
-                    lblFile1.Visible = true;
-                    btnBrowse1.Visible = true;
-                    txtFile1.Visible = true;
-                }
-                else
-                {
-                    lblFile1.Visible = false;
-                    btnBrowse1.Visible = false;
-                    txtFile1.Visible = false;
-                }
-                // file 2
-                if (_importerOld.File2Description != null)
-                {
-                    lblFile2.Text = _importerOld.File2Description;
-                    lblFile2.Visible = true;
-                    btnBrowse2.Visible = true;
-                    txtFile2.Visible = true;
-                }
-                else
-                {
-                    lblFile2.Visible = false;
-                    btnBrowse2.Visible = false;
-                    txtFile2.Visible = false;
-                }
-                // file 3
-                if (_importerOld.File3Description != null)
-                {
-                    lblFile3.Text = _importerOld.File3Description;
-                    lblFile3.Visible = true;
-                    btnBrowse3.Visible = true;
-                    txtFile3.Visible = true;
-                }
-                else
-                {
-                    lblFile3.Visible = false;
-                    btnBrowse3.Visible = false;
-                    txtFile3.Visible = false;
-                }
-                // file instructions
-                if (_importerOld.FileInstructions != null)
-                {
-                    txtFileInstructions.Text = _importerOld.FileInstructions;
-                }
-                else
-                {
-                    txtFileInstructions.Text = "No instructions provided for " + _importerOld.FormatName + ".";
-                }
+            UpdateClashHighlight();
 
-                // bring up panel 2
-                panel1.Visible = false;
-                panel2.Visible = true;
-                if(lblFile1.Text.ToLower() == "login")
-                {
-                    panelLogin.Visible = true;
-                }* /
-                // enable back button
-                btnBack.Enabled = true;
-            }
-            else if (_currentPage == 2)
-            {
-                // internet login specifics
-                labelWait.Visible = true;
-                panelLogin.Cursor = Cursors.WaitCursor;
-                _importerOld.SetLogin(textBoxUsername.Text, textBoxPassword.Text);
-                panelLogin.Refresh();
+            btnRequire.Enabled = false;
+            btnIgnore.Enabled = false;
 
-                // try and parse files
-                _timetable = _importerOld.Import();
+            // bring up panel 4
+            panelLoading.Visible = false;
+            panelPreview.Visible = false;
 
-                // if it failed, alert the user and stay on the current page
-                if (_timetable == null)
-                {
-                    MessageBox.Show("Failed to import/retrieve timetable data.", "Import", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            // swap next button for finish
+            btnNext.Visible = false;
+            btnFinish.Visible = true;
 
-                    // Hide "loading" prompts from login page
-                    //labelWait.Visible = false;
-                    Cursor = Cursors.Default;
-                    Refresh();
-
-                    return;
-                }
-
-                // build relational data
-                _timetable.BuildEquivalency();
-                _timetable.BuildCompatibility();
-                //Timetable_.UpdateStates();
-
-                // build tree
-                _timetable.BuildTreeView(treePreview);
-                // and scroll back to the top
-                treePreview.Nodes[0].EnsureVisible();
-                // clear details box
-                txtTreeDetails.Text = "";
-                timetableControl1.Clear();
-
-                // bring up panel 3
-                //panel2.Visible = false;
-                //panelLogin.Visible = false;
-                panel3.Visible = true;
-            }
-            else if (_currentPage == 3)
-            {
-                // clear ignored/required lists
-                listViewIgnored.Items.Clear();
-                listViewIgnored.Groups.Clear();
-                listViewRequired.Items.Clear();
-                listViewRequired.Groups.Clear();
-
-                // populate ignored/required lists
-                foreach (var subject in _timetable.SubjectList)
-                {
-                    // create and add groups for the subjects
-                    var ignoredSubjectGroup = new ListViewGroup(subject.Name) {Tag = subject};
-                    listViewIgnored.Groups.Add(ignoredSubjectGroup);
-
-                    var requiredSubjectGroup = new ListViewGroup(subject.Name) {Tag = subject};
-                    listViewRequired.Groups.Add(requiredSubjectGroup);
-
-                    // add stream types to subject groups
-                    foreach (var type in subject.Types)
-                    {
-                        // create ListViewItem without group
-                        var item = new ListViewItem(new [] { type.Code, type.Name }) {Tag = type};
-
-                        // add it to the current group in the correct box
-                        if (type.Required)
-                        {
-                            // set group and add to list
-                            item.Group = requiredSubjectGroup;
-                            listViewRequired.Items.Add(item);
-                        }
-                        else
-                        {
-                            // set group and add to list
-                            item.Group = ignoredSubjectGroup;
-                            listViewIgnored.Items.Add(item);
-                        }
-                    }
-                }
-
-                UpdateClashHighlight();
-
-                btnRequire.Enabled = false;
-                btnIgnore.Enabled = false;
-
-                // bring up panel 4
-                panel3.Visible = false;
-                panel4.Visible = true;
-                // swap next button for finish
-                btnNext.Visible = false;
-                btnFinish.Visible = true;
-
-                // need to refresh to get red highlighter
-                listViewIgnored.Refresh();
-                listViewRequired.Refresh();
-            }
-            _currentPage++;*/
+            // need to refresh to get red highlighter
+            listViewIgnored.Refresh();
+            listViewRequired.Refresh();
         }
 
         #endregion

@@ -435,7 +435,6 @@ namespace UniTimetable.ViewControllers
                     Solver.Criteria other = (Solver.Criteria) listBoxCriteria.Items[i];
                     if (criteria.FieldIndex != other.FieldIndex || criteria.Preference != other.Preference)
                     {
-                        changed = false;
                         break;
                     }
                 }
@@ -455,7 +454,6 @@ namespace UniTimetable.ViewControllers
                         && filter.Test == other.Test
                         && filter.ValueAsInt == other.ValueAsInt)
                     {
-                        changed = false;
                         break;
                     }
                 }

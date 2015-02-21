@@ -17,6 +17,7 @@ namespace UniTimetable.ViewControllers
             {
                 components.Dispose();
             }
+            _outlinePen.Dispose();
             base.Dispose(disposing);
         }
 

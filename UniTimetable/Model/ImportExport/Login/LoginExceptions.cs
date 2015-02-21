@@ -3,6 +3,7 @@ using System.Security.Authentication;
 
 namespace UniTimetable.Model.ImportExport.Login
 {
+    [Serializable]
     public class FailedLoginException : AuthenticationException
     {
         public string User { get; private set; }
@@ -13,6 +14,7 @@ namespace UniTimetable.Model.ImportExport.Login
         }
     }
 
+    [Serializable]
     public class InvalidLoginHandleException : Exception
     {
         public InvalidLoginHandleException(bool import, string message)
@@ -20,6 +22,7 @@ namespace UniTimetable.Model.ImportExport.Login
         {}
     }
 
+    [Serializable]
     public class InvalidLoginFieldException : Exception
     {
         public LoginField LoginField { get; private set; }

@@ -449,17 +449,16 @@ namespace UniTimetable.ViewControllers
             SaveAs();
         }
 
-        private DialogResult SaveAs()
+        private void SaveAs()
         {
             if (Timetable == null)
-                return DialogResult.Cancel;
+                return;
 
             var result = _saveDialogXml.ShowDialog();
             if (result != DialogResult.OK)
-                return result;
+                return;
 
             SaveToFile(_saveDialogXml.FileName);
-            return DialogResult.OK;
         }
 
         private void SaveToFile(string filename)
@@ -687,7 +686,7 @@ namespace UniTimetable.ViewControllers
 
         private void SetWallpaper(string path, int style, int tile)
         {
-            WinAPI.SystemParametersInfo(20, 0, path, 0x01 | 0x02);
+            WinApi.SystemParametersInfo(20, 0, path, 0x01 | 0x02);
 
             var rkWallPaper = Registry.CurrentUser.OpenSubKey("Control Panel\\Desktop", true);
             if (rkWallPaper == null) return;
@@ -1260,11 +1259,8 @@ namespace UniTimetable.ViewControllers
         #endregion
     }
 
-    internal static class WinAPI
+    internal static class WinApi
     {
-        public const int SPI_SETDESKWALLPAPER = 20;
-        public const int SPIF_SENDCHANGE = 0x2;
-
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
     }

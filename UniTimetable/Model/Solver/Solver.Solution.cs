@@ -1,6 +1,7 @@
 #region
 
 using System.Collections.Generic;
+using System.Linq;
 using UniTimetable.Model.Time;
 using UniTimetable.Model.Timetable;
 
@@ -12,13 +13,13 @@ namespace UniTimetable.Model.Solver
     {
         public class Solution
         {
-            public static int MinBreak = 15;
+            private const int MinBreak = 15;
             // list of streams
             // member variables for solution analysis
-            private OrderedList<Session>[] ClassesByDay_;
-            private TimeLength TotalEnd_;
+            private OrderedList<Session>[] _classesByDay;
+            private TimeLength _totalEnd;
             // used in computation
-            private TimeLength TotalStart_;
+            private TimeLength _totalStart;
 
             #region Accessors
 
@@ -26,7 +27,7 @@ namespace UniTimetable.Model.Solver
 
             #endregion
 
-            public void Clear()
+            private void Clear()
             {
                 // list of streams
                 Streams = new List<Stream>();
@@ -34,12 +35,12 @@ namespace UniTimetable.Model.Solver
                 ClearComputation();
             }
 
-            public void ClearComputation()
+            private void ClearComputation()
             {
                 // classes indexed by day
-                ClassesByDay_ = new OrderedList<Session>[7];
+                _classesByDay = new OrderedList<Session>[7];
                 for (int i = 0; i < 7; i++)
-                    ClassesByDay_[i] = new OrderedList<Session>();
+                    _classesByDay[i] = new OrderedList<Session>();
 
                 TimeAtUni = new TimeLength(0, 0);
                 TimeInClasses = new TimeLength(0, 0);
@@ -68,8 +69,8 @@ namespace UniTimetable.Model.Solver
                 LateEnd = TimeOfDay.Minimum;
                 AverageEnd = TimeOfDay.Minimum;
 
-                TotalStart_ = new TimeLength(0);
-                TotalEnd_ = new TimeLength(0);
+                _totalStart = new TimeLength(0);
+                _totalEnd = new TimeLength(0);
             }
 
             public int CompareTo(Solution other, SolutionComparer solutionComparer)
@@ -119,20 +120,13 @@ namespace UniTimetable.Model.Solver
                 Clear();
             }
 
-            public Solution(IEnumerable<Stream> streams)
-            {
-                Streams = new List<Stream>(streams);
-                ReCompute();
-            }
-
             public Solution(Solution other)
             {
                 Streams = new List<Stream>(other.Streams);
-                ClassesByDay_ = new OrderedList<Session>[7];
+                _classesByDay = new OrderedList<Session>[7];
                 for (int i = 0; i < 7; i++)
                 {
-                    ClassesByDay_[i] = new OrderedList<Session>(other.ClassesByDay_[i]);
-                    //ClassesByDay_[i] = other.ClassesByDay_[i].Clone();
+                    _classesByDay[i] = new OrderedList<Session>(other._classesByDay[i]);
                 }
 
                 TimeAtUni = other.TimeAtUni;
@@ -162,312 +156,18 @@ namespace UniTimetable.Model.Solver
                 LateEnd = other.EarlyEnd;
                 AverageEnd = other.AverageEnd;
 
-                TotalStart_ = other.TotalStart_;
-                TotalEnd_ = other.TotalEnd_;
+                _totalStart = other._totalStart;
+                _totalEnd = other._totalEnd;
             }
 
             #endregion
 
             #region Evaluation
 
-            public bool ReCompute()
-            {
-                ClearComputation();
-
-                // check if each stream fits with the other streams
-                /*for (int i = 0; i < Combination_.Count; i++)
-                {
-                    for (int j = i + 1; j < Combination_.Count; j++)
-                    {
-                        if (Timetable_.LookupClashTable(Combination_[i], Combination_[j]))
-                            return false;
-                    }
-                }*/
-
-                // for each stream
-                foreach (Stream stream in Streams)
-                {
-                    // for each session in each stream
-                    foreach (Session session in stream.Classes)
-                    {
-                        // build day-indexed list of classes
-                        ClassesByDay_[session.Day].Add(session);
-                        // calculate total time spent in classes
-                        TimeInClasses += session.Length;
-                    }
-                }
-
-                // for each day of classes
-                foreach (List<Session> daySessions in ClassesByDay_)
-                {
-                    // empty day - skip
-                    if (daySessions.Count == 0)
-                        continue;
-                    // otherwise increment day count
-                    Days++;
-
-                    #region Breaks and blocks
-
-                    // set up data for the start of the block
-                    TimeOfDay blockStart = daySessions[0].StartTime;
-                    TimeLength blockLength, breakLength;
-
-                    // compare adjacent classes
-                    int i;
-                    for (i = 1; i < daySessions.Count; i++)
-                    {
-                        breakLength = daySessions[i].StartTime - daySessions[i - 1].EndTime;
-
-                        // if there is at least ~15 minutes between the classes, call it a break, otherwise skip
-                        if (breakLength.TotalMinutes < MinBreak)
-                            continue;
-
-                        // find block length
-                        blockLength = daySessions[i - 1].EndTime - blockStart;
-
-                        // increment number of blocks
-                        NumberBlocks++;
-                        // add block length to cumulative sum
-                        AverageBlock += blockLength;
-                        // set start of next block
-                        blockStart = daySessions[i].StartTime;
-
-                        // compare block against maxima/minima
-                        if (blockLength < ShortBlock)
-                            ShortBlock = blockLength;
-                        if (blockLength > LongBlock)
-                            LongBlock = blockLength;
-
-                        // increment number of breaks
-                        NumberBreaks++;
-                        // add break to cumulative sum
-                        TimeInBreaks += breakLength;
-
-                        // compare break length against maxima/minima
-                        if (breakLength < ShortBreak)
-                            ShortBreak = breakLength;
-                        // check if it's the longest break so far
-                        if (breakLength > LongBreak)
-                            LongBreak = breakLength;
-                    }
-
-                    // also create a block at the end
-                    // find block length
-                    blockLength = daySessions[i - 1].EndTime - blockStart;
-                    // compare block against maxima/minima
-                    if (blockLength < ShortBlock)
-                        ShortBlock = blockLength;
-                    if (blockLength > LongBlock)
-                        LongBlock = blockLength;
-                    // increment number of blocks
-                    NumberBlocks++;
-                    // add block length to cumulative sum
-                    AverageBlock += blockLength;
-
-                    #endregion
-
-                    TimeOfDay dayStart = daySessions[0].StartTime;
-                    TimeOfDay dayEnd = daySessions[i - 1].EndTime;
-
-                    TimeLength dayLength = dayEnd - dayStart;
-                    // add to total time at uni
-                    TimeAtUni += dayLength;
-                    // check max/min
-                    if (dayLength > MaxDayLength)
-                        MaxDayLength = dayLength;
-                    if (dayLength < MinDayLength)
-                        MinDayLength = dayLength;
-
-                    // add to total time for start and end
-                    TotalStart_.TotalMinutes += dayStart.DayMinutes;
-                    TotalEnd_.TotalMinutes += dayEnd.DayMinutes;
-
-                    // check start/end min/max
-                    if (dayStart < EarlyStart)
-                        EarlyStart = dayStart;
-                    if (dayStart > LateStart)
-                        LateStart = dayStart;
-                    if (dayEnd < EarlyEnd)
-                        EarlyEnd = dayEnd;
-                    if (dayEnd > LateEnd)
-                        LateEnd = dayEnd;
-                }
-
-                // calculate averages using totals and counts
-                if (NumberBreaks > 0)
-                    AverageBreak = TimeInBreaks/NumberBreaks;
-                AverageBlock /= NumberBlocks;
-                AverageStart = new TimeOfDay(TotalStart_.TotalMinutes/Days);
-                AverageEnd = new TimeOfDay(TotalEnd_.TotalMinutes/Days);
-                AverageDayLength = TimeAtUni/Days;
-
-
-                /*
-                // process all the streams
-                foreach (Stream stream in Combination_)
-                {
-                    // run through list of classes
-                    foreach (Session session in stream.Classes)
-                    {
-                        // increase total time spent in classes
-                        TimeInClasses_ += session.Length;
-
-                        // if we're adding the class to an empty day
-                        if (ClassesByDay_[session.Day].Count == 0)
-                        {
-                            // increment day count
-                            Days_++;
-                            // add start and ending times to totals
-                            TotalStart_ += new TimeLength(session.Start.TotalMinutes);
-                            TotalEnd_ += new TimeLength(session.End.TotalMinutes);
-
-                            // add length to total time at uni
-                            TimeAtUni_ += session.Length;
-                        }
-                        else
-                        {
-                            // if it's earlier than the earliest class of that day
-                            if (session.Start < ClassesByDay_[session.Day][0].Start)
-                            {
-                                TimeLength difference = ClassesByDay_[session.Day][0].Start - session.Start;
-                                // remove the difference for total start
-                                TotalStart_ -= difference;
-                                // add the difference for total time at uni
-                                TimeAtUni_ += difference;
-                            }
-                            // if it's later than the latest class
-                            if (session.End > ClassesByDay_[session.Day][ClassesByDay_[session.Day].Count - 1].End)
-                            {
-                                TimeLength difference = session.End - ClassesByDay_[session.Day][ClassesByDay_[session.Day].Count - 1].End;
-                                // add the difference for total end
-                                TotalStart_ += difference;
-                                // add the difference for total time at uni
-                                TimeAtUni_ += difference;
-                            }
-                        }
-                        // update average day length
-                        AverageDayLength_ = TimeAtUni_ / Days_;
-
-                        // add new classes to day-indexed list
-                        ClassesByDay_[session.Day].Add(session);
-                        ClassesByDay_[session.Day].Sort();
-
-                        // check class start/end times against maxima/minima
-                        if (session.Start < EarlyStart_)
-                            EarlyStart_ = session.Start;
-                        if (session.Start > LateStart_)
-                            LateStart_ = session.Start;
-                        if (session.End < EarlyEnd_)
-                            EarlyEnd_ = session.End;
-                        if (session.End > LateEnd_)
-                            LateEnd_ = session.End;
-
-                        // check day length
-                        TimeLength dayLength = ClassesByDay_[session.Day][ClassesByDay_[session.Day].Count - 1].End -
-                            ClassesByDay_[session.Day][0].Start;
-                        if (dayLength < MinDayLength_)
-                            MinDayLength_ = dayLength;
-                        if (dayLength > MaxDayLength_)
-                            MaxDayLength_ = dayLength;
-                    }
-                }
-
-                // clear break data
-                NumberBreaks_ = 0;
-                AverageBreak_ = new TimeLength(0, 0);
-                ShortBreak_ = new TimeLength(24, 0);
-                LongBreak_ = new TimeLength(0, 0);
-                TimeInBreaks_ = new TimeLength(0, 0);
-                // clear block data
-                NumberBlocks_ = 0;
-                AverageBlock_ = new TimeLength(0, 0);
-                ShortBlock_ = new TimeLength(24, 0);
-                LongBlock_ = new TimeLength(0, 0);
-                // TODO: rewrite to avoid full sweep?
-                // do a fresh sweep of all days to rebuild break/block data
-                foreach (List<Session> daySessions in ClassesByDay_)
-                {
-                    // set up data for the start of the block
-                    TimeOfDay blockStart;
-                    if (daySessions.Count > 0)
-                        blockStart = daySessions[0].Start;
-                    else
-                        blockStart = new TimeOfDay();
-
-                    // compare adjacent classes
-                    for (int i = 1; i < daySessions.Count; i++)
-                    {
-                        TimeLength breakLength = daySessions[i].Start - daySessions[i - 1].End;
-
-                        // if there's a break between classes, make a block
-                        if (breakLength.TotalMinutes >= MinBreak)
-                        {
-                            // find block length
-                            TimeLength blockLength = daySessions[i - 1].End - blockStart;
-                            // compare block against maxima/minima
-                            if (blockLength < ShortBlock_)
-                                ShortBlock_ = blockLength;
-                            if (blockLength > LongBlock_)
-                                LongBlock_ = blockLength;
-
-                            // increment number of blocks
-                            NumberBlocks_++;
-                            // add block length to cumulative sum
-                            AverageBlock_ += blockLength;
-                            // set start of next block
-                            blockStart = daySessions[i].Start;
-                        }
-                        // also create a block at the end
-                        if (i == daySessions.Count - 1)
-                        {
-                            // find block length
-                            TimeLength blockLength = daySessions[i].End - blockStart;
-                            // compare block against maxima/minima
-                            if (blockLength < ShortBlock_)
-                                ShortBlock_ = blockLength;
-                            if (blockLength > LongBlock_)
-                                LongBlock_ = blockLength;
-
-                            // increment number of blocks
-                            NumberBlocks_++;
-                            // add block length to cumulative sum
-                            AverageBlock_ += blockLength;
-                        }
-
-                        // if there is at least ~15 minutes between the classes, call it a break, otherwise skip
-                        if (breakLength.TotalMinutes < MinBreak)
-                            continue;
-
-                        // increment number of breaks
-                        NumberBreaks_++;
-                        // add break to cumulative sum
-                        TimeInBreaks_ += breakLength;
-
-                        // compare break length against maxima/minima
-                        if (breakLength < ShortBreak_)
-                            ShortBreak_ = breakLength;
-                        // check if it's the longest break so far
-                        if (breakLength > LongBreak_)
-                            LongBreak_ = breakLength;
-                    }
-                }
-                // divide the sum of breaks to find the mean
-                AverageBreak_ = TimeInBreaks_ / NumberBreaks_;
-                // divide the sum of blocks to find the mean
-                AverageBlock_ /= NumberBlocks_;*/
-
-                return true;
-            }
-
-            public bool Fits(Stream stream)
+            private bool Fits(Stream stream)
             {
                 // check if stream fits with the current streams
-                foreach (Stream other in Streams)
-                {
-                    if (stream.ClashesWith(other))
-                        return false;
-                }
-                return true;
+                return Streams.All(other => !stream.ClashesWith(other));
             }
 
             public bool AddStream(Stream stream)
@@ -486,13 +186,13 @@ namespace UniTimetable.Model.Solver
                     TimeInClasses += session.Length;
 
                     // if we're adding the class to an empty day
-                    if (ClassesByDay_[session.Day].Count == 0)
+                    if (_classesByDay[session.Day].Count == 0)
                     {
                         // increment day count
                         Days++;
                         // add start and ending times to totals
-                        TotalStart_ += new TimeLength(session.StartTime.DayMinutes);
-                        TotalEnd_ += new TimeLength(session.EndTime.DayMinutes);
+                        _totalStart += new TimeLength(session.StartTime.DayMinutes);
+                        _totalEnd += new TimeLength(session.EndTime.DayMinutes);
 
                         // add length to total time at uni
                         TimeAtUni += session.Length;
@@ -500,22 +200,22 @@ namespace UniTimetable.Model.Solver
                     else
                     {
                         // if it's earlier than the earliest class of that day
-                        if (session.StartTime < ClassesByDay_[session.Day][0].StartTime)
+                        if (session.StartTime < _classesByDay[session.Day][0].StartTime)
                         {
-                            TimeLength difference = ClassesByDay_[session.Day][0].StartTime - session.StartTime;
+                            TimeLength difference = _classesByDay[session.Day][0].StartTime - session.StartTime;
                             // remove the difference for total start
-                            TotalStart_ -= difference;
+                            _totalStart -= difference;
                             // add the difference for total time at uni
                             TimeAtUni += difference;
                         }
                         // if it's later than the latest class
-                        if (session.EndTime > ClassesByDay_[session.Day][ClassesByDay_[session.Day].Count - 1].EndTime)
+                        if (session.EndTime > _classesByDay[session.Day][_classesByDay[session.Day].Count - 1].EndTime)
                         {
                             TimeLength difference = session.EndTime -
-                                                    ClassesByDay_[session.Day][ClassesByDay_[session.Day].Count - 1]
+                                                    _classesByDay[session.Day][_classesByDay[session.Day].Count - 1]
                                                         .EndTime;
                             // add the difference for total end
-                            TotalEnd_ += difference;
+                            _totalEnd += difference;
                             // add the difference for total time at uni
                             TimeAtUni += difference;
                         }
@@ -524,7 +224,7 @@ namespace UniTimetable.Model.Solver
                     AverageDayLength = TimeAtUni/Days;
 
                     // add new classes to day-indexed list
-                    ClassesByDay_[session.Day].Add(session);
+                    _classesByDay[session.Day].Add(session);
                     //ClassesByDay_[session.Day].Sort();
 
                     // check class start/end times against maxima/minima
@@ -538,8 +238,8 @@ namespace UniTimetable.Model.Solver
                         LateEnd = session.EndTime;
 
                     // check day length
-                    TimeLength dayLength = ClassesByDay_[session.Day][ClassesByDay_[session.Day].Count - 1].EndTime -
-                                           ClassesByDay_[session.Day][0].StartTime;
+                    TimeLength dayLength = _classesByDay[session.Day][_classesByDay[session.Day].Count - 1].EndTime -
+                                           _classesByDay[session.Day][0].StartTime;
                     if (dayLength < MinDayLength)
                         MinDayLength = dayLength;
                     if (dayLength > MaxDayLength)
@@ -559,67 +259,14 @@ namespace UniTimetable.Model.Solver
                 LongBlock = new TimeLength(0, 0);
                 // TODO: rewrite to avoid full sweep?
                 // do a fresh sweep of all days to rebuild break/block data
-                foreach (List<Session> daySessions in ClassesByDay_)
+                foreach (List<Session> daySessions in _classesByDay)
                 {
                     // empty day - skip
                     if (daySessions.Count == 0)
                         continue;
 
-                    // set up data for the start of the block
-                    TimeOfDay blockStart = daySessions[0].StartTime;
-                    TimeLength blockLength, breakLength;
-
-                    // compare adjacent classes
                     int i;
-                    for (i = 1; i < daySessions.Count; i++)
-                    {
-                        breakLength = daySessions[i].StartTime - daySessions[i - 1].EndTime;
-
-                        // if there is at least ~15 minutes between the classes, call it a break, otherwise skip
-                        if (breakLength.TotalMinutes < MinBreak)
-                            continue;
-
-                        // find block length
-                        blockLength = daySessions[i - 1].EndTime - blockStart;
-
-                        // increment number of blocks
-                        NumberBlocks++;
-                        // add block length to cumulative sum
-                        AverageBlock += blockLength;
-                        // set start of next block
-                        blockStart = daySessions[i].StartTime;
-
-                        // compare block against maxima/minima
-                        if (blockLength < ShortBlock)
-                            ShortBlock = blockLength;
-                        if (blockLength > LongBlock)
-                            LongBlock = blockLength;
-
-                        // increment number of breaks
-                        NumberBreaks++;
-                        // add break to cumulative sum
-                        TimeInBreaks += breakLength;
-
-                        // compare break length against maxima/minima
-                        if (breakLength < ShortBreak)
-                            ShortBreak = breakLength;
-                        // check if it's the longest break so far
-                        if (breakLength > LongBreak)
-                            LongBreak = breakLength;
-                    }
-
-                    // also create a block at the end
-                    // find block length
-                    blockLength = daySessions[i - 1].EndTime - blockStart;
-                    // compare block against maxima/minima
-                    if (blockLength < ShortBlock)
-                        ShortBlock = blockLength;
-                    if (blockLength > LongBlock)
-                        LongBlock = blockLength;
-                    // increment number of blocks
-                    NumberBlocks++;
-                    // add block length to cumulative sum
-                    AverageBlock += blockLength;
+                    CompareAdjacent(daySessions, out i);
                 }
 
                 if (NumberBreaks > 0)
@@ -631,21 +278,68 @@ namespace UniTimetable.Model.Solver
                 // divide the sum of blocks to find the mean
                 AverageBlock /= NumberBlocks;
 
-                AverageStart = new TimeOfDay(TotalStart_.TotalMinutes/Days);
-                AverageEnd = new TimeOfDay(TotalEnd_.TotalMinutes/Days);
+                AverageStart = new TimeOfDay(_totalStart.TotalMinutes/Days);
+                AverageEnd = new TimeOfDay(_totalEnd.TotalMinutes/Days);
 
                 return true;
             }
 
-            public bool AddStreamWithoutCompute(Stream stream)
+            private void CompareAdjacent(List<Session> daySessions, out int i)
             {
-                // if the stream clashes with another stream
-                if (!Fits(stream))
-                    return false;
+                // set up data for the start of the block
+                var blockStart = daySessions[0].StartTime;
+                TimeLength blockLength;
 
-                // add to list of streams
-                Streams.Add(stream);
-                return true;
+                // compare adjacent classes
+                for (i = 1; i < daySessions.Count; i++)
+                {
+                    var breakLength = daySessions[i].StartTime - daySessions[i - 1].EndTime;
+
+                    // if there is at least ~15 minutes between the classes, call it a break, otherwise skip
+                    if (breakLength.TotalMinutes < MinBreak)
+                        continue;
+
+                    // find block length
+                    blockLength = daySessions[i - 1].EndTime - blockStart;
+
+                    // increment number of blocks
+                    NumberBlocks++;
+                    // add block length to cumulative sum
+                    AverageBlock += blockLength;
+                    // set start of next block
+                    blockStart = daySessions[i].StartTime;
+
+                    // compare block against maxima/minima
+                    if (blockLength < ShortBlock)
+                        ShortBlock = blockLength;
+                    if (blockLength > LongBlock)
+                        LongBlock = blockLength;
+
+                    // increment number of breaks
+                    NumberBreaks++;
+                    // add break to cumulative sum
+                    TimeInBreaks += breakLength;
+
+                    // compare break length against maxima/minima
+                    if (breakLength < ShortBreak)
+                        ShortBreak = breakLength;
+                    // check if it's the longest break so far
+                    if (breakLength > LongBreak)
+                        LongBreak = breakLength;
+                }
+
+                // also create a block at the end
+                // find block length
+                blockLength = daySessions[i - 1].EndTime - blockStart;
+                // compare block against maxima/minima
+                if (blockLength < ShortBlock)
+                    ShortBlock = blockLength;
+                if (blockLength > LongBlock)
+                    LongBlock = blockLength;
+                // increment number of blocks
+                NumberBlocks++;
+                // add block length to cumulative sum
+                AverageBlock += blockLength;
             }
 
             #endregion

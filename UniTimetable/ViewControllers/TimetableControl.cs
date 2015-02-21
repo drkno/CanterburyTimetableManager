@@ -717,12 +717,11 @@ namespace UniTimetable.ViewControllers
 
             var outer = new Rectangle {Width = CellSize.Width*nx, Height = CellSize.Height*ny};
             outer.X = (w - outer.Width)/2;
-            outer.Y = (h - outer.Height)/2;
 
             _table.Width = CellSize.Width*(_showWeekend ? 7 : 5);
             _table.Height = CellSize.Height*(_hourEnd - _hourStart);
             _table.X = outer.X;
-            _table.Y = outer.Y;
+            _table.Y = -15;
             if (_showTimes)
                 _table.X += CellSize.Width/2;
             if (_showDays)
@@ -1135,12 +1134,6 @@ namespace UniTimetable.ViewControllers
     public class TimetableEventArgs : MouseEventArgs
     {
         #region Constructors
-
-        public TimetableEventArgs(MouseButtons button, int clicks, int x, int y, int delta, TimeOfWeek time)
-            : base(button, clicks, x, y, delta)
-        {
-            Time = time;
-        }
 
         public TimetableEventArgs(MouseEventArgs e, TimeOfWeek time)
             : base(e.Button, e.Clicks, e.X, e.Y, e.Delta)
