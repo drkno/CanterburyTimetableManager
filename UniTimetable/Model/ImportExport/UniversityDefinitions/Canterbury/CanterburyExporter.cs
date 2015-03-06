@@ -76,7 +76,7 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
                 webRequest.Headers.Add("X-Requested-With", "XMLHttpRequest");
                 
                 var postStr = "token=a" +
-                              "&student_code=" + LoginHandle.StudentCode +
+                              "&student_code=" + LoginHandle.Student.StudentCode +
                               "&subject_code=" + subject +
                               "&activity_group_code=" + code +
                               "&activity_code=" + streamNumber;

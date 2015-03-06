@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury.JsonObjects;
@@ -12,6 +13,14 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
 {
     public class CanterburyImporter : Canterbury, IImporter
     {
+        private bool _eliminateDeadEntries = true;
+
+        public bool EliminateDeadEntries
+        {
+            get { return _eliminateDeadEntries; }
+            set { _eliminateDeadEntries = value; }
+        }
+
         public Timetable.Timetable ImportTimetable()
         {
             try
@@ -45,6 +54,13 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
         #region Parse Subject Stream
         private void ParseSubjectStream(ref Timetable.Timetable timetable, SubjectStream subs)
         {
+            Console.WriteLine(subs.Selectable);
+            Console.WriteLine(subs.Availability);
+            if (EliminateDeadEntries && subs.Selectable != "available" && subs.Selectable != "clash")
+            {
+                return;
+            }
+
             var endTime = subs.Date.AddMinutes(double.Parse(subs.Duration));
             int currentDay;
             switch (subs.DayOfWeek)
@@ -156,15 +172,27 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
         private List<EnrolledSubjectStreams> GetCourseData()
         {
             var subjectStreams = new List<EnrolledSubjectStreams>();
-            foreach (var course in LoginHandle.Courses)
+            foreach (var course in LoginHandle.Student.StudentEnrolments)
             {
-                var split = course.Split(new []{"\",\"activity_group_code\":\""}, StringSplitOptions.None);
-                var canterburyData = GetCourse(split[0], split[1]);
-                if (canterburyData != null)
+                foreach (var group in course.Groups)
                 {
-                    subjectStreams.Add(canterburyData);
+                    var stream = GetCourse(group.SubjectCode, group.ActivityGroupCode);
+                    for (var i = 0; i < stream.SubjectStreams.Count; i++)
+                    {
+                        if (stream.SubjectStreams[i].Value.Selectable != "full") continue;
+                        stream.SubjectStreams.RemoveAt(i);
+                        i--;
+                    }
+                    subjectStreams.Add(stream);
                 }
             }
+            foreach (var allocatedStream in LoginHandle.Student.AllocatedStreams)
+            {
+                var stream = GetCourse(allocatedStream.SubjectCode, allocatedStream.ActivityGroupCode);
+                subjectStreams.Add(stream);
+            }
+
+            subjectStreams.AddRange(LoginHandle.Student.AllocatedStreams.Select(allocatedStream => GetCourse(allocatedStream.SubjectCode, allocatedStream.ActivityGroupCode)));
             return subjectStreams;
         }
 
@@ -172,7 +200,7 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
         {
             var webRequest =
                 (HttpWebRequest)
-                    WebRequest.Create("https://mytimetable.canterbury.ac.nz/aplus/rest/student/" + LoginHandle.StudentCode +
+                    WebRequest.Create("https://mytimetable.canterbury.ac.nz/aplus/rest/student/" + LoginHandle.Student.StudentCode +
                                       "/subject/" + courseName + "/group/" + activityName + "/activities/?ss=" +
                                       LoginHandle.LoginToken);
             webRequest.UserAgent = LoginHandle.UserAgent;

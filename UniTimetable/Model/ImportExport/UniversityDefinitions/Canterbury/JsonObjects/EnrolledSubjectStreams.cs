@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury.JsonObjects
 {
@@ -6,6 +7,6 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury.JsonO
     public class EnrolledSubjectStreams : CommonRequest
     {
         [DataMember]
-        public KeySubjectStreamPair[] SubjectStreams { get; set; }
+        public List<KeySubjectStreamPair> SubjectStreams { get; set; }
     }
 }

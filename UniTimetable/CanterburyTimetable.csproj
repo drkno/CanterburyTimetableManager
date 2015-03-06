@@ -76,8 +76,8 @@
     <Compile Include="Model\ImportExport\UniversityDefinitions\Canterbury\JsonObjects\CommonRequest.cs" />
     <Compile Include="Model\ImportExport\UniversityDefinitions\Canterbury\JsonObjects\EnrolledSubjectStreams.cs" />
     <Compile Include="Model\ImportExport\UniversityDefinitions\Canterbury\JsonObjects\KeySubjectStreamPair.cs" />
+    <Compile Include="Model\ImportExport\UniversityDefinitions\Canterbury\JsonObjects\StudentInformation.cs" />
     <Compile Include="Model\ImportExport\UniversityDefinitions\Canterbury\JsonObjects\SubjectStream.cs" />
-    <Compile Include="Model\ImportExport\UniversityDefinitions\Canterbury\JsonObjects\SubjectStreamContainer.cs" />
     <Compile Include="Resources\Resources.cs" />
     <Compile Include="Model\ColorScheme.cs" />
     <Compile Include="ViewControllers\EtchedLine.cs">

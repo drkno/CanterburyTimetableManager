@@ -15,6 +15,17 @@ namespace UniTimetable.Model.ImportExport.Login
     }
 
     [Serializable]
+    public class ReloginRequiredException : AuthenticationException
+    {
+        public string User { get; private set; }
+        public ReloginRequiredException(string user, string messageOrCode, Exception innerException = null)
+            : base(messageOrCode, innerException)
+        {
+            User = user;
+        }
+    }
+
+    [Serializable]
     public class InvalidLoginHandleException : Exception
     {
         public InvalidLoginHandleException(bool import, string message)

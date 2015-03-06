@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Authentication;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using UniTimetable.Model.ImportExport.Login;
 using UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury.JsonObjects;
 
@@ -16,8 +17,7 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
         public CookieContainer Cookies { get; private set; }
         public string Username { get; private set; }
         public string LoginToken { get; private set; }
-        public string StudentCode { get; private set; }
-        public string[] Courses { get; private set; }
+        public Student Student { get; private set; }
         public string UserAgent { get; set; }
         
         public CanterburyLoginHandle()
@@ -64,13 +64,14 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
                 LoginToken = response.ReturnedToken;
             }
 
-            var coursesList = new List<string>();
             webRequest =
                 (HttpWebRequest)
                     WebRequest.Create("https://mytimetable.canterbury.ac.nz/aplus/student?ss=" + LoginToken);
             webRequest.UserAgent = UserAgent;
             webRequest.Referer = "https://mytimetable.canterbury.ac.nz/aplus/student";
             webRequest.CookieContainer = Cookies;
+
+
             using (var webResponse = (HttpWebResponse)webRequest.GetResponse())
             {
                 var stream = webResponse.GetResponseStream();
@@ -80,20 +81,13 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
                 {
                     var line = reader.ReadLine();
                     if (string.IsNullOrWhiteSpace(line)) continue;
-                    if (line.Contains("student_code") && string.IsNullOrWhiteSpace(StudentCode))
-                    {
-                        StudentCode = Regex.Match(line, "[0-9]+").Value;
-                    }
-
-                    if (!line.Contains("data={")) continue;
-                    line = line.Substring(line.IndexOf("student_enrolment", StringComparison.Ordinal));
-
-                    coursesList.AddRange(from object course in Regex.Matches(line, "[A-Z]+[0-9]+-[0-9]{2}[^\\\"]+\",\"activity_group_code\":\"[^\\\"]+") select course.ToString());
+                    if (!line.StartsWith("data={")) continue;
+                    Student = Student.GetStudent(line.Substring(5, line.Length - 6));
+                    break;
                 }
                 reader.Close();
                 Cookies = webRequest.CookieContainer;
             }
-            Courses = coursesList.ToArray();
             LoggedIn = true;
         }
 
