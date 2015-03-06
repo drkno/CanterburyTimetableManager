@@ -10,7 +10,6 @@ namespace UniTimetable.Model.Timetable
 {
     public class Stream : IComparable<Stream>
     {
-        private List<Session> _classes = new List<Session>();
         private List<Stream> _equivalent = new List<Stream>();
         private int _id = -1;
         private List<Stream> _incompatible = new List<Stream>();
@@ -49,7 +48,7 @@ namespace UniTimetable.Model.Timetable
             ClashTable = null;
             Type = null;
             Selected = false;
-            _classes = new List<Session>();
+            Classes = new List<Session>();
             //State_ = StreamState.Null;
             _incompatible = new List<Stream>();
             _equivalent = new List<Stream>();
@@ -63,13 +62,13 @@ namespace UniTimetable.Model.Timetable
             _number = number;
         }
 
-        public Stream(string number, Type type)
+        /*public Stream(string number, Type type)
         {
             ClashTable = null;
             Selected = false;
             _number = number;
             Type = type;
-        }
+        }*/
 
         public Stream(Stream other)
         {
@@ -78,7 +77,7 @@ namespace UniTimetable.Model.Timetable
             _number = other._number;
             Selected = other.Selected;
             Type = other.Type;
-            _classes = new List<Session>(other._classes);
+            Classes = new List<Session>(other.Classes);
             _incompatible = new List<Stream>(other._incompatible);
             _equivalent = new List<Stream>(other._equivalent);
             //this.State_ = other.State_;
@@ -114,11 +113,7 @@ namespace UniTimetable.Model.Timetable
         public Type Type { get; set; }
 
         [XmlArray("sessions"), XmlArrayItem("session", typeof (Session))]
-        public List<Session> Classes
-        {
-            get { return _classes; }
-            set { _classes = value; }
-        }
+        public List<Session> Classes { get; set; }
 
         [XmlIgnore]
         public bool[] ClashTable { get; set; }

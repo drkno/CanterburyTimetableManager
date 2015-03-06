@@ -97,6 +97,7 @@ namespace UniTimetable.Model.Timetable
         /// <summary>
         /// Gets the enabled stream in the type.
         /// </summary>
+        [XmlIgnore]
         public Stream SelectedStream
         {
             get

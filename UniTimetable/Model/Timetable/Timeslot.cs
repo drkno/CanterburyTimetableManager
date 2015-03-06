@@ -125,10 +125,10 @@ namespace UniTimetable.Model.Timetable
 
         #region Accessors
 
-        [XmlIgnore]
         /// <summary>
         /// Gets or sets the start time.
         /// </summary>
+        [XmlIgnore]
         public TimeOfDay StartTime
         {
             get { return _start; }
@@ -142,10 +142,10 @@ namespace UniTimetable.Model.Timetable
             }
         }
 
-        [XmlIgnore]
         /// <summary>
         /// Gets or sets the end time.
         /// </summary>
+        [XmlIgnore]
         public TimeOfDay EndTime
         {
             get { return _end; }
@@ -159,62 +159,62 @@ namespace UniTimetable.Model.Timetable
             }
         }
 
-        [XmlIgnore]
         /// <summary>
         /// Gets the start time with day.
         /// </summary>
+        [XmlIgnore]
         public TimeOfWeek Start
         {
             get { return new TimeOfWeek(Day, _start); }
         }
 
-        [XmlIgnore]
         /// <summary>
         /// Gets the end time with day.
         /// </summary>
+        [XmlIgnore]
         public TimeOfWeek End
         {
             get { return new TimeOfWeek(Day, _end); }
         }
 
-        [XmlAttribute("day")]
         /// <summary>
         /// Gets or sets the day as an integer.
         /// </summary>
+        [XmlAttribute("day")]
         public int Day { get; set; }
 
-        [XmlIgnore]
         /// <summary>
         /// Gets or sets the day of the week.
         /// </summary>
+        [XmlIgnore]
         public DayOfWeek DayOfWeek
         {
             get { return (DayOfWeek) Day; }
             set { Day = (int) value; }
         }
 
-        [XmlIgnore]
         /// <summary>
         /// Gets the length of the timeslot in minutes.
         /// </summary>
+        [XmlIgnore]
         public TimeLength Length
         {
             get { return _end - _start; }
         }
 
-        [XmlIgnore]
         /// <summary>
         /// Gets the length of the timeslot in minutes.
         /// </summary>
+        [XmlIgnore]
         public int TotalMinutes
         {
             get { return _end.DayMinutes - _start.DayMinutes; }
         }
 
-        [XmlIgnore]
         /// <summary>
         /// Gets or sets the hour of the starting time.
         /// </summary>
+        [XmlIgnore]
         public int StartHour
         {
             get { return _start.Hour; }
@@ -230,10 +230,10 @@ namespace UniTimetable.Model.Timetable
             }
         }
 
-        [XmlIgnore]
         /// <summary>
         /// Gets or sets the minute of the starting time.
         /// </summary>
+        [XmlIgnore]
         public int StartMinute
         {
             get { return _start.Minute; }
@@ -249,10 +249,10 @@ namespace UniTimetable.Model.Timetable
             }
         }
 
-        [XmlAttribute("start")]
         /// <summary>
         /// Gets or sets the total minutes in the starting time.
         /// </summary>
+        [XmlAttribute("start")]
         public int StartTotalMinutes
         {
             get { return _start.DayMinutes; }
@@ -268,10 +268,10 @@ namespace UniTimetable.Model.Timetable
             }
         }
 
-        [XmlIgnore]
         /// <summary>
         /// Gets or sets the hour of the ending time.
         /// </summary>
+        [XmlIgnore]
         public int EndHour
         {
             get { return _end.Hour; }
@@ -287,10 +287,10 @@ namespace UniTimetable.Model.Timetable
             }
         }
 
-        [XmlIgnore]
         /// <summary>
         /// Gets or sets the minute of the ending time.
         /// </summary>
+        [XmlIgnore]
         public int EndMinute
         {
             get { return _end.Minute; }
@@ -306,10 +306,10 @@ namespace UniTimetable.Model.Timetable
             }
         }
 
-        [XmlAttribute("end")]
         /// <summary>
         /// Gets or sets the total minutes in the ending time.
         /// </summary>
+        [XmlAttribute("end")]
         public int EndTotalMinutes
         {
             get { return _end.DayMinutes; }

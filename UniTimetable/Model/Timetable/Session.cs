@@ -20,6 +20,11 @@ namespace UniTimetable.Model.Timetable
 
         #region Constructors
 
+        public Session()
+        {
+            Stream = null;
+        }
+
         public Session(int day, int startYearDay, int startHour, int startMinute, int endHour, int endMinute, string location, string weekPattern = "")
             : base(day, startYearDay, startHour, startMinute, endHour, endMinute, weekPattern)
         {
