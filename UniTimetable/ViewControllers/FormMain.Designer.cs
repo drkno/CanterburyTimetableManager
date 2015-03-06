@@ -554,7 +554,7 @@ namespace UniTimetable.ViewControllers
             this.btnAddByClass.Text = "Classes";
             this.btnAddByClass.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnAddByClass.ToolTipText = "Show/hide avalible classes";
-            this.btnAddByClass.Click += new System.EventHandler(this.BtnAddByClassClick);
+            this.btnAddByClass.Click += new System.EventHandler(this.AddByClass);
             // 
             // btnNew
             // 
@@ -580,7 +580,7 @@ namespace UniTimetable.ViewControllers
             this.btnClear.Text = "Reset";
             this.btnClear.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnClear.ToolTipText = "Reset Canterbury Timetable Manager";
-            this.btnClear.Click += new System.EventHandler(this.BtnClearClick);
+            this.btnClear.Click += new System.EventHandler(this.Clear);
             // 
             // btnPreferences
             // 

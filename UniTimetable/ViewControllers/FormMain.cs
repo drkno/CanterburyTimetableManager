@@ -376,8 +376,8 @@ namespace UniTimetable.ViewControllers
                 return;
             }
 
-            var remaining = new List<Type>();
-            var ignored = new List<Type>();
+            var remaining = new List<object>();
+            var ignored = new List<object>();
             foreach (
                 var type in
                     Timetable.SubjectList.SelectMany(subject => subject.Types.Where(type => type.SelectedStream == null))
@@ -399,9 +399,6 @@ namespace UniTimetable.ViewControllers
 
             timetableControl.EndPreviewStream();
             timetableControl.EndPreviewOptions();
-
-            //groupBox2.Text = "Remaining (" + remaining.Count.ToString() + ")";
-            //groupBox3.Text = "Ignored (" + ignored.Count.ToString() + ")";
         }
 
         #endregion
@@ -419,6 +416,11 @@ namespace UniTimetable.ViewControllers
             _saveDialogXml.FileName = null;
             EnableButtons(false);
             ClearHistory();
+        }
+
+        private void BtnSaveClick(object sender, EventArgs e)
+        {
+            Save();
         }
 
         private DialogResult Save()
@@ -911,11 +913,6 @@ namespace UniTimetable.ViewControllers
             btnAccept.Enabled = enable;
         }
 
-        private void BtnSaveClick(object sender, EventArgs e)
-        {
-            Save();
-        }
-
         private void FeelingLucky(object sender, EventArgs e)
         {
             if (Timetable == null)
@@ -934,12 +931,12 @@ namespace UniTimetable.ViewControllers
             MadeChanges(true);
         }
 
-        private void BtnAddByClassClick(object sender, EventArgs e)
+        private void AddByClass(object sender, EventArgs e)
         {
             ToggleSidePane();
         }
 
-        private void BtnClearClick(object sender, EventArgs e)
+        private void Clear(object sender, EventArgs e)
         {
             if (!Timetable.RevertToBaseStreams()) return;
             timetableControl.EndPreviewStream();
@@ -986,8 +983,8 @@ namespace UniTimetable.ViewControllers
                         findClassHereToolStripMenuItem.DropDownItems.Clear();
 
                         // populate list of options at this time
-                        var required = new List<ToolStripMenuItem>();
-                        var ignored = new List<ToolStripMenuItem>();
+                        var required = new List<ToolStripItem>();
+                        var ignored = new List<ToolStripItem>();
                         foreach (var subject in Timetable.SubjectList)
                         {
                             foreach (var type in subject.Types)
