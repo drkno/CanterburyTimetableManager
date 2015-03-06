@@ -17,7 +17,7 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
 
         public string UniversityName { get { return "University of Canterbury"; } }
         public string CreatedBy { get { return "Matthew Knox"; } }
-        public DateTime LastUpdated { get { return new DateTime(2015, 02, 20); } }
+        public DateTime LastUpdated { get { return new DateTime(2015, 03, 06); } }
 
         protected CanterburyLoginHandle LoginHandle;
         public ILoginHandle CreateNewLoginHandle()

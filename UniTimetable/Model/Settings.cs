@@ -2,13 +2,14 @@ namespace UniTimetable.Model
 {
     public class Settings
     {
-        public int HourEnd;
-        public int HourStart;
-        public bool ResetWindow;
-        public bool ShowGhost;
-        public bool ShowGray;
-        public bool ShowLocation;
-        public bool ShowWeekend;
+        public int HourEnd { get; set; }
+        public int HourStart { get; set; }
+        public bool ResetWindow { get; set; }
+        public bool ShowGhost { get; private set; }
+        public bool ShowGray { get; private set; }
+        public bool ShowLocation { get; private set; }
+        public bool ShowWeekend { get; private set; }
+        public bool ImportUnselectable { get; private set; }
 
         public Settings()
         {
@@ -16,6 +17,7 @@ namespace UniTimetable.Model
         }
 
         public Settings(
+            bool importUnselectable,
             bool showGhost,
             bool showWeekend,
             bool showGray,
@@ -24,6 +26,7 @@ namespace UniTimetable.Model
             int hourEnd,
             bool resetWindow)
         {
+            ImportUnselectable = importUnselectable;
             ShowGhost = showGhost;
             ShowWeekend = showWeekend;
             ShowGray = showGray;
@@ -35,6 +38,7 @@ namespace UniTimetable.Model
 
         public Settings(Settings other)
         {
+            ImportUnselectable = other.ImportUnselectable;
             ShowGhost = other.ShowGhost;
             ShowWeekend = other.ShowWeekend;
             ShowGray = other.ShowGray;
@@ -46,6 +50,7 @@ namespace UniTimetable.Model
 
         public void Load()
         {
+            ImportUnselectable = Properties.Settings.Default.ImportUnselectable;
             ShowGhost = Properties.Settings.Default.ShowGhost;
             ShowWeekend = Properties.Settings.Default.ShowWeekend;
             ShowGray = Properties.Settings.Default.ShowGray;
@@ -57,6 +62,7 @@ namespace UniTimetable.Model
 
         public void Save()
         {
+            Properties.Settings.Default.ImportUnselectable = ImportUnselectable;
             Properties.Settings.Default.ShowGhost = ShowGhost;
             Properties.Settings.Default.ShowWeekend = ShowWeekend;
             Properties.Settings.Default.ShowLocation = ShowGray;

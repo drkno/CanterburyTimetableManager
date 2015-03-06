@@ -97,14 +97,14 @@ namespace UniTimetable.ViewControllers
             this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.timetableControl = new UniTimetable.ViewControllers.TimetableControl();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.btnShowHide = new System.Windows.Forms.Button();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.lblRemaining = new System.Windows.Forms.Label();
-            this.lblIgnored = new System.Windows.Forms.Label();
-            this.timetableControl = new UniTimetable.ViewControllers.TimetableControl();
             this.listBox2 = new UniTimetable.ViewControllers.ListBoxBuffered();
             this.listBox1 = new UniTimetable.ViewControllers.ListBoxBuffered();
+            this.lblRemaining = new System.Windows.Forms.Label();
+            this.lblIgnored = new System.Windows.Forms.Label();
             this.contextMenuStrip1.SuspendLayout();
             this.streamMenu.SuspendLayout();
             this.timeMenu.SuspendLayout();
@@ -318,7 +318,7 @@ namespace UniTimetable.ViewControllers
             this.btnLucky});
             this.toolStrip1.Location = new System.Drawing.Point(3, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(627, 52);
+            this.toolStrip1.Size = new System.Drawing.Size(658, 52);
             this.toolStrip1.TabIndex = 10;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -344,7 +344,7 @@ namespace UniTimetable.ViewControllers
             this.importToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
             this.importToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
             this.importToolStripMenuItem.Text = "&Import";
-            this.importToolStripMenuItem.Click += new System.EventHandler(this.ImportToolStripMenuItemClick);
+            this.importToolStripMenuItem.Click += new System.EventHandler(this.BtnImportClick);
             // 
             // importAndMergeToolStripMenuItem
             // 
@@ -693,6 +693,41 @@ namespace UniTimetable.ViewControllers
             this.tableLayoutPanel2.Size = new System.Drawing.Size(992, 599);
             this.tableLayoutPanel2.TabIndex = 13;
             // 
+            // timetableControl
+            // 
+            this.timetableControl.AllowDrop = true;
+            this.timetableControl.BackColor = System.Drawing.Color.Transparent;
+            this.timetableControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.timetableControl.EnableDrag = true;
+            this.timetableControl.Font = new System.Drawing.Font("Arial Narrow", 8.933568F);
+            this.timetableControl.Grayscale = false;
+            this.timetableControl.HourEnd = 21;
+            this.timetableControl.HourStart = 8;
+            this.timetableControl.Location = new System.Drawing.Point(8, 0);
+            this.timetableControl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 3);
+            this.timetableControl.Name = "timetableControl";
+            this.timetableControl.OutlineColour = System.Drawing.Color.LightGray;
+            this.timetableControl.ShowAll = false;
+            this.timetableControl.ShowDays = true;
+            this.timetableControl.ShowDragGhost = true;
+            this.timetableControl.ShowGrayArea = true;
+            this.timetableControl.ShowLocation = true;
+            this.timetableControl.ShowText = true;
+            this.timetableControl.ShowTimes = true;
+            this.timetableControl.ShowWeekend = true;
+            this.timetableControl.Size = new System.Drawing.Size(812, 590);
+            this.timetableControl.TabIndex = 17;
+            this.timetableControl.TimeslotUnavalibleColour = System.Drawing.Color.LightGray;
+            this.timetableControl.Timetable = null;
+            this.timetableControl.TimetableMouseClick += new UniTimetable.ViewControllers.TimetableEventHandler(this.TimetableControl1TimetableMouseClick);
+            this.timetableControl.TimetableMouseDoubleClick += new UniTimetable.ViewControllers.TimetableEventHandler(this.TimetableControl1TimetableMouseClick);
+            this.timetableControl.TimetableMouseDown += new UniTimetable.ViewControllers.TimetableEventHandler(this.TimetableControl1TimetableMouseDoubleClick);
+            this.timetableControl.TimetableChanged += new UniTimetable.ViewControllers.TimetableChangedEventHandler(this.TimetableControlTimetableChanged);
+            this.timetableControl.ResizeCell += new UniTimetable.ViewControllers.ResizeCellEventHandler(this.TimetableControl1ResizeCell);
+            this.timetableControl.BoundsClipped += new UniTimetable.ViewControllers.BoundsClippedEventHandler(this.TimetableControl1BoundsClipped);
+            this.timetableControl.DragDrop += new System.Windows.Forms.DragEventHandler(this.TimetableControl1DragDrop);
+            this.timetableControl.DragOver += new System.Windows.Forms.DragEventHandler(this.TimetableControl1DragOver);
+            // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 1;
@@ -744,63 +779,6 @@ namespace UniTimetable.ViewControllers
             this.tableLayoutPanel3.Size = new System.Drawing.Size(132, 581);
             this.tableLayoutPanel3.TabIndex = 14;
             // 
-            // lblRemaining
-            // 
-            this.lblRemaining.AutoSize = true;
-            this.lblRemaining.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblRemaining.Location = new System.Drawing.Point(3, 0);
-            this.lblRemaining.Name = "lblRemaining";
-            this.lblRemaining.Size = new System.Drawing.Size(126, 20);
-            this.lblRemaining.TabIndex = 15;
-            this.lblRemaining.Text = "Remaining";
-            this.lblRemaining.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblIgnored
-            // 
-            this.lblIgnored.AutoSize = true;
-            this.lblIgnored.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblIgnored.Location = new System.Drawing.Point(3, 398);
-            this.lblIgnored.Name = "lblIgnored";
-            this.lblIgnored.Size = new System.Drawing.Size(126, 20);
-            this.lblIgnored.TabIndex = 16;
-            this.lblIgnored.Text = "Ignored";
-            this.lblIgnored.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // timetableControl
-            // 
-            this.timetableControl.AllowDrop = true;
-            this.timetableControl.BackColor = System.Drawing.Color.Transparent;
-            this.timetableControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.timetableControl.EnableDrag = true;
-            this.timetableControl.Font = new System.Drawing.Font("Arial Narrow", 8.845117F);
-            this.timetableControl.Grayscale = false;
-            this.timetableControl.HourEnd = 21;
-            this.timetableControl.HourStart = 8;
-            this.timetableControl.Location = new System.Drawing.Point(8, 0);
-            this.timetableControl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 3);
-            this.timetableControl.Name = "timetableControl";
-            this.timetableControl.OutlineColour = System.Drawing.Color.LightGray;
-            this.timetableControl.ShowAll = false;
-            this.timetableControl.ShowDays = true;
-            this.timetableControl.ShowDragGhost = true;
-            this.timetableControl.ShowGrayArea = true;
-            this.timetableControl.ShowLocation = true;
-            this.timetableControl.ShowText = true;
-            this.timetableControl.ShowTimes = true;
-            this.timetableControl.ShowWeekend = true;
-            this.timetableControl.Size = new System.Drawing.Size(812, 590);
-            this.timetableControl.TabIndex = 17;
-            this.timetableControl.TimeslotUnavalibleColour = System.Drawing.Color.LightGray;
-            this.timetableControl.Timetable = null;
-            this.timetableControl.TimetableMouseClick += new UniTimetable.ViewControllers.TimetableEventHandler(this.TimetableControl1TimetableMouseClick);
-            this.timetableControl.TimetableMouseDoubleClick += new UniTimetable.ViewControllers.TimetableEventHandler(this.TimetableControl1TimetableMouseClick);
-            this.timetableControl.TimetableMouseDown += new UniTimetable.ViewControllers.TimetableEventHandler(this.TimetableControl1TimetableMouseDoubleClick);
-            this.timetableControl.TimetableChanged += new UniTimetable.ViewControllers.TimetableChangedEventHandler(this.TimetableControlTimetableChanged);
-            this.timetableControl.ResizeCell += new UniTimetable.ViewControllers.ResizeCellEventHandler(this.TimetableControl1ResizeCell);
-            this.timetableControl.BoundsClipped += new UniTimetable.ViewControllers.BoundsClippedEventHandler(this.TimetableControl1BoundsClipped);
-            this.timetableControl.DragDrop += new System.Windows.Forms.DragEventHandler(this.TimetableControl1DragDrop);
-            this.timetableControl.DragOver += new System.Windows.Forms.DragEventHandler(this.TimetableControl1DragOver);
-            // 
             // listBox2
             // 
             this.listBox2.AllowDrop = true;
@@ -842,6 +820,28 @@ namespace UniTimetable.ViewControllers
             this.listBox1.GiveFeedback += new System.Windows.Forms.GiveFeedbackEventHandler(this.ListBox1GiveFeedback);
             this.listBox1.Leave += new System.EventHandler(this.ListBox1Leave);
             this.listBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ListBox1MouseDown);
+            // 
+            // lblRemaining
+            // 
+            this.lblRemaining.AutoSize = true;
+            this.lblRemaining.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblRemaining.Location = new System.Drawing.Point(3, 0);
+            this.lblRemaining.Name = "lblRemaining";
+            this.lblRemaining.Size = new System.Drawing.Size(126, 20);
+            this.lblRemaining.TabIndex = 15;
+            this.lblRemaining.Text = "Remaining";
+            this.lblRemaining.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblIgnored
+            // 
+            this.lblIgnored.AutoSize = true;
+            this.lblIgnored.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblIgnored.Location = new System.Drawing.Point(3, 398);
+            this.lblIgnored.Name = "lblIgnored";
+            this.lblIgnored.Size = new System.Drawing.Size(126, 20);
+            this.lblIgnored.TabIndex = 16;
+            this.lblIgnored.Text = "Ignored";
+            this.lblIgnored.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // FormMain
             // 

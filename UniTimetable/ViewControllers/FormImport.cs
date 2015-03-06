@@ -20,11 +20,11 @@ namespace UniTimetable.ViewControllers
         private readonly IImporter _importer;
         private Timetable _timetable;
 
-        public FormImport()
+        public FormImport(bool importUnselectable)
         {
             InitializeComponent();
 
-            _importer = new CanterburyImporter();
+            _importer = new CanterburyImporter {ImportUnselectableStreams = importUnselectable};
             ILoginRequired loginRequired = _importer as ILoginRequired;
             if (loginRequired != null)
             {

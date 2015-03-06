@@ -37,7 +37,6 @@ namespace UniTimetable.ViewControllers
         private readonly SaveFileDialog _saveDialogVector = new SaveFileDialog();
         private readonly SaveFileDialog _saveDialogWallpaper = new SaveFileDialog();
         private readonly SaveFileDialog _saveDialogXml = new SaveFileDialog();
-        private readonly Solver _solver;
         private int _changes;
         private Session _clickSession;
         private TimeOfWeek _clickTime;
@@ -46,11 +45,12 @@ namespace UniTimetable.ViewControllers
         private Settings _settings = new Settings();
         private bool _sidePaneEnabled = true;
         public Timetable Timetable;
+        public readonly Solver Solver;
 
         public FormMain()
         {
             Timetable = null;
-            _solver = new Solver(null);
+            Solver = new Solver(null);
 
             InitializeComponent();
 
@@ -785,17 +785,12 @@ namespace UniTimetable.ViewControllers
 
         #region Importing
 
-        private void ImportToolStripMenuItemClick(object sender, EventArgs e)
-        {
-            Import();
-        }
-
         private void Import()
         {
             if (!AreYouSure("Import Timetable"))
                 return;
 
-            var importForm = new FormImport();
+            var importForm = new FormImport(_settings.ImportUnselectable);
             if (importForm.DialogResult == DialogResult.Cancel)
             {
                 return;
@@ -816,7 +811,7 @@ namespace UniTimetable.ViewControllers
         private void ImportAndMergeToolStripMenuItemClick(object sender, EventArgs e)
         {
             // run the import wizard
-            var importForm = new FormImport();
+            var importForm = new FormImport(_settings.ImportUnselectable);
             if (importForm.DialogResult == DialogResult.Cancel)
             {
                 return;
@@ -907,13 +902,13 @@ namespace UniTimetable.ViewControllers
                 return;
             }
 
-            _solver.Timetable = Timetable;
+            Solver.Timetable = Timetable;
             var formProgress = new FormProgress();
-            if (formProgress.ShowDialog(_solver) != DialogResult.OK)
+            if (formProgress.ShowDialog(Solver) != DialogResult.OK)
                 return;
 
             var formSolution = new FormSolution();
-            if (formSolution.ShowDialog(_solver) != DialogResult.OK)
+            if (formSolution.ShowDialog(Solver) != DialogResult.OK)
                 return;
 
             MadeChanges(true);
@@ -925,7 +920,7 @@ namespace UniTimetable.ViewControllers
                 return;
 
             var formCriteria = new FormCriteria();
-            if (formCriteria.ShowDialog(_solver) != DialogResult.OK)
+            if (formCriteria.ShowDialog(Solver) != DialogResult.OK)
                 return;
             Timetable.RecomputeSolutions = true;
         }
@@ -1011,13 +1006,13 @@ namespace UniTimetable.ViewControllers
             if (Timetable.IsFull())
                 Timetable.RevertToBaseStreams();
 
-            _solver.Timetable = Timetable;
+            Solver.Timetable = Timetable;
             var formProgress = new FormProgress();
-            if (formProgress.ShowDialog(_solver) != DialogResult.OK)
+            if (formProgress.ShowDialog(Solver) != DialogResult.OK)
                 return;
 
-            var index = _random.Next(Math.Min(100, _solver.Solutions.Count));
-            Timetable.LoadSolution(_solver.Solutions[index]);
+            var index = _random.Next(Math.Min(100, Solver.Solutions.Count));
+            Timetable.LoadSolution(Solver.Solutions[index]);
             MadeChanges(true);
         }
 

@@ -16,27 +16,17 @@ namespace UniTimetable.ViewControllers
         public FormSettings()
         {
             InitializeComponent();
-            for (var i = 0; i <= 23; i++)
-            {
-                var hr = i%24;
-                var time = (hr < 12 ? "am" : "pm");
-                hr = i%12;
-                time = (hr == 0 ? 12 : hr) + time;
-
-                ddStart.Items.Add(time);
-                ddEnd.Items.Add(time);
-            }
         }
 
         private void FormSettingsLoad(object sender, EventArgs e)
         {
-            cbGhost.Checked = _settings.ShowGhost;
-            cbWeekend.Checked = _settings.ShowWeekend;
-            cbGray.Checked = _settings.ShowGray;
-            cbLocation.Checked = _settings.ShowLocation;
+            checkBoxGhost.Checked = _settings.ShowGhost;
+            checkBoxWeekend.Checked = _settings.ShowWeekend;
+            checkBoxGray.Checked = _settings.ShowGray;
+            checkBoxLocation.Checked = _settings.ShowLocation;
             ddStart.SelectedIndex = _settings.HourStart;
             ddEnd.SelectedIndex = _settings.HourEnd;
-            cbReset.Checked = _settings.ResetWindow;
+            checkBoxReset.Checked = _settings.ResetWindow;
         }
 
         public Settings ShowDialog(Settings settings, FormMain formMain)
@@ -46,21 +36,17 @@ namespace UniTimetable.ViewControllers
             if (base.ShowDialog() != DialogResult.OK)
                 return null;
             return new Settings(
-                cbGhost.Checked,
-                cbWeekend.Checked,
-                cbGray.Checked,
-                cbLocation.Checked,
+                checkBoxImportUnsettable.Checked,
+                checkBoxGhost.Checked,
+                checkBoxWeekend.Checked,
+                checkBoxGray.Checked,
+                checkBoxLocation.Checked,
                 ddStart.SelectedIndex,
                 ddEnd.SelectedIndex,
-                cbReset.Checked);
+                checkBoxReset.Checked);
         }
 
-        public new DialogResult ShowDialog()
-        {
-            throw new Exception("No input was provided.");
-        }
-
-        private void BtnOkClick(object sender, EventArgs e)
+        private void ButtonOkClick(object sender, EventArgs e)
         {
             if (ddStart.SelectedIndex == -1)
             {
@@ -87,7 +73,7 @@ namespace UniTimetable.ViewControllers
             Close();
         }
 
-        private void BtnCancelClick(object sender, EventArgs e)
+        private void ButtonCancelClick(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
             Close();
@@ -96,13 +82,32 @@ namespace UniTimetable.ViewControllers
         private void ButtonColoursClick(object sender, EventArgs e)
         {
             if (_form == null || _form.Timetable == null)
+            {
+                MessageBox.Show("Please import a timetable before setting colours.", "Colours",
+                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
+            }
 
             var formStyle = new FormStyle();
             if (formStyle.ShowDialog(_form.Timetable) == DialogResult.Cancel)
                 return;
 
             _form.MadeChanges(false);
+        }
+
+        private void ButtonCriteriaClick(object sender, EventArgs e)
+        {
+            if (_form == null || _form.Timetable == null)
+            {
+                MessageBox.Show("Please import a timetable before setting solver criteria.", "Criteria",
+                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+            var formCriteria = new FormCriteria();
+            if (formCriteria.ShowDialog(_form.Solver) != DialogResult.OK)
+                return;
+            _form.Timetable.RecomputeSolutions = true;
         }
     }
 }

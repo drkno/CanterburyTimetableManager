@@ -13,13 +13,7 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
 {
     public class CanterburyImporter : Canterbury, IImporter
     {
-        private bool _eliminateDeadEntries = true;
-
-        public bool EliminateDeadEntries
-        {
-            get { return _eliminateDeadEntries; }
-            set { _eliminateDeadEntries = value; }
-        }
+        public bool ImportUnselectableStreams { get; set; }
 
         public Timetable.Timetable ImportTimetable()
         {
@@ -56,7 +50,7 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
         {
             Console.WriteLine(subs.Selectable);
             Console.WriteLine(subs.Availability);
-            if (EliminateDeadEntries && subs.Selectable != "available" && subs.Selectable != "clash")
+            if (!ImportUnselectableStreams && subs.Selectable != "available" && subs.Selectable != "clash")
             {
                 return;
             }
@@ -177,11 +171,14 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
                 foreach (var group in course.Groups)
                 {
                     var stream = GetCourse(group.SubjectCode, group.ActivityGroupCode);
-                    for (var i = 0; i < stream.SubjectStreams.Count; i++)
+                    if (!ImportUnselectableStreams)
                     {
-                        if (stream.SubjectStreams[i].Value.Selectable != "full") continue;
-                        stream.SubjectStreams.RemoveAt(i);
-                        i--;
+                        for (var i = 0; i < stream.SubjectStreams.Count; i++)
+                        {
+                            if (stream.SubjectStreams[i].Value.Selectable != "full") continue;
+                            stream.SubjectStreams.RemoveAt(i);
+                            i--;
+                        }
                     }
                     subjectStreams.Add(stream);
                 }
