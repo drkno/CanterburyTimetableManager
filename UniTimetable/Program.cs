@@ -1,9 +1,7 @@
 #region
 
 using System;
-using System.IO;
 using System.Windows.Forms;
-using UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury.JsonObjects;
 using UniTimetable.ViewControllers;
 
 #endregion

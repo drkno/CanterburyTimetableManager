@@ -13,7 +13,14 @@ namespace UniTimetable.Model
 
         public Settings()
         {
-            Load();
+            ImportUnselectable = Properties.Settings.Default.ImportUnselectable;
+            ShowGhost = Properties.Settings.Default.ShowGhost;
+            ShowWeekend = Properties.Settings.Default.ShowWeekend;
+            ShowGray = Properties.Settings.Default.ShowGray;
+            ShowLocation = Properties.Settings.Default.ShowLocation;
+            HourStart = Properties.Settings.Default.HourStart;
+            HourEnd = Properties.Settings.Default.HourEnd;
+            ResetWindow = false;
         }
 
         public Settings(
@@ -34,30 +41,6 @@ namespace UniTimetable.Model
             HourStart = hourStart;
             HourEnd = hourEnd;
             ResetWindow = resetWindow;
-        }
-
-        public Settings(Settings other)
-        {
-            ImportUnselectable = other.ImportUnselectable;
-            ShowGhost = other.ShowGhost;
-            ShowWeekend = other.ShowWeekend;
-            ShowGray = other.ShowGray;
-            ShowLocation = other.ShowLocation;
-            HourStart = other.HourStart;
-            HourEnd = other.HourEnd;
-            ResetWindow = other.ResetWindow;
-        }
-
-        public void Load()
-        {
-            ImportUnselectable = Properties.Settings.Default.ImportUnselectable;
-            ShowGhost = Properties.Settings.Default.ShowGhost;
-            ShowWeekend = Properties.Settings.Default.ShowWeekend;
-            ShowGray = Properties.Settings.Default.ShowGray;
-            ShowLocation = Properties.Settings.Default.ShowLocation;
-            HourStart = Properties.Settings.Default.HourStart;
-            HourEnd = Properties.Settings.Default.HourEnd;
-            ResetWindow = false;
         }
 
         public void Save()
