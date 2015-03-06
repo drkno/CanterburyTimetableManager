@@ -350,13 +350,18 @@ namespace UniTimetable.ViewControllers
             btnIgnore.Enabled = true;
         }
 
+        private bool CheckDirectClash(Type a)
+        {
+            return a.Required && _timetable.TypeList.Where(b => a != b).Where(b => b.Required).Any(a.ClashesWith);
+        }
+
         private void UpdateClashHighlight()
         {
             var clash = false;
             foreach (ListViewItem item in listViewRequired.Items)
             {
                 var type = (Type) item.Tag;
-                if (_timetable.CheckDirectClash(type))
+                if (CheckDirectClash(type))
                 {
                     clash = true;
                     item.BackColor = Color.Red;

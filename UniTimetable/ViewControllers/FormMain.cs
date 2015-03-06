@@ -28,7 +28,7 @@ namespace UniTimetable.ViewControllers
         private readonly Size _defaultSize;
         private readonly TimetableControl _export = new TimetableControl();
         private readonly FormSettings _formSettings = new FormSettings();
-        private readonly FormUnavailability _formUnavail = new FormUnavailability();
+
         private readonly History<Timetable> _history = new History<Timetable>(50);
         private readonly Size _imageSize = new Size(1024, 768);
         private readonly OpenFileDialog _openDialogXml = new OpenFileDialog();
@@ -1114,12 +1114,14 @@ namespace UniTimetable.ViewControllers
 
         private void UnavailabilityToolStripMenuItemClick(object sender, EventArgs e)
         {
+            //TODO:
+            /*var formUnavail = new FormUnavailability();
             if (
-                _formUnavail.ShowDialog(Timetable,
+                formUnavail.ShowDialog(Timetable,
                     new Timeslot(_clickTime.Day, _clickTime.Hour, 0, _clickTime.Hour + 1, 0), timetableControl.HourStart,
                     timetableControl.HourEnd) == DialogResult.Cancel)
                 return;
-            MadeChanges(true);
+            MadeChanges(true);*/
         }
 
         private void StreamMenuClosed(object sender, ToolStripDropDownClosedEventArgs e)
@@ -1136,8 +1138,9 @@ namespace UniTimetable.ViewControllers
         private void EditUnavailable()
         {
             if (_clickUnavail == null) return;
+            var formUnavail = new FormUnavailability();
             if (
-                _formUnavail.ShowDialog(Timetable, _clickUnavail, timetableControl.HourStart,
+                formUnavail.ShowDialog(Timetable, _clickUnavail, timetableControl.HourStart,
                     timetableControl.HourEnd) == DialogResult.Cancel)
                 return;
             MadeChanges(true);

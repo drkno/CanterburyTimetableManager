@@ -83,7 +83,8 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
                 default:
                     return;
             }
-            var session = new Session(currentDay, subs.Date.Hour,
+            
+            var session = new Session(currentDay, subs.Date.DayOfYear, subs.Date.Hour,
                 subs.Date.Minute, endTime.Hour, endTime.Minute, subs.Location);
 
             Subject subject;

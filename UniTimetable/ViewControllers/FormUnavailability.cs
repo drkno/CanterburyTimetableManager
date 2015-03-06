@@ -11,10 +11,10 @@ namespace UniTimetable.ViewControllers
 {
     partial class FormUnavailability : Form
     {
-        private int Earliest_ = 8;
-        private int Latest_ = 21;
-        private Timetable Timetable_;
-        private Unavailability Unavail_;
+        private int _earliest = 8;
+        private int _latest = 21;
+        private Timetable _timetable;
+        private Unavailability _unavail;
 
         public FormUnavailability()
         {
@@ -23,10 +23,10 @@ namespace UniTimetable.ViewControllers
 
         public DialogResult ShowDialog(Timetable timetable, Unavailability unavail, int earliest, int latest)
         {
-            Timetable_ = timetable;
-            Unavail_ = unavail;
-            Earliest_ = earliest;
-            Latest_ = latest;
+            _timetable = timetable;
+            _unavail = unavail;
+            _earliest = earliest;
+            _latest = latest;
             return base.ShowDialog();
         }
 
@@ -35,50 +35,35 @@ namespace UniTimetable.ViewControllers
             return ShowDialog(timetable, new Unavailability("", timeslot), earliest, latest);
         }
 
-        public new DialogResult ShowDialog()
-        {
-            throw new Exception("No input was provided.");
-        }
-
-        private void FormUnavailability_Load(object sender, EventArgs e)
+        private void FormUnavailabilityLoad(object sender, EventArgs e)
         {
             // if we're editing
-            if (Unavail_ != null)
+            if (_unavail != null)
             {
                 // copy the data out from the timeslot into the inputs
-                txtName.Text = Unavail_.Name;
-                ddDay.SelectedIndex = Unavail_.Day;
-                timeStart.Value = timeStart.Value.Date.AddMinutes(Unavail_.StartTotalMinutes);
-                timeEnd.Value = timeEnd.Value.Date.AddMinutes(Unavail_.EndTotalMinutes);
+                textBoxName.Text = _unavail.Name;
+                dateTimePickerStart.Value = dateTimePickerStart.Value.AddMinutes(_unavail.StartTotalMinutes);
+                dateTimePickerEnd.Value = dateTimePickerEnd.Value.AddMinutes(_unavail.EndTotalMinutes);
             }
             else
             {
                 // reset inputs to default/blank
-                txtName.Clear();
-                ddDay.SelectedIndex = -1;
-                timeStart.Value = timeStart.MinDate.Date.AddHours(9);
-                timeEnd.Value = timeEnd.MinDate.Date.AddHours(17);
+                textBoxName.Clear();
+                var now = DateTime.Now;
+                dateTimePickerStart.Value = new DateTime(now.Year, now.Month, now.Day, 12, 0, 0);
+                dateTimePickerEnd.Value = dateTimePickerStart.Value;
             }
-            txtName.Focus();
+            textBoxName.Focus();
         }
 
-        private void btnOK_Click(object sender, EventArgs e)
+        private void ButtonOkClick(object sender, EventArgs e)
         {
             // take focus away from time pickers
-            btnOK.Focus();
-
-            // if no day is selected
-            if (ddDay.SelectedIndex == -1)
-            {
-                MessageBox.Show("Please select a day.", "Unavailable Timeslot", MessageBoxButtons.OK,
-                    MessageBoxIcon.Exclamation);
-                ddDay.Focus();
-                return;
-            }
+            buttonOK.Focus();
 
             // get start and end times from input
-            TimeOfDay start = TimeOfDay.FromDateTime(timeStart.Value);
-            TimeOfDay end = TimeOfDay.FromDateTime(timeEnd.Value);
+            var start = TimeOfDay.FromDateTime(dateTimePickerStart.Value);
+            var end = TimeOfDay.FromDateTime(dateTimePickerEnd.Value);
             // if it starts before it ends
             if (start >= end)
             {
@@ -88,32 +73,32 @@ namespace UniTimetable.ViewControllers
             }
 
             // if it's not within the scope of the timetable
-            if (end <= new TimeOfDay(Earliest_, 0))
+            if (end <= new TimeOfDay(_earliest, 0))
             {
-                MessageBox.Show("End time must be after 8am.", "Unavailable Timeslot", MessageBoxButtons.OK,
+                MessageBox.Show("End time must be after " + _earliest + "am.", "Unavailable Timeslot", MessageBoxButtons.OK,
                     MessageBoxIcon.Exclamation);
-                timeEnd.Focus();
+                dateTimePickerEnd.Focus();
                 return;
             }
-            if (start >= new TimeOfDay(Latest_, 0))
+            if (start >= new TimeOfDay(_latest, 0))
             {
-                MessageBox.Show("Start time must be before 9pm.", "Unavailable Timeslot", MessageBoxButtons.OK,
+                MessageBox.Show("Start time must be before " + _latest + "pm.", "Unavailable Timeslot", MessageBoxButtons.OK,
                     MessageBoxIcon.Exclamation);
-                timeStart.Focus();
+                dateTimePickerStart.Focus();
                 return;
             }
 
             // clip the timeslot to be within the bounds of the timetable
-            if (start < new TimeOfDay(Earliest_, 0))
-                start = new TimeOfDay(Earliest_, 0);
-            if (end > new TimeOfDay(Latest_, 0))
-                end = new TimeOfDay(Latest_, 0);
+            if (start < new TimeOfDay(_earliest, 0))
+                start = new TimeOfDay(_earliest, 0);
+            if (end > new TimeOfDay(_latest, 0))
+                end = new TimeOfDay(_latest, 0);
 
             // build new unavailability from input
-            Unavailability unavail = new Unavailability(txtName.Text, ddDay.SelectedIndex, start.Hour, start.Minute,
-                end.Hour, end.Minute);
+            var unavail = new Unavailability(textBoxName.Text, (int)dateTimePickerStart.Value.DayOfWeek,
+                dateTimePickerStart.Value.DayOfYear, start.Hour, start.Minute, end.Hour, end.Minute);
 
-            if (Unavail_ != null && Unavail_.EquivalentTo(unavail) && Unavail_.Name == unavail.Name)
+            if (_unavail != null && _unavail.EquivalentTo(unavail) && _unavail.Name == unavail.Name)
             {
                 DialogResult = DialogResult.Cancel;
                 Close();
@@ -121,31 +106,31 @@ namespace UniTimetable.ViewControllers
             }
 
             // if editing, remove the old timeslot
-            if (Unavail_ != null)
-                Timetable_.UnavailableList.Remove(Unavail_);
+            if (_unavail != null)
+                _timetable.UnavailableList.Remove(_unavail);
 
             // if it doesn't fit in the current timetable
-            if (!Timetable_.FreeDuring(unavail, true))
+            if (!_timetable.FreeDuring(unavail, true))
             {
                 MessageBox.Show("Selected time slot is currently occupied.", "Unavailable Timeslot",
                     MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 // if editing, add the old timeslot back in
-                if (Unavail_ != null)
-                    Timetable_.UnavailableList.Add(Unavail_);
+                if (_unavail != null)
+                    _timetable.UnavailableList.Add(_unavail);
                 return;
             }
 
             // insert the edited timeslot
-            Timetable_.UnavailableList.Add(unavail);
+            _timetable.UnavailableList.Add(unavail);
 
             // recompute solutions
-            Timetable_.RecomputeSolutions = true;
+            _timetable.RecomputeSolutions = true;
             // return
             DialogResult = DialogResult.OK;
             Close();
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+        private void ButtonCancelClick(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
             Close();

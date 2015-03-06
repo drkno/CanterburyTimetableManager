@@ -10,9 +10,11 @@ namespace UniTimetable.Model.Timetable
 {
     public class Timeslot : IComparable<Timeslot>
     {
-        protected int Day_;
-        protected TimeOfDay End_;
-        protected TimeOfDay Start_;
+        private readonly int _startYearDay, _endYearDay;
+        private TimeOfDay _end, _start;
+        private readonly string _weekPattern;
+        private const ushort WeekLength = 7;
+        private const char WeekInstance = '1';
 
         #region IComparable<Timeslot> Members
 
@@ -20,42 +22,68 @@ namespace UniTimetable.Model.Timetable
         {
             int result;
             // first compare days
-            if ((result = Day_.CompareTo(other.Day_)) != 0)
+            if ((result = Day.CompareTo(other.Day)) != 0)
                 return result;
             // same day - compare starts
-            if ((result = Start_.CompareTo(other.Start_)) != 0)
+            if ((result = _start.CompareTo(other._start)) != 0)
                 return result;
             // same start - compare end
-            return End_.CompareTo(other.End_);
+            return _end.CompareTo(other._end);
         }
 
         #endregion
 
         public bool ClashesWith(Timeslot other)
         {
-            // return true if on the same day
-            return ((Day_ == other.Day_)
+            // if on the same day
+            var initialCheck = ((Day == other.Day)
                 // and object's start time is within the other's period
-                    && ((Start_ >= other.Start_ && Start_ < other.End_)
+                    && ((_start >= other._start && _start < other._end)
                         // or object's end time is within the other's period
-                        || (End_ > other.Start_ && End_ <= other.End_)
+                        || (_end > other._start && _end <= other._end)
                         // or start/end times are either side
-                        || (Start_ <= other.Start_ && End >= other.End_)));
+                        || (_start <= other._start && End >= other._end)));
+
+            if (string.IsNullOrWhiteSpace(_weekPattern) || !initialCheck || 
+                other._endYearDay < _startYearDay || _endYearDay < other._startYearDay)
+            {
+                return initialCheck;
+            }
+
+            var difference = (other._startYearDay - _startYearDay)/WeekLength;
+            int i = 0, j = 0;
+            if (difference < 0)
+            {
+                i = difference * -1;
+            }
+            else
+            {
+                j = difference;
+            }
+
+            for (; i < _weekPattern.Length && j < other._weekPattern.Length; i++, j++)
+            {
+                if (_weekPattern[i] == WeekInstance && other._weekPattern[j] == WeekInstance)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public bool EquivalentTo(Timeslot other)
         {
             // return true if they're at the same time
-            return (Day_ == other.Day_
-                    && Start_ == other.Start_
-                    && End_ == other.End_);
+            return (Day == other.Day
+                    && _start == other._start
+                    && _end == other._end);
         }
 
         #region Base methods
 
         public override string ToString()
         {
-            return DayOfWeek + " " + Start_ + "-" + End_;
+            return DayOfWeek + " " + _start + "-" + _end;
         }
 
         #endregion
@@ -64,30 +92,33 @@ namespace UniTimetable.Model.Timetable
 
         public Timeslot()
         {
-            Day_ = -1;
-            Start_ = TimeOfDay.Minimum;
-            End_ = TimeOfDay.Maximum;
+            Day = -1;
+            _start = TimeOfDay.Minimum;
+            _end = TimeOfDay.Maximum;
         }
 
         public Timeslot(Timeslot other)
         {
-            Day_ = other.Day_;
-            Start_ = new TimeOfDay(other.Start_);
-            End_ = new TimeOfDay(other.End_);
+            Day = other.Day;
+            _start = new TimeOfDay(other._start);
+            _end = new TimeOfDay(other._end);
         }
 
         public Timeslot(int day, TimeOfDay start, TimeOfDay end)
         {
-            Day_ = day;
-            Start_ = new TimeOfDay(start);
-            End_ = new TimeOfDay(end);
+            Day = day;
+            _start = new TimeOfDay(start);
+            _end = new TimeOfDay(end);
         }
 
-        public Timeslot(int day, int startHour, int startMinute, int endHour, int endMinute)
+        public Timeslot(int day, int startYearDay, int startHour, int startMinute, int endHour, int endMinute, string weekPattern = "")
         {
-            Day_ = day;
-            Start_ = new TimeOfDay(startHour, startMinute);
-            End_ = new TimeOfDay(endHour, endMinute);
+            Day = day;
+            _startYearDay = startYearDay;
+            _endYearDay = startYearDay + WeekLength * (weekPattern.Length - 1);
+            _start = new TimeOfDay(startHour, startMinute);
+            _end = new TimeOfDay(endHour, endMinute);
+            _weekPattern = weekPattern;
         }
 
         #endregion
@@ -100,14 +131,14 @@ namespace UniTimetable.Model.Timetable
         /// </summary>
         public TimeOfDay StartTime
         {
-            get { return Start_; }
+            get { return _start; }
             set
             {
-                if (value > End_)
+                if (value > _end)
                 {
                     throw new Exception("Start time cannot be before end time.");
                 }
-                Start_ = value;
+                _start = value;
             }
         }
 
@@ -117,14 +148,14 @@ namespace UniTimetable.Model.Timetable
         /// </summary>
         public TimeOfDay EndTime
         {
-            get { return End_; }
+            get { return _end; }
             set
             {
-                if (value < Start_)
+                if (value < _start)
                 {
                     throw new Exception("End time cannot be before start time.");
                 }
-                End_ = value;
+                _end = value;
             }
         }
 
@@ -134,7 +165,7 @@ namespace UniTimetable.Model.Timetable
         /// </summary>
         public TimeOfWeek Start
         {
-            get { return new TimeOfWeek(Day_, Start_); }
+            get { return new TimeOfWeek(Day, _start); }
         }
 
         [XmlIgnore]
@@ -143,18 +174,14 @@ namespace UniTimetable.Model.Timetable
         /// </summary>
         public TimeOfWeek End
         {
-            get { return new TimeOfWeek(Day_, End_); }
+            get { return new TimeOfWeek(Day, _end); }
         }
 
         [XmlAttribute("day")]
         /// <summary>
         /// Gets or sets the day as an integer.
         /// </summary>
-        public int Day
-        {
-            get { return Day_; }
-            set { Day_ = value; }
-        }
+        public int Day { get; set; }
 
         [XmlIgnore]
         /// <summary>
@@ -162,8 +189,8 @@ namespace UniTimetable.Model.Timetable
         /// </summary>
         public DayOfWeek DayOfWeek
         {
-            get { return (DayOfWeek) Day_; }
-            set { Day_ = (int) value; }
+            get { return (DayOfWeek) Day; }
+            set { Day = (int) value; }
         }
 
         [XmlIgnore]
@@ -172,7 +199,7 @@ namespace UniTimetable.Model.Timetable
         /// </summary>
         public TimeLength Length
         {
-            get { return End_ - Start_; }
+            get { return _end - _start; }
         }
 
         [XmlIgnore]
@@ -181,7 +208,7 @@ namespace UniTimetable.Model.Timetable
         /// </summary>
         public int TotalMinutes
         {
-            get { return End_.DayMinutes - Start_.DayMinutes; }
+            get { return _end.DayMinutes - _start.DayMinutes; }
         }
 
         [XmlIgnore]
@@ -190,16 +217,16 @@ namespace UniTimetable.Model.Timetable
         /// </summary>
         public int StartHour
         {
-            get { return Start_.Hour; }
+            get { return _start.Hour; }
             set
             {
-                TimeOfDay newStart = new TimeOfDay(Start_);
+                TimeOfDay newStart = new TimeOfDay(_start);
                 newStart.Hour = value;
                 /*if (newStart > End_)
                 {
                     throw new Exception("Start time cannot be after end time.");
                 }*/
-                Start_.Hour = value;
+                _start.Hour = value;
             }
         }
 
@@ -209,16 +236,16 @@ namespace UniTimetable.Model.Timetable
         /// </summary>
         public int StartMinute
         {
-            get { return Start_.Minute; }
+            get { return _start.Minute; }
             set
             {
-                TimeOfDay newStart = new TimeOfDay(Start_);
+                TimeOfDay newStart = new TimeOfDay(_start);
                 newStart.Minute = value;
                 /*if (newStart > End_)
                 {
                     throw new Exception("Start time cannot be after end time.");
                 }*/
-                Start_.Minute = value;
+                _start.Minute = value;
             }
         }
 
@@ -228,7 +255,7 @@ namespace UniTimetable.Model.Timetable
         /// </summary>
         public int StartTotalMinutes
         {
-            get { return Start_.DayMinutes; }
+            get { return _start.DayMinutes; }
             set
             {
                 TimeOfDay newStart = new TimeOfDay();
@@ -237,7 +264,7 @@ namespace UniTimetable.Model.Timetable
                 {
                     throw new Exception("Start time cannot be after end time.");
                 }*/
-                Start_.DayMinutes = value;
+                _start.DayMinutes = value;
             }
         }
 
@@ -247,16 +274,16 @@ namespace UniTimetable.Model.Timetable
         /// </summary>
         public int EndHour
         {
-            get { return End_.Hour; }
+            get { return _end.Hour; }
             set
             {
-                TimeOfDay newEnd = new TimeOfDay(End_);
+                TimeOfDay newEnd = new TimeOfDay(_end);
                 newEnd.Hour = value;
                 /*if (newEnd < Start_)
                 {
                     throw new Exception("End time cannot be before start time.");
                 }*/
-                End_.Hour = value;
+                _end.Hour = value;
             }
         }
 
@@ -266,16 +293,16 @@ namespace UniTimetable.Model.Timetable
         /// </summary>
         public int EndMinute
         {
-            get { return End_.Minute; }
+            get { return _end.Minute; }
             set
             {
-                TimeOfDay newEnd = new TimeOfDay(End_);
+                TimeOfDay newEnd = new TimeOfDay(_end);
                 newEnd.Minute = value;
                 /*if (newEnd < Start_)
                 {
                     throw new Exception("End time cannot be before start time.");
                 }*/
-                End_.Minute = value;
+                _end.Minute = value;
             }
         }
 
@@ -285,7 +312,7 @@ namespace UniTimetable.Model.Timetable
         /// </summary>
         public int EndTotalMinutes
         {
-            get { return End_.DayMinutes; }
+            get { return _end.DayMinutes; }
             set
             {
                 TimeOfDay newEnd = new TimeOfDay();
@@ -294,7 +321,7 @@ namespace UniTimetable.Model.Timetable
                 {
                     throw new Exception("End time cannot be before start time.");
                 }*/
-                End_.DayMinutes = value;
+                _end.DayMinutes = value;
             }
         }
 
