@@ -1,4 +1,4 @@
-namespace UniTimetable.ViewControllers
+namespace UniTimetable.ViewControllers.CriteriaFilters
 {
     partial class FormFilterDetails
     {

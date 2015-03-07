@@ -15,6 +15,7 @@ using UniTimetable.Model;
 using UniTimetable.Model.Solver;
 using UniTimetable.Model.Time;
 using UniTimetable.Model.Timetable;
+using UniTimetable.ViewControllers.CriteriaFilters;
 using Stream = UniTimetable.Model.Timetable.Stream;
 using Type = UniTimetable.Model.Timetable.Type;
 

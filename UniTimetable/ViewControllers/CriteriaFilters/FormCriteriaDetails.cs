@@ -6,7 +6,7 @@ using UniTimetable.Model.Solver;
 
 #endregion
 
-namespace UniTimetable.ViewControllers
+namespace UniTimetable.ViewControllers.CriteriaFilters
 {
     public partial class FormCriteriaDetails : Form
     {

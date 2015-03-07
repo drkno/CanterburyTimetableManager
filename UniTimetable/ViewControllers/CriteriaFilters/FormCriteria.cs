@@ -8,7 +8,7 @@ using UniTimetable.Model.Solver;
 
 #endregion
 
-namespace UniTimetable.ViewControllers
+namespace UniTimetable.ViewControllers.CriteriaFilters
 {
     public partial class FormCriteria : Form
     {
@@ -219,10 +219,14 @@ namespace UniTimetable.ViewControllers
             var formDetails = new FormCriteriaDetails();
             var criteria = formDetails.ShowDialog(null);
             if (criteria == null)
+            {
                 return;
+            }
             var index = listBoxCriteria.SelectedIndex;
             if (index == -1)
+            {
                 index = listBoxCriteria.Items.Count;
+            }
             listBoxCriteria.Items.Insert(index, criteria);
 
             comboBoxPresets.SelectedIndex = -1;

@@ -122,10 +122,10 @@
     <Compile Include="ViewControllers\FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewControllers\FormFilterDetails.cs">
+    <Compile Include="ViewControllers\CriteriaFilters\FormFilterDetails.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ViewControllers\FormFilterDetails.Designer.cs">
+    <Compile Include="ViewControllers\CriteriaFilters\FormFilterDetails.Designer.cs">
       <DependentUpon>FormFilterDetails.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewControllers\FormProgress.cs">
@@ -161,11 +161,11 @@
       <SubType>Designer</SubType>
       <DependentUpon>EtchedLine.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ViewControllers\FormCriteria.resx">
+    <EmbeddedResource Include="ViewControllers\CriteriaFilters\FormCriteria.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormCriteria.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ViewControllers\FormCriteriaDetails.resx">
+    <EmbeddedResource Include="ViewControllers\CriteriaFilters\FormCriteriaDetails.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormCriteriaDetails.cs</DependentUpon>
     </EmbeddedResource>
@@ -177,7 +177,7 @@
       <SubType>Designer</SubType>
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ViewControllers\FormFilterDetails.resx">
+    <EmbeddedResource Include="ViewControllers\CriteriaFilters\FormFilterDetails.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormFilterDetails.cs</DependentUpon>
     </EmbeddedResource>
@@ -244,16 +244,16 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Resources\Find.png" />
-    <Compile Include="ViewControllers\FormCriteria.cs">
+    <Compile Include="ViewControllers\CriteriaFilters\FormCriteria.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ViewControllers\FormCriteria.Designer.cs">
+    <Compile Include="ViewControllers\CriteriaFilters\FormCriteria.Designer.cs">
       <DependentUpon>FormCriteria.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewControllers\FormCriteriaDetails.cs">
+    <Compile Include="ViewControllers\CriteriaFilters\FormCriteriaDetails.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ViewControllers\FormCriteriaDetails.Designer.cs">
+    <Compile Include="ViewControllers\CriteriaFilters\FormCriteriaDetails.Designer.cs">
       <DependentUpon>FormCriteriaDetails.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewControllers\FormSettings.cs">

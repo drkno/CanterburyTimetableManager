@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using UniTimetable.Model.Solver;
 using UniTimetable.Model.Timetable;
+using UniTimetable.ViewControllers.CriteriaFilters;
 
 #endregion
 
