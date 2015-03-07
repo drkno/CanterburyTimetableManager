@@ -85,6 +85,9 @@
     </Compile>
     <Compile Include="Resources\Resources.cs" />
     <Compile Include="Model\ColorScheme.cs" />
+    <Compile Include="ViewControllers\CriteriaFilters\CriteriaListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ViewControllers\EtchedLine.cs">
       <SubType>UserControl</SubType>
     </Compile>

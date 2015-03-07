@@ -31,7 +31,7 @@ namespace UniTimetable.ViewControllers.CriteriaFilters
             {
                 return;
             }
-            var preset = Solver.Presets[index];
+            var preset = (Solver.Preset)Solver.Presets[index];
             LoadLists(preset.Criteria, preset.Filters);
         }
 
@@ -75,45 +75,6 @@ namespace UniTimetable.ViewControllers.CriteriaFilters
         #endregion
 
         #region Criteria list
-
-        private void ListBoxCriteriaDrawItem(object sender, DrawItemEventArgs e)
-        {
-            e.DrawBackground();
-
-            if (listBoxCriteria.Items.Count == 0)
-                return;
-
-            var g = e.Graphics;
-            var criteria = (Solver.Criteria) listBoxCriteria.Items[e.Index];
-
-            const int margin = 2;
-            var r = new Rectangle(e.Bounds.X + margin, e.Bounds.Y + margin, e.Bounds.Width - 2*margin,
-                e.Bounds.Height - 2*margin);
-
-            var format = new StringFormat {Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Near};
-
-            // heading: name
-            const int nameLeft = 5, nameTop = 5;
-            var font = new Font("Microsoft Sans Serif", 11f, FontStyle.Bold);
-            var q = new Rectangle(r.X + nameLeft, r.Y + nameTop, r.Width - nameLeft, r.Height - nameTop);
-            g.DrawString(criteria.Field.ToString(), font, Brushes.Black, q, format);
-
-            // subheading: preference
-            const int prefLeft = 20, prefTop = 25;
-            font = new Font("Microsoft Sans Serif", 8.25f, FontStyle.Regular);
-            q = new Rectangle(r.X + prefLeft, r.Y + prefTop, r.Width - prefLeft, r.Height - prefTop);
-            string text = "Preference: " + Solver.Criteria.FieldSpecificPreference(criteria);
-            g.DrawString(text, font, Brushes.Black, q, format);
-
-            // top right corner: criteria number
-            const int numRight = 3, numTop = 3;
-            format.Alignment = StringAlignment.Far;
-            font = new Font("Microsoft Sans Serif", 8.25f, FontStyle.Regular);
-            q = new Rectangle(r.X, r.Y + numTop, r.Width - numRight, r.Height - numTop);
-            g.DrawString((e.Index + 1).ToString(), font, Brushes.Black, q, format);
-
-            g.DrawRectangle(Pens.Black, r);
-        }
 
         private void ListBoxCriteriaMouseDown(object sender, MouseEventArgs e)
         {
@@ -280,42 +241,6 @@ namespace UniTimetable.ViewControllers.CriteriaFilters
 
         #region Filter list
 
-        private void ListBoxFiltersDrawItem(object sender, DrawItemEventArgs e)
-        {
-            e.DrawBackground();
-
-            if (listBoxFilters.Items.Count == 0)
-            {
-                return;
-            }
-
-            var g = e.Graphics;
-            var filter = (Solver.Filter) listBoxFilters.Items[e.Index];
-
-            const int margin = 2;
-            var r = new Rectangle(e.Bounds.X + margin, e.Bounds.Y + margin, e.Bounds.Width - 2*margin,
-                e.Bounds.Height - 2*margin);
-
-            var format = new StringFormat {Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Near};
-
-            // header: field name
-            const int nameLeft = 5, nameTop = 5;
-            var font = new Font("Microsoft Sans Serif", 11f, FontStyle.Bold);
-            var q = new Rectangle(r.X + nameLeft, r.Y + nameTop, r.Width - nameLeft, r.Height - nameTop);
-            g.DrawString(filter.Field.ToString(), font, Brushes.Black, q, format);
-
-            // subheading: details of filter
-            const int specLeft = 20, specTop = 25;
-            font = new Font("Microsoft Sans Serif", 8.25f, FontStyle.Regular);
-            q = new Rectangle(r.X + specLeft, r.Y + specTop, r.Width - specLeft, r.Height - specTop);
-            var text = (filter.Exclude ? "Must not" : "Must") + " be " +
-                          Solver.Filter.FieldSpecificTest(filter) + " " +
-                          filter.ValueToString();
-            g.DrawString(text, font, Brushes.Black, q, format);
-
-            g.DrawRectangle(Pens.Black, r);
-        }
-
         private void ListBoxFiltersMouseDown(object sender, MouseEventArgs e)
         {
             // didn't click on an item, so deselect
@@ -330,7 +255,9 @@ namespace UniTimetable.ViewControllers.CriteriaFilters
         {
             var index = listBoxFilters.IndexFromPoint(e.Location);
             if (index < 0)
+            {
                 return;
+            }
             EditFilter();
         }
 
@@ -423,13 +350,6 @@ namespace UniTimetable.ViewControllers.CriteriaFilters
         #endregion
 
         #region Main buttons
-
-        private void ButtonRevertClick(object sender, EventArgs e)
-        {
-            LoadLists(_solver);
-            // not preset anymore
-            comboBoxPresets.SelectedIndex = -1;
-        }
 
         private void ButtonOkClick(object sender, EventArgs e)
         {

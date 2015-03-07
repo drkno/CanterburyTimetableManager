@@ -29,8 +29,8 @@ namespace UniTimetable.ViewControllers.CriteriaFilters
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormCriteria));
-            this.listBoxCriteria = new System.Windows.Forms.ListBox();
-            this.listBoxFilters = new System.Windows.Forms.ListBox();
+            this.listBoxCriteria = new UniTimetable.ViewControllers.CriteriaFilters.CriteriaListBox();
+            this.listBoxFilters = new UniTimetable.ViewControllers.CriteriaFilters.CriteriaListBox();
             this.buttonCriteriaAdd = new System.Windows.Forms.Button();
             this.buttonCriteriaEdit = new System.Windows.Forms.Button();
             this.buttonCriteriaRemove = new System.Windows.Forms.Button();
@@ -39,7 +39,6 @@ namespace UniTimetable.ViewControllers.CriteriaFilters
             this.buttonFiltersRemove = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.buttonRevert = new System.Windows.Forms.Button();
             this.labelPreset = new System.Windows.Forms.Label();
             this.comboBoxPresets = new System.Windows.Forms.ComboBox();
             this.groupBoxFilters = new System.Windows.Forms.GroupBox();
@@ -51,15 +50,16 @@ namespace UniTimetable.ViewControllers.CriteriaFilters
             // listBoxCriteria
             // 
             this.listBoxCriteria.AllowDrop = true;
+            this.listBoxCriteria.CriteriaOrFilter = UniTimetable.ViewControllers.CriteriaFilters.CriteriaListBox.CriteriaFilter.Critera;
             this.listBoxCriteria.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.listBoxCriteria.FormattingEnabled = true;
             this.listBoxCriteria.IntegralHeight = false;
             this.listBoxCriteria.ItemHeight = 50;
             this.listBoxCriteria.Location = new System.Drawing.Point(15, 19);
             this.listBoxCriteria.Name = "listBoxCriteria";
+            this.listBoxCriteria.ShowItemNumber = true;
             this.listBoxCriteria.Size = new System.Drawing.Size(250, 300);
             this.listBoxCriteria.TabIndex = 0;
-            this.listBoxCriteria.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.ListBoxCriteriaDrawItem);
             this.listBoxCriteria.DragDrop += new System.Windows.Forms.DragEventHandler(this.ListBoxCriteriaDragDrop);
             this.listBoxCriteria.DragEnter += new System.Windows.Forms.DragEventHandler(this.ListBoxCriteriaDragEnter);
             this.listBoxCriteria.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ListBoxCriteriaKeyDown);
@@ -69,15 +69,16 @@ namespace UniTimetable.ViewControllers.CriteriaFilters
             // listBoxFilters
             // 
             this.listBoxFilters.AllowDrop = true;
+            this.listBoxFilters.CriteriaOrFilter = UniTimetable.ViewControllers.CriteriaFilters.CriteriaListBox.CriteriaFilter.Filter;
             this.listBoxFilters.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.listBoxFilters.FormattingEnabled = true;
             this.listBoxFilters.IntegralHeight = false;
             this.listBoxFilters.ItemHeight = 50;
             this.listBoxFilters.Location = new System.Drawing.Point(15, 19);
             this.listBoxFilters.Name = "listBoxFilters";
+            this.listBoxFilters.ShowItemNumber = false;
             this.listBoxFilters.Size = new System.Drawing.Size(250, 300);
             this.listBoxFilters.TabIndex = 1;
-            this.listBoxFilters.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.ListBoxFiltersDrawItem);
             this.listBoxFilters.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ListBoxFiltersKeyDown);
             this.listBoxFilters.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListBoxFiltersMouseDoubleClick);
             this.listBoxFilters.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ListBoxFiltersMouseDown);
@@ -165,17 +166,6 @@ namespace UniTimetable.ViewControllers.CriteriaFilters
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.ButtonCancelClick);
             // 
-            // buttonRevert
-            // 
-            this.buttonRevert.Location = new System.Drawing.Point(244, 376);
-            this.buttonRevert.Name = "buttonRevert";
-            this.buttonRevert.Size = new System.Drawing.Size(164, 23);
-            this.buttonRevert.TabIndex = 9;
-            this.buttonRevert.Text = "Revert Changes";
-            this.buttonRevert.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.buttonRevert.UseVisualStyleBackColor = true;
-            this.buttonRevert.Click += new System.EventHandler(this.ButtonRevertClick);
-            // 
             // labelPreset
             // 
             this.labelPreset.Location = new System.Drawing.Point(10, 378);
@@ -232,7 +222,6 @@ namespace UniTimetable.ViewControllers.CriteriaFilters
             this.Controls.Add(this.labelPreset);
             this.Controls.Add(this.comboBoxPresets);
             this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.buttonRevert);
             this.Controls.Add(this.btnOk);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -250,8 +239,8 @@ namespace UniTimetable.ViewControllers.CriteriaFilters
 
         #endregion
 
-        private System.Windows.Forms.ListBox listBoxCriteria;
-        private System.Windows.Forms.ListBox listBoxFilters;
+        private CriteriaListBox listBoxCriteria;
+        private CriteriaListBox listBoxFilters;
         private System.Windows.Forms.Button buttonCriteriaAdd;
         private System.Windows.Forms.Button buttonCriteriaEdit;
         private System.Windows.Forms.Button buttonCriteriaRemove;
@@ -260,7 +249,6 @@ namespace UniTimetable.ViewControllers.CriteriaFilters
         private System.Windows.Forms.Button buttonFiltersRemove;
         private System.Windows.Forms.Button btnOk;
         private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.Button buttonRevert;
         private System.Windows.Forms.Label labelPreset;
         private System.Windows.Forms.ComboBox comboBoxPresets;
         private System.Windows.Forms.GroupBox groupBoxFilters;

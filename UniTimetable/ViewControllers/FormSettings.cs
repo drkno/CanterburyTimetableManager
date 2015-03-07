@@ -2,7 +2,9 @@
 
 using System;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using UniTimetable.Model;
+using UniTimetable.ViewControllers.CriteriaFilters;
 
 #endregion
 
@@ -34,7 +36,9 @@ namespace UniTimetable.ViewControllers
             _form = formMain;
             _settings = settings;
             if (base.ShowDialog() != DialogResult.OK)
+            {
                 return null;
+            }
             return new Settings(
                 checkBoxImportUnsettable.Checked,
                 checkBoxGhost.Checked,
@@ -106,7 +110,9 @@ namespace UniTimetable.ViewControllers
 
             var formCriteria = new FormCriteria();
             if (formCriteria.ShowDialog(_form.Solver) != DialogResult.OK)
+            {
                 return;
+            }
             _form.Timetable.RecomputeSolutions = true;
         }
     }
