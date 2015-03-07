@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using UniTimetable.Model.Solver;
 using UniTimetable.Model.Timetable;
@@ -13,13 +14,11 @@ namespace UniTimetable.ViewControllers
 {
     partial class FormSolution : Form
     {
-        private const string StarText = "Star It!";
-        private const string DeStarText = "De-Star It!";
-        private readonly Image _deStarImage = Image.FromStream(Resources.Resources.GetEmbeddedResourceStream("UniTimetable.Resources.DeStar.png"));
-        private readonly Color _solutionColor1 = Color.White;
-        private readonly Color _solutionColor2 = Color.LightGray;
-        private readonly Color _starColor = Color.Yellow;
-        private readonly Image _starImage = Image.FromStream(Resources.Resources.GetEmbeddedResourceStream("UniTimetable.Resources.Favorites.png"));
+        private const string MarkText = "&Mark Solution";
+        private const string UnmarkText = "Un&mark Solution";
+        private readonly Color _solutionColour1 = Color.White;
+        private readonly Color _solutionColour2 = Color.FromArgb(0xF0, 0xF0, 0xF0);
+        private readonly Color _markColour = Color.Yellow;
         private ListViewItem[] _fullListBackup;
         private Color[] _originalColors;
         private Solver _solver;
@@ -48,46 +47,44 @@ namespace UniTimetable.ViewControllers
             RebuildList();
 
             // disable buttons which can't be used yet
-            btnStar.Enabled = false;
-            btnUse.Enabled = false;
-            SetStarButton(false);
-            chkOnlyStarred.Checked = false;
+            buttonMark.Enabled = false;
+            buttonUse.Enabled = false;
+            SetMarkButton(false);
+            checkBoxOnlyMarked.Checked = false;
         }
 
         /// <summary>
         ///     Update preview and information for a new selected solution
         /// </summary>
-        private void LvbSolutionsSelectedIndexChanged(object sender, EventArgs e)
+        private void ListViewSolutionsSelectedIndexChanged(object sender, EventArgs e)
         {
             // update preview panel
             UpdatePreview();
-            // clear streams box
-            textBox1.Clear();
             // clear properties box
-            lvbProperties.Items.Clear();
+            listViewProperties.Items.Clear();
             // if nothing is selected, return
-            if (lvbSolutions.SelectedIndices.Count == 0 || lvbSolutions.SelectedIndices[0] == -1)
+            if (listViewSolutions.SelectedIndices.Count == 0 || listViewSolutions.SelectedIndices[0] == -1)
             {
-                btnStar.Enabled = false;
-                btnUse.Enabled = false;
-                SetStarButton(false);
+                buttonMark.Enabled = false;
+                buttonUse.Enabled = false;
+                SetMarkButton(false);
                 return;
             }
 
-            btnStar.Enabled = true;
-            btnUse.Enabled = true;
-            // set star button text accordingly
-            SetStarButton(lvbSolutions.SelectedItems[0].BackColor == _starColor);
+            buttonMark.Enabled = true;
+            buttonUse.Enabled = true;
+            // set mark button text accordingly
+            SetMarkButton(listViewSolutions.SelectedItems[0].BackColor == _markColour);
 
             // set the currently selected solution
-            Solver.Solution solution = (Solver.Solution) lvbSolutions.SelectedItems[0].Tag;
+            var solution = (Solver.Solution) listViewSolutions.SelectedItems[0].Tag;
 
             // a list of lists of streams selected for each subject
-            List<List<Stream>> groupedStreams = new List<List<Stream>>();
+            var groupedStreams = new List<List<Stream>>();
             // an ordered list of subjects
-            List<Subject> orderedSubjects = new List<Subject>();
+            var orderedSubjects = new List<Subject>();
             // fill the lists
-            foreach (Subject subject in _solver.Timetable.SubjectList)
+            foreach (var subject in _solver.Timetable.SubjectList)
             {
                 groupedStreams.Add(new List<Stream>());
                 orderedSubjects.Add(subject);
@@ -96,33 +93,15 @@ namespace UniTimetable.ViewControllers
             orderedSubjects.Sort();
             //orderedSubjects.Sort(new IndexComparer(m_Timetable.SubjectList));
             // fill the grouped streams list
-            foreach (Stream stream in solution.Streams)
+            foreach (var stream in solution.Streams)
             {
                 groupedStreams[orderedSubjects.IndexOf(stream.Type.Subject)].Add(stream);
             }
-            // sort each sublist and fill up the streams text box
-            for (int i = 0; i < groupedStreams.Count; i++)
-            {
-                // sort the sublist
-                groupedStreams[i].Sort();
-                // first get the name of the subject
-                textBox1.Text += orderedSubjects[i].Name + ":\r\n  ";
-                // for each stream in the subject sublist
-                for (int j = 0; j < groupedStreams[i].Count; j++)
-                {
-                    // print the stream
-                    textBox1.Text += groupedStreams[i][j].ToString();
-                    if (j != groupedStreams[i].Count - 1)
-                        textBox1.Text += ", ";
-                }
-                if (i != groupedStreams.Count - 1)
-                    textBox1.Text += "\r\n";
-            }
 
             // properties list - for each property (field)
-            for (int i = 0; i < Solver.Fields.Length; i++)
+            for (var i = 0; i < Solver.Fields.Length; i++)
             {
-                ListViewItem item = new ListViewItem(new[]
+                var item = new ListViewItem(new[]
                                                      {
                                                          // with the name of the field
                                                          Solver.Fields[i].Name,
@@ -130,24 +109,24 @@ namespace UniTimetable.ViewControllers
                                                          solution.FieldValueToString((Solver.FieldIndex) i)
                                                      });
 
-                lvbProperties.Items.Add(item);
+                listViewProperties.Items.Add(item);
             }
         }
 
-        private void BtnUseClick(object sender, EventArgs e)
+        private void ButtonUseClick(object sender, EventArgs e)
         {
             // nothing selected
-            if (lvbSolutions.SelectedIndices.Count <= 0 || lvbSolutions.SelectedIndices[0] == -1)
+            if (listViewSolutions.SelectedIndices.Count <= 0 || listViewSolutions.SelectedIndices[0] == -1)
                 return;
 
             // set the currently selected solution
-            Solver.Solution solution = (Solver.Solution) lvbSolutions.SelectedItems[0].Tag;
+            var solution = (Solver.Solution) listViewSolutions.SelectedItems[0].Tag;
             _solver.Timetable.LoadSolution(solution);
             DialogResult = DialogResult.OK;
             Close();
         }
 
-        private void BtnCriteriaClick(object sender, EventArgs e)
+        private void ButtonCriteriaClick(object sender, EventArgs e)
         {
             var formCriteria = new FormCriteria();
             // if the criteria dialog was shown and nothing changed, all good
@@ -161,89 +140,83 @@ namespace UniTimetable.ViewControllers
             Reset();
         }
 
-        private void BtnStarClick(object sender, EventArgs e)
+        private void ButtonMarkClick(object sender, EventArgs e)
         {
             // nothing selected
-            if (lvbSolutions.SelectedIndices.Count == 0 || lvbSolutions.SelectedIndices[0] == -1)
+            if (listViewSolutions.SelectedIndices.Count == 0 || listViewSolutions.SelectedIndices[0] == -1)
                 return;
             // get the selected item
-            ListViewItem item = lvbSolutions.SelectedItems[0];
+            var item = listViewSolutions.SelectedItems[0];
 
-            // if we're only viewing starred
-            if (chkOnlyStarred.Checked)
+            // if we're only viewing marked
+            if (checkBoxOnlyMarked.Checked)
             {
                 // get the solution
-                Solver.Solution solution = (Solver.Solution) item.Tag;
+                var solution = (Solver.Solution) item.Tag;
                 // remove the item from the list
-                lvbSolutions.Items.RemoveAt(lvbSolutions.SelectedIndices[0]);
-                // search for the item in the backup list and destar it
-                for (int i = 0; i < _fullListBackup.Length; i++)
+                listViewSolutions.Items.RemoveAt(listViewSolutions.SelectedIndices[0]);
+                // search for the item in the backup list and unmark it
+                for (var i = 0; i < _fullListBackup.Length; i++)
                 {
-                    if ((Solver.Solution) _fullListBackup[i].Tag == solution)
-                    {
-                        _fullListBackup[i].ImageIndex = -1;
-                        _fullListBackup[i].BackColor = _originalColors[i];
-                        break;
-                    }
+                    if ((Solver.Solution) _fullListBackup[i].Tag != solution) continue;
+                    _fullListBackup[i].ImageIndex = -1;
+                    _fullListBackup[i].BackColor = _originalColors[i];
+                    break;
                 }
             }
-            // if it is starred already
-            if (item.BackColor == _starColor)
+            // if it is mark already
+            if (item.BackColor == _markColour)
             {
-                lvbSolutions.SelectedItems[0].ImageIndex = -1;
-                lvbSolutions.SelectedItems[0].BackColor = _originalColors[lvbSolutions.SelectedIndices[0]];
+                listViewSolutions.SelectedItems[0].ImageIndex = -1;
+                listViewSolutions.SelectedItems[0].BackColor = _originalColors[listViewSolutions.SelectedIndices[0]];
                 // set button text
-                SetStarButton(false);
+                SetMarkButton(false);
             }
             else
             {
                 item.ImageIndex = 0;
-                item.BackColor = _starColor;
+                item.BackColor = _markColour;
                 // set button text
-                SetStarButton(true);
+                SetMarkButton(true);
             }
             // reselect list view box
-            lvbSolutions.Select();
+            listViewSolutions.Select();
         }
 
         private void RebuildList()
         {
-            // clear the outputs
-            // TODO: clean up at all?
-            lvbSolutions.Items.Clear();
+            listViewSolutions.Items.Clear();
             UpdatePreview();
-            textBox1.Clear();
-            lvbProperties.Items.Clear();
-            lvbSolutions.Columns.Clear();
+            listViewProperties.Items.Clear();
+            listViewSolutions.Columns.Clear();
             _originalColors = new Color[_solver.Solutions.Count];
-            int i;
 
-            // create a dummy column - first column must be left-aligned
-            var dummy = new ColumnHeader {Text = "", Width = 24};
-            lvbSolutions.Columns.Add(dummy);
-            // redo all the columns
+            var solutionNumberColumn = new ColumnHeader {Text = "#", Width = 25};
+            listViewSolutions.Columns.Add(solutionNumberColumn);
+
+            int i;
             for (i = 0; i < _solver.Comparer.Criteria.Count; i++)
             {
                 var columnHeader = new ColumnHeader
                                             {
                                                 Text = _solver.Comparer.Criteria[i].Field.Name,
-                                                TextAlign = HorizontalAlignment.Right,
+                                                TextAlign = HorizontalAlignment.Center,
                                                 Width = 100
                                             };
-                lvbSolutions.Columns.Add(columnHeader);
+                listViewSolutions.Columns.Add(columnHeader);
             }
 
             // rebuild the list of solutions
             Solver.Solution prevSolution = null;
-            Color prevColor = _solutionColor1;
+            var prevColor = _solutionColour1;
             i = 0;
-            foreach (Solver.Solution solution in _solver.Solutions)
+            foreach (var solution in _solver.Solutions)
             {
                 // make a list of data for each entry
-                string[] data = new string[_solver.Comparer.Criteria.Count + 1];
-                data[0] = "";
+                var data = new string[_solver.Comparer.Criteria.Count + 1];
+                data[0] = i.ToString();
                 // for each field we're using
-                for (int j = 0; j < _solver.Comparer.Criteria.Count; j++)
+                for (var j = 0; j < _solver.Comparer.Criteria.Count; j++)
                 {
                     // get a string representing the value for that criteria in the solution
                     data[j + 1] = solution.FieldValueToString(_solver.Comparer.Criteria[j].FieldIndex);
@@ -254,19 +227,19 @@ namespace UniTimetable.ViewControllers
                 // make the first result white
                 if (prevSolution == null)
                 {
-                    prevColor = _solutionColor1;
+                    prevColor = _solutionColour1;
                 }
                 // else if the following solution is different (by the current criteria)
                 else if (solution.CompareTo(prevSolution, _solver.Comparer) != 0)
                 {
                     // switch colours
-                    prevColor = prevColor == _solutionColor1 ? _solutionColor2 : _solutionColor1;
+                    prevColor = prevColor == _solutionColour1 ? _solutionColour2 : _solutionColour1;
                 }
                 item.BackColor = prevColor;
                 _originalColors[i++] = item.BackColor;
 
                 // add the item to the list
-                lvbSolutions.Items.Add(item);
+                listViewSolutions.Items.Add(item);
                 prevSolution = solution;
             }
         }
@@ -274,69 +247,55 @@ namespace UniTimetable.ViewControllers
         private void UpdatePreview()
         {
             // nothing selected
-            if (lvbSolutions.SelectedIndices.Count == 0 || lvbSolutions.SelectedIndices[0] == -1)
+            if (listViewSolutions.SelectedIndices.Count == 0 || listViewSolutions.SelectedIndices[0] == -1)
             {
                 timetableControl.Timetable = null;
                 return;
             }
 
-            Solver.Solution solution = (Solver.Solution) lvbSolutions.SelectedItems[0].Tag;
+            var solution = (Solver.Solution) listViewSolutions.SelectedItems[0].Tag;
             timetableControl.Timetable = _solver.Timetable.PreviewSolution(solution);
         }
 
-        private void SetStarButton(bool destar)
+        private void SetMarkButton(bool unmark)
         {
-            // if starring is disabled
-            if (chkOnlyStarred.Checked || destar)
-            {
-                btnStar.Image = _deStarImage;
-                btnStar.Text = DeStarText;
-            }
-            else
-            {
-                btnStar.Image = _starImage;
-                btnStar.Text = StarText;
-            }
+            buttonMark.Text = checkBoxOnlyMarked.Checked || unmark ? UnmarkText : MarkText;
         }
 
-        private void ChkOnlyStarredCheckedChanged(object sender, EventArgs e)
+        private void CheckboxOnlyMarkedCheckedChanged(object sender, EventArgs e)
         {
             // checkbox just got checked
-            if (chkOnlyStarred.Checked)
+            if (checkBoxOnlyMarked.Checked)
             {
-                // disable star button
-                btnStar.Enabled = false;
+                // disable mark button
+                buttonMark.Enabled = false;
                 // back-up full list
-                _fullListBackup = new ListViewItem[lvbSolutions.Items.Count];
-                lvbSolutions.Items.CopyTo(_fullListBackup, 0);
+                _fullListBackup = new ListViewItem[listViewSolutions.Items.Count];
+                listViewSolutions.Items.CopyTo(_fullListBackup, 0);
                 // start with fresh list
-                lvbSolutions.Items.Clear();
-                // add starred items to ListView
-                foreach (ListViewItem item in _fullListBackup)
+                listViewSolutions.Items.Clear();
+                // add marked items to ListView
+                foreach (var item in _fullListBackup.Where(item => item.BackColor == _markColour))
                 {
-                    // if it is starred
-                    if (item.BackColor == _starColor)
-                    {
-                        // clone the item and add to the list
-                        lvbSolutions.Items.Add((ListViewItem) item.Clone());
-                    }
+                    // clone the item and add to the list
+                    listViewSolutions.Items.Add((ListViewItem) item.Clone());
                 }
                 // now set the colours
-                foreach (ListViewItem item in lvbSolutions.Items)
+                foreach (ListViewItem item in listViewSolutions.Items)
                 {
-                    item.BackColor = _solutionColor1;
+                    item.BackColor = _solutionColour1;
                 }
             }
             // checkbox just got unchecked
             else
             {
                 // enable start button
-                btnStar.Enabled = true;
+                buttonMark.Enabled = true;
                 // refer back to the backup
-                lvbSolutions.Items.Clear();
-                lvbSolutions.Items.AddRange(_fullListBackup);
+                listViewSolutions.Items.Clear();
+                listViewSolutions.Items.AddRange(_fullListBackup);
                 // restore selection
-                lvbSolutions.Select();
+                listViewSolutions.Select();
             }
         }
     }
