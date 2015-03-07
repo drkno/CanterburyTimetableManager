@@ -12,25 +12,25 @@ namespace UniTimetable.ViewControllers
 {
     public partial class FormCriteria : Form
     {
-        private Solver.Criteria DragCriteria_;
-        private int DragTarget_;
-        private Solver Solver_;
+        private Solver.Criteria _dragCriteria;
+        private int _dragTarget;
+        private Solver _solver;
 
         public FormCriteria()
         {
             InitializeComponent();
 
-            ddPresets.Items.Clear();
-            ddPresets.Items.AddRange(Solver.Presets);
+            comboBoxPresets.Items.Clear();
+            comboBoxPresets.Items.AddRange(Solver.Presets);
         }
 
-        private void ddPresets_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBoxPresetsSelectedIndexChanged(object sender, EventArgs e)
         {
-            int index = ddPresets.SelectedIndex;
+            var index = comboBoxPresets.SelectedIndex;
             if (index == -1)
                 return;
 
-            Solver.Preset preset = Solver.Presets[index];
+            var preset = Solver.Presets[index];
             LoadLists(preset.Criteria, preset.Filters);
         }
 
@@ -38,19 +38,14 @@ namespace UniTimetable.ViewControllers
 
         public DialogResult ShowDialog(Solver solver)
         {
-            Solver_ = solver;
+            _solver = solver;
             return base.ShowDialog();
         }
 
-        public new DialogResult ShowDialog()
+        private void FormCriteriaLoad(object sender, EventArgs e)
         {
-            throw new Exception("No input was provided.");
-        }
-
-        private void FormCriteria_Load(object sender, EventArgs e)
-        {
-            LoadLists(Solver_);
-            ddPresets.SelectedIndex = -1;
+            LoadLists(_solver);
+            comboBoxPresets.SelectedIndex = -1;
         }
 
         private void LoadLists(Solver solver)
@@ -61,11 +56,11 @@ namespace UniTimetable.ViewControllers
         private void LoadLists(IEnumerable<Solver.Criteria> criteria, IEnumerable<Solver.Filter> filters)
         {
             listBoxCriteria.Items.Clear();
-            foreach (Solver.Criteria c in criteria)
+            foreach (var c in criteria)
                 listBoxCriteria.Items.Add(c.DeepCopy());
 
             listBoxFilters.Items.Clear();
-            foreach (Solver.Filter f in filters)
+            foreach (var f in filters)
                 listBoxFilters.Items.Add(f.DeepCopy());
 
             UpdateCriteriaButtons();
@@ -76,35 +71,26 @@ namespace UniTimetable.ViewControllers
 
         #region Criteria list
 
-        private void listBoxCriteria_DrawItem(object sender, DrawItemEventArgs e)
+        private void ListBoxCriteriaDrawItem(object sender, DrawItemEventArgs e)
         {
             e.DrawBackground();
 
             if (listBoxCriteria.Items.Count == 0)
                 return;
 
-            Graphics g = e.Graphics;
-            Solver.Criteria criteria = (Solver.Criteria) listBoxCriteria.Items[e.Index];
+            var g = e.Graphics;
+            var criteria = (Solver.Criteria) listBoxCriteria.Items[e.Index];
 
             const int margin = 2;
-            Rectangle r = new Rectangle(e.Bounds.X + margin, e.Bounds.Y + margin, e.Bounds.Width - 2*margin,
+            var r = new Rectangle(e.Bounds.X + margin, e.Bounds.Y + margin, e.Bounds.Width - 2*margin,
                 e.Bounds.Height - 2*margin);
 
-            Font font;
-            Rectangle q;
-            StringFormat format = new StringFormat();
-            format.Alignment = StringAlignment.Near;
-            format.LineAlignment = StringAlignment.Near;
-
-            /*const int numTop = 2;
-            font = new Font("Microsoft Sans Serif", 8.25f, FontStyle.Regular);
-            q = new Rectangle(r.X, r.Y + numTop, r.Width, r.Height - numTop);
-            g.DrawString((e.Index + 1).ToString() + ".", font, Brushes.Black, q, format);*/
+            var format = new StringFormat {Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Near};
 
             // heading: name
             const int nameLeft = 5, nameTop = 5;
-            font = new Font("Microsoft Sans Serif", 11f, FontStyle.Bold);
-            q = new Rectangle(r.X + nameLeft, r.Y + nameTop, r.Width - nameLeft, r.Height - nameTop);
+            var font = new Font("Microsoft Sans Serif", 11f, FontStyle.Bold);
+            var q = new Rectangle(r.X + nameLeft, r.Y + nameTop, r.Width - nameLeft, r.Height - nameTop);
             g.DrawString(criteria.Field.ToString(), font, Brushes.Black, q, format);
 
             // subheading: preference
@@ -124,9 +110,9 @@ namespace UniTimetable.ViewControllers
             g.DrawRectangle(Pens.Black, r);
         }
 
-        private void listBoxCriteria_MouseDown(object sender, MouseEventArgs e)
+        private void ListBoxCriteriaMouseDown(object sender, MouseEventArgs e)
         {
-            int index = listBoxCriteria.IndexFromPoint(e.Location);
+            var index = listBoxCriteria.IndexFromPoint(e.Location);
             if (index == -1)
             {
                 listBoxCriteria.SelectedIndex = -1;
@@ -139,85 +125,76 @@ namespace UniTimetable.ViewControllers
                 return;
             }
 
-            Solver.Criteria criteria = (Solver.Criteria) listBoxCriteria.Items[index];
-            DragTarget_ = -1;
-            DragCriteria_ = null;
+            var criteria = (Solver.Criteria) listBoxCriteria.Items[index];
+            _dragTarget = -1;
+            _dragCriteria = null;
             // drag drop failed
             if (listBoxCriteria.DoDragDrop(criteria, DragDropEffects.Move) != DragDropEffects.Move)
                 return;
             // some sort of conflict
-            if (DragTarget_ == -1 || DragCriteria_ != criteria)
+            if (_dragTarget == -1 || _dragCriteria != criteria)
                 return;
             // moving back to same position
-            if (DragTarget_ == index)
+            if (_dragTarget == index)
                 return;
-            if (DragTarget_ > index)
+            if (_dragTarget > index)
             {
-                listBoxCriteria.Items.Insert(DragTarget_ + 1, criteria);
+                listBoxCriteria.Items.Insert(_dragTarget + 1, criteria);
                 listBoxCriteria.Items.RemoveAt(index);
             }
             else
             {
                 listBoxCriteria.Items.RemoveAt(index);
-                listBoxCriteria.Items.Insert(DragTarget_, criteria);
+                listBoxCriteria.Items.Insert(_dragTarget, criteria);
             }
-            listBoxCriteria.SelectedIndex = DragTarget_;
+            listBoxCriteria.SelectedIndex = _dragTarget;
 
             // not preset anymore
-            ddPresets.SelectedIndex = -1;
+            comboBoxPresets.SelectedIndex = -1;
         }
 
-        private void listBoxCriteria_DragEnter(object sender, DragEventArgs e)
+        private void ListBoxCriteriaDragEnter(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(typeof (Solver.Criteria)))
-            {
-                e.Effect = DragDropEffects.Move;
-            }
-            else
-            {
-                e.Effect = DragDropEffects.None;
-            }
+            e.Effect = e.Data.GetDataPresent(typeof (Solver.Criteria)) ? DragDropEffects.Move : DragDropEffects.None;
         }
 
-        private void listBoxCriteria_DragDrop(object sender, DragEventArgs e)
+        private void ListBoxCriteriaDragDrop(object sender, DragEventArgs e)
         {
             if (!e.Data.GetDataPresent(typeof (Solver.Criteria)))
                 return;
 
-            Point location = listBoxCriteria.PointToClient(new Point(e.X, e.Y));
-            DragTarget_ = listBoxCriteria.IndexFromPoint(location);
-            DragCriteria_ = (Solver.Criteria) e.Data.GetData(typeof (Solver.Criteria));
+            var location = listBoxCriteria.PointToClient(new Point(e.X, e.Y));
+            _dragTarget = listBoxCriteria.IndexFromPoint(location);
+            _dragCriteria = (Solver.Criteria) e.Data.GetData(typeof (Solver.Criteria));
         }
 
-        private void listBoxCriteria_KeyDown(object sender, KeyEventArgs e)
+        private void ListBoxCriteriaKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Back || e.KeyCode == Keys.Delete)
-            {
-                RemoveCriteria();
-                // not preset anymore
-                ddPresets.SelectedIndex = -1;
-            }
+            if (e.KeyCode != Keys.Back && e.KeyCode != Keys.Delete) return;
+            RemoveCriteria();
+            // not preset anymore
+            comboBoxPresets.SelectedIndex = -1;
         }
 
-        private void listBoxCriteria_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void ListBoxCriteriaMouseDoubleClick(object sender, MouseEventArgs e)
         {
-            int index = listBoxCriteria.IndexFromPoint(e.Location);
+            var index = listBoxCriteria.IndexFromPoint(e.Location);
             if (index < 0)
                 return;
             EditCriteria();
         }
 
-        private void btnCriteriaAdd_Click(object sender, EventArgs e)
+        private void ButtonCriteriaAddClick(object sender, EventArgs e)
         {
             AddCriteria();
         }
 
-        private void btnCriteriaEdit_Click(object sender, EventArgs e)
+        private void ButtonCriteriaEditClick(object sender, EventArgs e)
         {
             EditCriteria();
         }
 
-        private void btnCriteriaRemove_Click(object sender, EventArgs e)
+        private void ButtonCriteriaRemoveClick(object sender, EventArgs e)
         {
             RemoveCriteria();
         }
@@ -233,17 +210,17 @@ namespace UniTimetable.ViewControllers
                 index = listBoxCriteria.Items.Count;
             listBoxCriteria.Items.Insert(index, criteria);
 
-            ddPresets.SelectedIndex = -1;
+            comboBoxPresets.SelectedIndex = -1;
         }
 
         private void EditCriteria()
         {
-            int index = listBoxCriteria.SelectedIndex;
+            var index = listBoxCriteria.SelectedIndex;
             if (index == -1)
                 return;
 
-            Solver.Criteria criteria = (Solver.Criteria) listBoxCriteria.SelectedItem;
-            FormCriteriaDetails formDetails = new FormCriteriaDetails();
+            var criteria = (Solver.Criteria) listBoxCriteria.SelectedItem;
+            var formDetails = new FormCriteriaDetails();
             criteria = formDetails.ShowDialog(criteria);
             if (criteria == null)
                 return;
@@ -251,63 +228,59 @@ namespace UniTimetable.ViewControllers
             listBoxCriteria.Items.Insert(index, criteria);
             listBoxCriteria.SelectedIndex = index;
 
-            ddPresets.SelectedIndex = -1;
+            comboBoxPresets.SelectedIndex = -1;
         }
 
         private void RemoveCriteria()
         {
             if (listBoxCriteria.SelectedIndex == -1)
                 return;
-            int index = listBoxCriteria.SelectedIndex;
+            var index = listBoxCriteria.SelectedIndex;
             listBoxCriteria.Items.RemoveAt(index);
             listBoxCriteria.SelectedIndex = Math.Min(index, listBoxCriteria.Items.Count - 1);
             UpdateCriteriaButtons();
 
-            ddPresets.SelectedIndex = -1;
+            comboBoxPresets.SelectedIndex = -1;
         }
 
         private void UpdateCriteriaButtons()
         {
-            bool enabled = (listBoxCriteria.Items.Count > 0);
-            btnCriteriaEdit.Enabled = enabled;
-            btnCriteriaRemove.Enabled = enabled;
+            var enabled = (listBoxCriteria.Items.Count > 0);
+            buttonCriteriaEdit.Enabled = enabled;
+            buttonCriteriaRemove.Enabled = enabled;
         }
 
         #endregion
 
         #region Filter list
 
-        private void listBoxFilters_DrawItem(object sender, DrawItemEventArgs e)
+        private void ListBoxFiltersDrawItem(object sender, DrawItemEventArgs e)
         {
             e.DrawBackground();
 
             if (listBoxFilters.Items.Count == 0)
                 return;
 
-            Graphics g = e.Graphics;
-            Solver.Filter filter = (Solver.Filter) listBoxFilters.Items[e.Index];
+            var g = e.Graphics;
+            var filter = (Solver.Filter) listBoxFilters.Items[e.Index];
 
             const int margin = 2;
-            Rectangle r = new Rectangle(e.Bounds.X + margin, e.Bounds.Y + margin, e.Bounds.Width - 2*margin,
+            var r = new Rectangle(e.Bounds.X + margin, e.Bounds.Y + margin, e.Bounds.Width - 2*margin,
                 e.Bounds.Height - 2*margin);
 
-            Font font;
-            Rectangle q;
-            StringFormat format = new StringFormat();
-            format.Alignment = StringAlignment.Near;
-            format.LineAlignment = StringAlignment.Near;
+            var format = new StringFormat {Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Near};
 
             // header: field name
             const int nameLeft = 5, nameTop = 5;
-            font = new Font("Microsoft Sans Serif", 11f, FontStyle.Bold);
-            q = new Rectangle(r.X + nameLeft, r.Y + nameTop, r.Width - nameLeft, r.Height - nameTop);
+            var font = new Font("Microsoft Sans Serif", 11f, FontStyle.Bold);
+            var q = new Rectangle(r.X + nameLeft, r.Y + nameTop, r.Width - nameLeft, r.Height - nameTop);
             g.DrawString(filter.Field.ToString(), font, Brushes.Black, q, format);
 
             // subheading: details of filter
             const int specLeft = 20, specTop = 25;
             font = new Font("Microsoft Sans Serif", 8.25f, FontStyle.Regular);
             q = new Rectangle(r.X + specLeft, r.Y + specTop, r.Width - specLeft, r.Height - specTop);
-            string text = (filter.Exclude ? "Must not" : "Must") + " be " +
+            var text = (filter.Exclude ? "Must not" : "Must") + " be " +
                           Solver.Filter.FieldSpecificTest(filter) + " " +
                           filter.ValueToString();
             g.DrawString(text, font, Brushes.Black, q, format);
@@ -315,25 +288,25 @@ namespace UniTimetable.ViewControllers
             g.DrawRectangle(Pens.Black, r);
         }
 
-        private void listBoxFilters_MouseDown(object sender, MouseEventArgs e)
+        private void ListBoxFiltersMouseDown(object sender, MouseEventArgs e)
         {
             // didn't click on an item, so deselect
-            int index = listBoxFilters.IndexFromPoint(e.Location);
+            var index = listBoxFilters.IndexFromPoint(e.Location);
             if (index == -1)
             {
                 listBoxFilters.SelectedIndex = -1;
             }
         }
 
-        private void listBoxFilters_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void ListBoxFiltersMouseDoubleClick(object sender, MouseEventArgs e)
         {
-            int index = listBoxFilters.IndexFromPoint(e.Location);
+            var index = listBoxFilters.IndexFromPoint(e.Location);
             if (index < 0)
                 return;
             EditFilter();
         }
 
-        private void listBoxFilters_KeyDown(object sender, KeyEventArgs e)
+        private void ListBoxFiltersKeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Back || e.KeyCode == Keys.Delete)
             {
@@ -341,17 +314,17 @@ namespace UniTimetable.ViewControllers
             }
         }
 
-        private void btnFiltersAdd_Click(object sender, EventArgs e)
+        private void ButtonFiltersAddClick(object sender, EventArgs e)
         {
             AddFilter();
         }
 
-        private void btnFiltersEdit_Click(object sender, EventArgs e)
+        private void ButtonFiltersEditClick(object sender, EventArgs e)
         {
             EditFilter();
         }
 
-        private void btnFiltersRemove_Click(object sender, EventArgs e)
+        private void ButtonFiltersRemoveClick(object sender, EventArgs e)
         {
             RemoveFilter();
         }
@@ -370,7 +343,7 @@ namespace UniTimetable.ViewControllers
             listBoxFilters.SelectedIndex = listBoxFilters.Items.Count - 1;
 
             // not preset anymore
-            ddPresets.SelectedIndex = -1;
+            comboBoxPresets.SelectedIndex = -1;
         }
 
         private void EditFilter()
@@ -389,7 +362,7 @@ namespace UniTimetable.ViewControllers
             listBoxFilters.SelectedIndex = index;
 
             // not preset anymore
-            ddPresets.SelectedIndex = -1;
+            comboBoxPresets.SelectedIndex = -1;
         }
 
         private void RemoveFilter()
@@ -402,37 +375,37 @@ namespace UniTimetable.ViewControllers
             UpdateFilterButtons();
 
             // not preset anymore
-            ddPresets.SelectedIndex = -1;
+            comboBoxPresets.SelectedIndex = -1;
         }
 
         private void UpdateFilterButtons()
         {
-            bool enabled = (listBoxFilters.Items.Count > 0);
-            btnFiltersEdit.Enabled = enabled;
-            btnFiltersRemove.Enabled = enabled;
+            var enabled = (listBoxFilters.Items.Count > 0);
+            buttonFiltersEdit.Enabled = enabled;
+            buttonFiltersRemove.Enabled = enabled;
         }
 
         #endregion
 
         #region Main buttons
 
-        private void btnRevert_Click(object sender, EventArgs e)
+        private void ButtonRevertClick(object sender, EventArgs e)
         {
-            LoadLists(Solver_);
+            LoadLists(_solver);
             // not preset anymore
-            ddPresets.SelectedIndex = -1;
+            comboBoxPresets.SelectedIndex = -1;
         }
 
-        private void btnOK_Click(object sender, EventArgs e)
+        private void ButtonOkClick(object sender, EventArgs e)
         {
             // check if there were any changes
-            bool changed = false;
-            if (Solver_.Comparer.Criteria.Count == listBoxCriteria.Items.Count)
+            var changed = false;
+            if (_solver.Comparer.Criteria.Count == listBoxCriteria.Items.Count)
             {
-                for (int i = 0; i < Solver_.Comparer.Criteria.Count; i++)
+                for (var i = 0; i < _solver.Comparer.Criteria.Count; i++)
                 {
-                    Solver.Criteria criteria = Solver_.Comparer.Criteria[i];
-                    Solver.Criteria other = (Solver.Criteria) listBoxCriteria.Items[i];
+                    var criteria = _solver.Comparer.Criteria[i];
+                    var other = (Solver.Criteria) listBoxCriteria.Items[i];
                     if (criteria.FieldIndex != other.FieldIndex || criteria.Preference != other.Preference)
                     {
                         break;
@@ -443,12 +416,12 @@ namespace UniTimetable.ViewControllers
             {
                 changed = true;
             }
-            if (!changed && Solver_.Filters.Count == listBoxFilters.Items.Count)
+            if (!changed && _solver.Filters.Count == listBoxFilters.Items.Count)
             {
-                for (int i = 0; i < Solver_.Filters.Count; i++)
+                for (var i = 0; i < _solver.Filters.Count; i++)
                 {
-                    Solver.Filter filter = Solver_.Filters[i];
-                    Solver.Filter other = (Solver.Filter) listBoxFilters.Items[i];
+                    var filter = _solver.Filters[i];
+                    var other = (Solver.Filter) listBoxFilters.Items[i];
                     if (filter.FieldIndex == other.FieldIndex
                         && filter.Exclude == other.Exclude
                         && filter.Test == other.Test
@@ -471,19 +444,19 @@ namespace UniTimetable.ViewControllers
             }
 
             // copy changes across
-            Solver_.Comparer.Criteria.Clear();
+            _solver.Comparer.Criteria.Clear();
             foreach (Solver.Criteria criteria in listBoxCriteria.Items)
-                Solver_.Comparer.Criteria.Add(criteria);
+                _solver.Comparer.Criteria.Add(criteria);
 
-            Solver_.Filters.Clear();
+            _solver.Filters.Clear();
             foreach (Solver.Filter filter in listBoxFilters.Items)
-                Solver_.Filters.Add(filter);
+                _solver.Filters.Add(filter);
 
             DialogResult = DialogResult.OK;
             Close();
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+        private void ButtonCancelClick(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
             Close();

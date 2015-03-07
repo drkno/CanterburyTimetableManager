@@ -78,6 +78,11 @@
     <Compile Include="Model\ImportExport\UniversityDefinitions\Canterbury\JsonObjects\KeySubjectStreamPair.cs" />
     <Compile Include="Model\ImportExport\UniversityDefinitions\Canterbury\JsonObjects\StudentInformation.cs" />
     <Compile Include="Model\ImportExport\UniversityDefinitions\Canterbury\JsonObjects\SubjectStream.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\Resources.cs" />
     <Compile Include="Model\ColorScheme.cs" />
     <Compile Include="ViewControllers\EtchedLine.cs">
@@ -135,11 +140,11 @@
     <Compile Include="ViewControllers\FormSolution.Designer.cs">
       <DependentUpon>FormSolution.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewControllers\FormStyle.cs">
+    <Compile Include="ViewControllers\FormColours.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ViewControllers\FormStyle.Designer.cs">
-      <DependentUpon>FormStyle.cs</DependentUpon>
+    <Compile Include="ViewControllers\FormColours.Designer.cs">
+      <DependentUpon>FormColours.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewControllers\FormUnavailability.cs">
       <SubType>Form</SubType>
@@ -194,9 +199,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>FormSolution.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ViewControllers\FormStyle.resx">
+    <EmbeddedResource Include="ViewControllers\FormColours.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>FormStyle.cs</DependentUpon>
+      <DependentUpon>FormColours.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ViewControllers\FormUnavailability.resx">
       <SubType>Designer</SubType>
@@ -207,18 +212,13 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="ViewControllers\TimetableControl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>TimetableControl.cs</DependentUpon>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -243,20 +243,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Resources\Alarm.png" />
-    <None Include="Resources\Redo.png" />
-    <None Include="Resources\Config-Tools.png" />
     <None Include="Resources\Find.png" />
-    <None Include="Resources\Document.png" />
-    <EmbeddedResource Include="Resources\Favorites.png" />
-    <None Include="Resources\Symbol-Add.png" />
-    <None Include="Resources\Symbol-Add-Stream.png" />
-    <None Include="Resources\Symbol-Add-Time.png" />
-    <None Include="Resources\Dice.png" />
-    <None Include="Resources\TimeTable.ico" />
-    <None Include="Resources\Symbol-Check.png" />
-    <None Include="Resources\Symbol-Delete.png" />
-    <EmbeddedResource Include="Resources\DeStar.png" />
     <Compile Include="ViewControllers\FormCriteria.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -289,32 +276,8 @@
     <Compile Include="ViewControllers\TimetableControl.Designer.cs">
       <DependentUpon>TimetableControl.cs</DependentUpon>
     </Compile>
-    <None Include="Resources\Unknown.png" />
-    <None Include="Resources\Undo.png" />
-    <None Include="Resources\Copy.png" />
-    <None Include="Resources\Folder.png" />
-    <None Include="Resources\My-Documents.png" />
     <None Include="Resources\Save.png" />
     <None Include="Resources\Printer.png" />
-    <None Include="Resources\Redo16.png" />
-    <None Include="Resources\Save16.png" />
-    <None Include="Resources\Symbol-Add-Stream16.png" />
-    <None Include="Resources\Symbol-Add-Time16.png" />
-    <None Include="Resources\Symbol-Add16.png" />
-    <None Include="Resources\Symbol-Check16.png" />
-    <None Include="Resources\Symbol-Delete16.png" />
-    <None Include="Resources\Undo16.png" />
-    <None Include="Resources\Config-Tools16.png" />
-    <None Include="Resources\Copy16.png" />
-    <None Include="Resources\Dice16.png" />
-    <None Include="Resources\Document16.png" />
-    <None Include="Resources\My-Documents16.png" />
-    <None Include="Resources\Help.png" />
-    <None Include="Resources\Color-palette.png" />
-    <None Include="Resources\Color-picker.png" />
-    <None Include="Resources\Colors.png" />
-    <None Include="Resources\Color-Settings.png" />
-    <None Include="Resources\Color-picker16.png" />
     <None Include="Resources\Criteria.png" />
     <None Include="Resources\Clear.png" />
     <Content Include="Resources\Export.png" />
