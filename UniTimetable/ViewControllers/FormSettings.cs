@@ -88,7 +88,7 @@ namespace UniTimetable.ViewControllers
                 return;
             }
 
-            var formStyle = new FormStyle();
+            var formStyle = new FormColours();
             if (formStyle.ShowDialog(_form.Timetable) == DialogResult.Cancel)
                 return;
 

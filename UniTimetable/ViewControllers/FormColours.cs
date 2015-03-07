@@ -11,12 +11,12 @@ using UniTimetable.Model.Timetable;
 
 namespace UniTimetable.ViewControllers
 {
-    partial class FormStyle : Form
+    partial class FormColours : Form
     {
         private readonly List<Color> _colourList = new List<Color>();
         private Timetable _timetable;
 
-        public FormStyle()
+        public FormColours()
         {
             InitializeComponent();
 
