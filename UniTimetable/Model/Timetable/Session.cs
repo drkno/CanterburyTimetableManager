@@ -23,6 +23,7 @@ namespace UniTimetable.Model.Timetable
         public Session()
         {
             Stream = null;
+            Location = "";
         }
 
         public Session(int day, int startYearDay, int startHour, int startMinute, int endHour, int endMinute, string location, string weekPattern = "")

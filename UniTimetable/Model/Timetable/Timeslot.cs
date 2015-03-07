@@ -44,7 +44,7 @@ namespace UniTimetable.Model.Timetable
                         // or start/end times are either side
                         || (_start <= other._start && End >= other._end)));
 
-            if (string.IsNullOrWhiteSpace(_weekPattern) || !initialCheck || 
+            if (_startYearDay == -1 || string.IsNullOrWhiteSpace(_weekPattern) || !initialCheck || 
                 other._endYearDay < _startYearDay || _endYearDay < other._startYearDay)
             {
                 return initialCheck;

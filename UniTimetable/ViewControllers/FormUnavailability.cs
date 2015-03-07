@@ -42,6 +42,7 @@ namespace UniTimetable.ViewControllers
             {
                 // copy the data out from the timeslot into the inputs
                 textBoxName.Text = _unavail.Name;
+                comboBoxDay.SelectedIndex = _unavail.Day;
                 dateTimePickerStart.Value = dateTimePickerStart.Value.AddMinutes(_unavail.StartTotalMinutes);
                 dateTimePickerEnd.Value = dateTimePickerEnd.Value.AddMinutes(_unavail.EndTotalMinutes);
             }
@@ -49,9 +50,7 @@ namespace UniTimetable.ViewControllers
             {
                 // reset inputs to default/blank
                 textBoxName.Clear();
-                var now = DateTime.Now;
-                dateTimePickerStart.Value = new DateTime(now.Year, now.Month, now.Day, 12, 0, 0);
-                dateTimePickerEnd.Value = dateTimePickerStart.Value;
+                comboBoxDay.SelectedIndex = 0;
             }
             textBoxName.Focus();
         }
@@ -95,8 +94,8 @@ namespace UniTimetable.ViewControllers
                 end = new TimeOfDay(_latest, 0);
 
             // build new unavailability from input
-            var unavail = new Unavailability(textBoxName.Text, (int)dateTimePickerStart.Value.DayOfWeek,
-                dateTimePickerStart.Value.DayOfYear, start.Hour, start.Minute, end.Hour, end.Minute);
+            var unavail = new Unavailability(textBoxName.Text, comboBoxDay.SelectedIndex,
+                -1, start.Hour, start.Minute, end.Hour, end.Minute);
 
             if (_unavail != null && _unavail.EquivalentTo(unavail) && _unavail.Name == unavail.Name)
             {

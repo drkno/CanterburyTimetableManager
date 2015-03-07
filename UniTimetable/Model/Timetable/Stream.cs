@@ -49,26 +49,14 @@ namespace UniTimetable.Model.Timetable
             Type = null;
             Selected = false;
             Classes = new List<Session>();
-            //State_ = StreamState.Null;
             _incompatible = new List<Stream>();
             _equivalent = new List<Stream>();
         }
 
-        public Stream(string number)
+        public Stream(string number) : this()
         {
-            ClashTable = null;
-            Type = null;
-            Selected = false;
             _number = number;
         }
-
-        /*public Stream(string number, Type type)
-        {
-            ClashTable = null;
-            Selected = false;
-            _number = number;
-            Type = type;
-        }*/
 
         public Stream(Stream other)
         {
@@ -80,7 +68,6 @@ namespace UniTimetable.Model.Timetable
             Classes = new List<Session>(other.Classes);
             _incompatible = new List<Stream>(other._incompatible);
             _equivalent = new List<Stream>(other._equivalent);
-            //this.State_ = other.State_;
         }
 
         public Stream Clone()

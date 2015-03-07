@@ -807,7 +807,7 @@ namespace UniTimetable.ViewControllers
             {
                 for (var hour = _hourStart; hour < _hourEnd; hour++)
                 {
-                    var time = new Timeslot(day, 0, hour, 0, hour + 1, 0);
+                    var time = new Timeslot(day, -1, hour, 0, hour + 1, 0);
                     if (!_timetable.ClassDuring(time, false))
                     {
                         DrawTimeslot(g, time, _timeslotUnavalibleColor);

@@ -144,7 +144,7 @@ namespace UniTimetable.ViewControllers
             return (choice == DialogResult.OK);
         }
 
-        private void TimetableControl1ResizeCell(object sender)
+        private void TimetableControlResizeCell(object sender)
         {
             if (timetableControl.CellSize.Height == 0) return;
             listBox1.ItemHeight =
@@ -332,7 +332,7 @@ namespace UniTimetable.ViewControllers
             UpdateRemaining();
         }
 
-        private void TimetableControl1DragOver(object sender, DragEventArgs e)
+        private void TimetableControlDragOver(object sender, DragEventArgs e)
         {
             var type = (Type) e.Data.GetData(typeof (Type));
             var time = timetableControl.FindClickTime(timetableControl.PointToClient(new Point(e.X, e.Y)));
@@ -348,7 +348,7 @@ namespace UniTimetable.ViewControllers
             }
         }
 
-        private void TimetableControl1DragDrop(object sender, DragEventArgs e)
+        private void TimetableControlDragDrop(object sender, DragEventArgs e)
         {
             var type = (Type) e.Data.GetData(typeof (Type));
             var time = timetableControl.FindClickTime(timetableControl.PointToClient(new Point(e.X, e.Y)));
@@ -360,7 +360,7 @@ namespace UniTimetable.ViewControllers
                 MadeChanges(true);
         }
 
-        private Stream FindStream(Type type, TimeOfWeek time)
+        private static Stream FindStream(Type type, TimeOfWeek time)
         {
             return Timetable.From(type).FindClassAt(time, false).Stream;
         }
@@ -371,8 +371,6 @@ namespace UniTimetable.ViewControllers
             {
                 listBox1.Items.Clear();
                 listBox2.Items.Clear();
-                //groupBox2.Text = "Remaining";
-                //groupBox3.Text = "Ignored";
                 return;
             }
 
@@ -1114,14 +1112,12 @@ namespace UniTimetable.ViewControllers
 
         private void UnavailabilityToolStripMenuItemClick(object sender, EventArgs e)
         {
-            //TODO:
-            /*var formUnavail = new FormUnavailability();
-            if (
-                formUnavail.ShowDialog(Timetable,
-                    new Timeslot(_clickTime.Day, _clickTime.Hour, 0, _clickTime.Hour + 1, 0), timetableControl.HourStart,
-                    timetableControl.HourEnd) == DialogResult.Cancel)
-                return;
-            MadeChanges(true);*/
+            var formUnavail = new FormUnavailability();
+            var result = formUnavail.ShowDialog(Timetable,
+                new Timeslot(_clickTime.Day, -1, _clickTime.Hour, 0, _clickTime.Hour + 1, 0),
+                timetableControl.HourStart, timetableControl.HourEnd);
+            if (result == DialogResult.Cancel) return;
+            MadeChanges(true);
         }
 
         private void StreamMenuClosed(object sender, ToolStripDropDownClosedEventArgs e)
@@ -1139,8 +1135,7 @@ namespace UniTimetable.ViewControllers
         {
             if (_clickUnavail == null) return;
             var formUnavail = new FormUnavailability();
-            if (
-                formUnavail.ShowDialog(Timetable, _clickUnavail, timetableControl.HourStart,
+            if (formUnavail.ShowDialog(Timetable, _clickUnavail, timetableControl.HourStart,
                     timetableControl.HourEnd) == DialogResult.Cancel)
                 return;
             MadeChanges(true);
