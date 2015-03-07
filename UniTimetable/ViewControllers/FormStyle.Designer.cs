@@ -29,120 +29,117 @@ namespace UniTimetable.ViewControllers
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormStyle));
-            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.btnColor = new System.Windows.Forms.Button();
-            this.btnOK = new System.Windows.Forms.Button();
-            this.btnCancel = new System.Windows.Forms.Button();
+            this.colorDialog = new System.Windows.Forms.ColorDialog();
+            this.buttonColour = new System.Windows.Forms.Button();
+            this.buttonOk = new System.Windows.Forms.Button();
+            this.buttonCancel = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.listBox1 = new ListBoxBuffered();
-            this.ddSchemes = new System.Windows.Forms.ComboBox();
+            this.listBoxColours = new UniTimetable.ViewControllers.ListBoxBuffered();
+            this.colourSchemes = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // btnColor
+            // buttonColour
             // 
-            this.btnColor.Enabled = false;
-            this.btnColor.Image = global::UniTimetable.Properties.Resources.Color_picker;
-            this.btnColor.Location = new System.Drawing.Point(182, 6);
-            this.btnColor.Margin = new System.Windows.Forms.Padding(6);
-            this.btnColor.Name = "btnColor";
-            this.btnColor.Size = new System.Drawing.Size(92, 92);
-            this.btnColor.TabIndex = 2;
-            this.btnColor.Text = "Pick a Colour";
-            this.btnColor.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnColor.UseVisualStyleBackColor = true;
-            this.btnColor.Click += new System.EventHandler(this.BtnColorClick);
+            this.buttonColour.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonColour.Enabled = false;
+            this.buttonColour.Location = new System.Drawing.Point(160, 250);
+            this.buttonColour.Margin = new System.Windows.Forms.Padding(0);
+            this.buttonColour.Name = "buttonColour";
+            this.buttonColour.Size = new System.Drawing.Size(100, 25);
+            this.buttonColour.TabIndex = 2;
+            this.buttonColour.Text = "&Colour Picker";
+            this.buttonColour.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.buttonColour.UseVisualStyleBackColor = true;
+            this.buttonColour.Click += new System.EventHandler(this.ButtonColorClick);
             // 
-            // btnOK
+            // buttonOk
             // 
-            this.btnOK.Image = global::UniTimetable.Properties.Resources.Symbol_Check;
-            this.btnOK.Location = new System.Drawing.Point(182, 152);
-            this.btnOK.Margin = new System.Windows.Forms.Padding(6);
-            this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(92, 92);
-            this.btnOK.TabIndex = 1;
-            this.btnOK.Text = "OK";
-            this.btnOK.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new System.EventHandler(this.BtnOkClick);
+            this.buttonOk.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonOk.Location = new System.Drawing.Point(260, 250);
+            this.buttonOk.Margin = new System.Windows.Forms.Padding(0);
+            this.buttonOk.Name = "buttonOk";
+            this.buttonOk.Size = new System.Drawing.Size(100, 25);
+            this.buttonOk.TabIndex = 1;
+            this.buttonOk.Text = "&OK";
+            this.buttonOk.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.buttonOk.UseVisualStyleBackColor = true;
+            this.buttonOk.Click += new System.EventHandler(this.ButtonOkClick);
             // 
-            // btnCancel
+            // buttonCancel
             // 
-            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Image = global::UniTimetable.Properties.Resources.Symbol_Delete;
-            this.btnCancel.Location = new System.Drawing.Point(182, 256);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(6);
-            this.btnCancel.Name = "btnCancel";
-            this.tableLayoutPanel1.SetRowSpan(this.btnCancel, 2);
-            this.btnCancel.Size = new System.Drawing.Size(92, 92);
-            this.btnCancel.TabIndex = 2;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.BtnCancelClick);
+            this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.buttonCancel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonCancel.Location = new System.Drawing.Point(360, 250);
+            this.buttonCancel.Margin = new System.Windows.Forms.Padding(0);
+            this.buttonCancel.Name = "buttonCancel";
+            this.buttonCancel.Size = new System.Drawing.Size(100, 25);
+            this.buttonCancel.TabIndex = 2;
+            this.buttonCancel.Text = "&Cancel";
+            this.buttonCancel.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Click += new System.EventHandler(this.ButtonCancelClick);
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.Controls.Add(this.btnColor, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.listBox1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.btnOK, 1, 2);
-            this.tableLayoutPanel1.Controls.Add(this.btnCancel, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.ddSchemes, 0, 4);
+            this.tableLayoutPanel1.ColumnCount = 4;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.listBoxColours, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.colourSchemes, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.buttonCancel, 3, 1);
+            this.tableLayoutPanel1.Controls.Add(this.buttonOk, 2, 1);
+            this.tableLayoutPanel1.Controls.Add(this.buttonColour, 1, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(6, 6);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 5;
+            this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(280, 354);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(460, 275);
             this.tableLayoutPanel1.TabIndex = 4;
             // 
             // listBox1
             // 
-            this.listBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBox1.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.IntegralHeight = false;
-            this.listBox1.ItemHeight = 40;
-            this.listBox1.Location = new System.Drawing.Point(6, 6);
-            this.listBox1.Margin = new System.Windows.Forms.Padding(6);
-            this.listBox1.Name = "listBox1";
-            this.tableLayoutPanel1.SetRowSpan(this.listBox1, 4);
-            this.listBox1.Size = new System.Drawing.Size(164, 309);
-            this.listBox1.TabIndex = 3;
-            this.listBox1.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.ListBox1DrawItem);
-            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.ListBox1SelectedIndexChanged);
+            this.tableLayoutPanel1.SetColumnSpan(this.listBoxColours, 4);
+            this.listBoxColours.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listBoxColours.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.listBoxColours.FormattingEnabled = true;
+            this.listBoxColours.IntegralHeight = false;
+            this.listBoxColours.ItemHeight = 40;
+            this.listBoxColours.Location = new System.Drawing.Point(6, 6);
+            this.listBoxColours.Margin = new System.Windows.Forms.Padding(6);
+            this.listBoxColours.Name = "listBox1";
+            this.listBoxColours.Size = new System.Drawing.Size(448, 238);
+            this.listBoxColours.TabIndex = 3;
+            this.listBoxColours.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.ListBoxDrawItem);
+            this.listBoxColours.SelectedIndexChanged += new System.EventHandler(this.ListBoxSelectedIndexChanged);
             // 
             // ddSchemes
             // 
-            this.ddSchemes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.ddSchemes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ddSchemes.FormattingEnabled = true;
-            this.ddSchemes.Location = new System.Drawing.Point(6, 327);
-            this.ddSchemes.Margin = new System.Windows.Forms.Padding(6);
-            this.ddSchemes.Name = "ddSchemes";
-            this.ddSchemes.Size = new System.Drawing.Size(164, 21);
-            this.ddSchemes.TabIndex = 4;
-            this.ddSchemes.SelectedIndexChanged += new System.EventHandler(this.DdSchemesSelectedIndexChanged);
+            this.colourSchemes.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.colourSchemes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.colourSchemes.FormattingEnabled = true;
+            this.colourSchemes.Location = new System.Drawing.Point(0, 252);
+            this.colourSchemes.Margin = new System.Windows.Forms.Padding(0);
+            this.colourSchemes.Name = "ddSchemes";
+            this.colourSchemes.Size = new System.Drawing.Size(160, 21);
+            this.colourSchemes.TabIndex = 4;
+            this.colourSchemes.SelectedIndexChanged += new System.EventHandler(this.DdSchemesSelectedIndexChanged);
             // 
             // FormStyle
             // 
-            this.AcceptButton = this.btnOK;
+            this.AcceptButton = this.buttonOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(292, 366);
+            this.CancelButton = this.buttonCancel;
+            this.ClientSize = new System.Drawing.Size(472, 287);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(300, 400);
             this.Name = "FormStyle";
             this.Padding = new System.Windows.Forms.Padding(6);
             this.ShowInTaskbar = false;
@@ -156,12 +153,12 @@ namespace UniTimetable.ViewControllers
 
         #endregion
 
-        private System.Windows.Forms.ColorDialog colorDialog1;
-        private System.Windows.Forms.Button btnColor;
-        private System.Windows.Forms.Button btnOK;
-        private System.Windows.Forms.Button btnCancel;
-        private ListBoxBuffered listBox1;
+        private System.Windows.Forms.ColorDialog colorDialog;
+        private System.Windows.Forms.Button buttonColour;
+        private System.Windows.Forms.Button buttonOk;
+        private System.Windows.Forms.Button buttonCancel;
+        private ListBoxBuffered listBoxColours;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.ComboBox ddSchemes;
+        private System.Windows.Forms.ComboBox colourSchemes;
     }
 }

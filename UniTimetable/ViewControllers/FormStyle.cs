@@ -13,15 +13,15 @@ namespace UniTimetable.ViewControllers
 {
     partial class FormStyle : Form
     {
-        private readonly List<Color> _colorList = new List<Color>();
+        private readonly List<Color> _colourList = new List<Color>();
         private Timetable _timetable;
 
         public FormStyle()
         {
             InitializeComponent();
 
-            ddSchemes.Items.Clear();
-            ddSchemes.Items.AddRange(ColorScheme.Schemes);
+            colourSchemes.Items.Clear();
+            colourSchemes.Items.AddRange(ColorScheme.Schemes);
         }
 
         public DialogResult ShowDialog(Timetable timetable)
@@ -32,58 +32,56 @@ namespace UniTimetable.ViewControllers
 
         private void UpdateButton()
         {
-            btnColor.Enabled = listBox1.SelectedIndex != -1;
+            buttonColour.Enabled = listBoxColours.SelectedIndex != -1;
         }
 
         private void FormStyleLoad(object sender, EventArgs e)
         {
             // copy colors into color list and subject names to list box
-            _colorList.Clear();
-            listBox1.Items.Clear();
+            _colourList.Clear();
+            listBoxColours.Items.Clear();
             foreach (var subject in _timetable.SubjectList)
             {
-                _colorList.Add(subject.Color);
-                listBox1.Items.Add(subject);
+                _colourList.Add(subject.Color);
+                listBoxColours.Items.Add(subject);
             }
-            ddSchemes.SelectedIndex = -1;
+            colourSchemes.SelectedIndex = -1;
             UpdateButton();
         }
 
-        private void ListBox1SelectedIndexChanged(object sender, EventArgs e)
+        private void ListBoxSelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateButton();
         }
 
-        private void BtnColorClick(object sender, EventArgs e)
+        private void ButtonColorClick(object sender, EventArgs e)
         {
-            if (colorDialog1.ShowDialog() == DialogResult.Cancel) return;
-            _colorList[listBox1.SelectedIndex] = colorDialog1.Color;
-            listBox1.Invalidate();
+            if (colorDialog.ShowDialog() == DialogResult.Cancel) return;
+            _colourList[listBoxColours.SelectedIndex] = colorDialog.Color;
+            listBoxColours.Invalidate();
         }
 
-        private void BtnOkClick(object sender, EventArgs e)
+        private void ButtonOkClick(object sender, EventArgs e)
         {
-            bool changed = false;
+            var changed = false;
             // copy the colours back
-            for (int i = 0; i < _colorList.Count; i++)
+            for (var i = 0; i < _colourList.Count; i++)
             {
-                if (_timetable.SubjectList[i].Color != _colorList[i])
-                {
-                    changed = true;
-                    _timetable.SubjectList[i].Color = _colorList[i];
-                }
+                if (_timetable.SubjectList[i].Color == _colourList[i]) continue;
+                changed = true;
+                _timetable.SubjectList[i].Color = _colourList[i];
             }
             DialogResult = (changed ? DialogResult.OK : DialogResult.Cancel);
             Close();
         }
 
-        private void BtnCancelClick(object sender, EventArgs e)
+        private void ButtonCancelClick(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
             Close();
         }
 
-        private void ListBox1DrawItem(object sender, DrawItemEventArgs e)
+        private void ListBoxDrawItem(object sender, DrawItemEventArgs e)
         {
             if (e.Index == -1)
                 return;
@@ -93,39 +91,39 @@ namespace UniTimetable.ViewControllers
             e.DrawBackground();
             e.DrawFocusRectangle();
 
-            Graphics g = e.Graphics;
-            Subject subject = (Subject) listBox1.Items[e.Index];
+            var g = e.Graphics;
+            var subject = (Subject) listBoxColours.Items[e.Index];
 
-            Rectangle r = new Rectangle(e.Bounds.X + margin, e.Bounds.Y + margin, e.Bounds.Width - 2*margin - 1,
+            var r = new Rectangle(e.Bounds.X + margin, e.Bounds.Y + margin, e.Bounds.Width - 2*margin - 1,
                 e.Bounds.Height - 2*margin - 1);
-            g.FillRectangle(TimetableControl.LinearGradient(r.Location, r.Width, r.Height, _colorList[e.Index]), r);
+            g.FillRectangle(TimetableControl.LinearGradient(r.Location, r.Width, r.Height, _colourList[e.Index]), r);
 
             var format = new StringFormat
                                   {
                                       Alignment = StringAlignment.Center,
                                       LineAlignment = StringAlignment.Center
                                   };
-            g.DrawString(subject.ToString(), listBox1.Font, Brushes.Black, r, format);
+            g.DrawString(subject.ToString(), listBoxColours.Font, Brushes.Black, r, format);
 
             g.DrawRectangle(Pens.Black, r);
         }
 
         private void DdSchemesSelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ddSchemes.SelectedIndex == -1)
+            if (colourSchemes.SelectedIndex == -1)
                 return;
-            ColorScheme scheme = (ColorScheme) ddSchemes.SelectedItem;
+            var scheme = (ColorScheme) colourSchemes.SelectedItem;
             LoadScheme(scheme);
         }
 
         private void LoadScheme(ColorScheme scheme)
         {
-            int n = scheme.Colours.Count;
-            for (int i = 0; i < _colorList.Count; i++)
+            var n = scheme.Colours.Count;
+            for (var i = 0; i < _colourList.Count; i++)
             {
-                _colorList[i] = scheme.Colours[i%n];
+                _colourList[i] = scheme.Colours[i%n];
             }
-            listBox1.Invalidate();
+            listBoxColours.Invalidate();
         }
     }
 }
