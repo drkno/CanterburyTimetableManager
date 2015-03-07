@@ -83,7 +83,7 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
             }
             
             var session = new Session(currentDay, subs.Date.DayOfYear, subs.Date.Hour,
-                subs.Date.Minute, endTime.Hour, endTime.Minute, subs.Location);
+                subs.Date.Minute, endTime.Hour, endTime.Minute, subs.Location, subs.WeekPattern);
 
             Subject subject;
             if (timetable.SubjectList.Exists(element => element.Name == subs.SubjectCode))

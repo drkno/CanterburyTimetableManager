@@ -10,9 +10,7 @@ namespace UniTimetable.Model.Timetable
 {
     public class Timeslot : IComparable<Timeslot>
     {
-        private readonly int _startYearDay, _endYearDay;
         private TimeOfDay _end, _start;
-        private readonly string _weekPattern;
         private const ushort WeekLength = 7;
         private const char WeekInstance = '1';
 
@@ -44,13 +42,17 @@ namespace UniTimetable.Model.Timetable
                         // or start/end times are either side
                         || (_start <= other._start && End >= other._end)));
 
-            if (_startYearDay == -1 || string.IsNullOrWhiteSpace(_weekPattern) || !initialCheck || 
-                other._endYearDay < _startYearDay || _endYearDay < other._startYearDay)
+            if (!initialCheck || StartYearDay == -1)
             {
                 return initialCheck;
             }
 
-            var difference = (other._startYearDay - _startYearDay)/WeekLength;
+            if (other.EndYearDay < StartYearDay || EndYearDay < other.StartYearDay)
+            {
+                return true;
+            }
+
+            var difference = (other.StartYearDay - StartYearDay)/WeekLength;
             int i = 0, j = 0;
             if (difference < 0)
             {
@@ -61,9 +63,9 @@ namespace UniTimetable.Model.Timetable
                 j = difference;
             }
 
-            for (; i < _weekPattern.Length && j < other._weekPattern.Length; i++, j++)
+            for (; i < WeekPattern.Length && j < other.WeekPattern.Length; i++, j++)
             {
-                if (_weekPattern[i] == WeekInstance && other._weekPattern[j] == WeekInstance)
+                if (WeekPattern[i] == WeekInstance && other.WeekPattern[j] == WeekInstance)
                 {
                     return true;
                 }
@@ -92,6 +94,7 @@ namespace UniTimetable.Model.Timetable
 
         public Timeslot()
         {
+            StartYearDay = -1;
             Day = -1;
             _start = TimeOfDay.Minimum;
             _end = TimeOfDay.Maximum;
@@ -99,6 +102,8 @@ namespace UniTimetable.Model.Timetable
 
         public Timeslot(Timeslot other)
         {
+            StartYearDay = other.StartYearDay;
+            WeekPattern = other.WeekPattern;
             Day = other.Day;
             _start = new TimeOfDay(other._start);
             _end = new TimeOfDay(other._end);
@@ -106,6 +111,7 @@ namespace UniTimetable.Model.Timetable
 
         public Timeslot(int day, TimeOfDay start, TimeOfDay end)
         {
+            StartYearDay = -1;
             Day = day;
             _start = new TimeOfDay(start);
             _end = new TimeOfDay(end);
@@ -114,11 +120,10 @@ namespace UniTimetable.Model.Timetable
         public Timeslot(int day, int startYearDay, int startHour, int startMinute, int endHour, int endMinute, string weekPattern = "")
         {
             Day = day;
-            _startYearDay = startYearDay;
-            _endYearDay = startYearDay + WeekLength * (weekPattern.Length - 1);
+            StartYearDay = startYearDay;
             _start = new TimeOfDay(startHour, startMinute);
             _end = new TimeOfDay(endHour, endMinute);
-            _weekPattern = weekPattern;
+            WeekPattern = weekPattern;
         }
 
         #endregion
@@ -322,6 +327,30 @@ namespace UniTimetable.Model.Timetable
                     throw new Exception("End time cannot be before start time.");
                 }*/
                 _end.DayMinutes = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the week pattern for detecting clashes.
+        /// </summary>
+        [XmlAttribute("weekPattern")]
+        public string WeekPattern { get; set; }
+
+        /// <summary>
+        /// Gets or sets the start year day for detecting clashes.
+        /// </summary>
+        [XmlAttribute("startYearDay")]
+        public int StartYearDay { get; set; }
+
+        /// <summary>
+        /// Gets the end year day for detecting clashes.
+        /// </summary>
+        [XmlIgnore]
+        private int EndYearDay
+        {
+            get
+            {
+                return StartYearDay + WeekLength * (WeekPattern.Length - 1);
             }
         }
 
