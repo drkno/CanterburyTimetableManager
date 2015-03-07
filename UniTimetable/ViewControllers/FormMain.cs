@@ -888,11 +888,15 @@ namespace UniTimetable.ViewControllers
         private void EditCriteria(object sender, EventArgs e)
         {
             if (Timetable == null)
+            {
                 return;
+            }
 
             var formCriteria = new FormCriteria();
             if (formCriteria.ShowDialog(Solver) != DialogResult.OK)
+            {
                 return;
+            }
             Timetable.RecomputeSolutions = true;
         }
 

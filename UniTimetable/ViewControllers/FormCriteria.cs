@@ -28,8 +28,9 @@ namespace UniTimetable.ViewControllers
         {
             var index = comboBoxPresets.SelectedIndex;
             if (index == -1)
+            {
                 return;
-
+            }
             var preset = Solver.Presets[index];
             LoadLists(preset.Criteria, preset.Filters);
         }
@@ -57,11 +58,15 @@ namespace UniTimetable.ViewControllers
         {
             listBoxCriteria.Items.Clear();
             foreach (var c in criteria)
+            {
                 listBoxCriteria.Items.Add(c.DeepCopy());
+            }
 
             listBoxFilters.Items.Clear();
             foreach (var f in filters)
+            {
                 listBoxFilters.Items.Add(f.DeepCopy());
+            }
 
             UpdateCriteriaButtons();
             UpdateFilterButtons();
@@ -130,13 +135,19 @@ namespace UniTimetable.ViewControllers
             _dragCriteria = null;
             // drag drop failed
             if (listBoxCriteria.DoDragDrop(criteria, DragDropEffects.Move) != DragDropEffects.Move)
+            {
                 return;
+            }
             // some sort of conflict
             if (_dragTarget == -1 || _dragCriteria != criteria)
+            {
                 return;
+            }
             // moving back to same position
             if (_dragTarget == index)
+            {
                 return;
+            }
             if (_dragTarget > index)
             {
                 listBoxCriteria.Items.Insert(_dragTarget + 1, criteria);
@@ -161,7 +172,9 @@ namespace UniTimetable.ViewControllers
         private void ListBoxCriteriaDragDrop(object sender, DragEventArgs e)
         {
             if (!e.Data.GetDataPresent(typeof (Solver.Criteria)))
+            {
                 return;
+            }
 
             var location = listBoxCriteria.PointToClient(new Point(e.X, e.Y));
             _dragTarget = listBoxCriteria.IndexFromPoint(location);
@@ -180,7 +193,9 @@ namespace UniTimetable.ViewControllers
         {
             var index = listBoxCriteria.IndexFromPoint(e.Location);
             if (index < 0)
+            {
                 return;
+            }
             EditCriteria();
         }
 
@@ -201,11 +216,11 @@ namespace UniTimetable.ViewControllers
 
         private void AddCriteria()
         {
-            FormCriteriaDetails formDetails = new FormCriteriaDetails();
-            Solver.Criteria criteria = formDetails.ShowDialog(null);
+            var formDetails = new FormCriteriaDetails();
+            var criteria = formDetails.ShowDialog(null);
             if (criteria == null)
                 return;
-            int index = listBoxCriteria.SelectedIndex;
+            var index = listBoxCriteria.SelectedIndex;
             if (index == -1)
                 index = listBoxCriteria.Items.Count;
             listBoxCriteria.Items.Insert(index, criteria);
@@ -217,13 +232,20 @@ namespace UniTimetable.ViewControllers
         {
             var index = listBoxCriteria.SelectedIndex;
             if (index == -1)
+            {
                 return;
+            }
 
             var criteria = (Solver.Criteria) listBoxCriteria.SelectedItem;
             var formDetails = new FormCriteriaDetails();
             criteria = formDetails.ShowDialog(criteria);
             if (criteria == null)
+            {
                 return;
+            }
+
+            _solver.Comparer.Criteria[index] = criteria;
+
             listBoxCriteria.Items.RemoveAt(index);
             listBoxCriteria.Items.Insert(index, criteria);
             listBoxCriteria.SelectedIndex = index;
@@ -245,7 +267,7 @@ namespace UniTimetable.ViewControllers
 
         private void UpdateCriteriaButtons()
         {
-            var enabled = (listBoxCriteria.Items.Count > 0);
+            var enabled = listBoxCriteria.Items.Count > 0;
             buttonCriteriaEdit.Enabled = enabled;
             buttonCriteriaRemove.Enabled = enabled;
         }
@@ -259,7 +281,9 @@ namespace UniTimetable.ViewControllers
             e.DrawBackground();
 
             if (listBoxFilters.Items.Count == 0)
+            {
                 return;
+            }
 
             var g = e.Graphics;
             var filter = (Solver.Filter) listBoxFilters.Items[e.Index];
@@ -348,15 +372,22 @@ namespace UniTimetable.ViewControllers
 
         private void EditFilter()
         {
-            int index = listBoxFilters.SelectedIndex;
+            var index = listBoxFilters.SelectedIndex;
             if (index == -1)
+            {
                 return;
+            }
 
-            Solver.Filter filter = (Solver.Filter) listBoxFilters.SelectedItem;
-            FormFilterDetails formDetails = new FormFilterDetails();
+            var filter = (Solver.Filter) listBoxFilters.SelectedItem;
+            var formDetails = new FormFilterDetails();
             filter = formDetails.ShowDialog(filter);
             if (filter == null)
+            {
                 return;
+            }
+
+            _solver.Filters[index] = filter;
+
             listBoxFilters.Items.RemoveAt(index);
             listBoxFilters.Items.Insert(index, filter);
             listBoxFilters.SelectedIndex = index;
