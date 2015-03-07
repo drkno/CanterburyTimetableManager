@@ -55,6 +55,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
@@ -113,10 +114,10 @@
       <DependentUpon>FormSetStreams.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\Solver\Solver.Filter.cs" />
-    <Compile Include="ViewControllers\FormImport.cs">
+    <Compile Include="ViewControllers\Import\FormImport.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ViewControllers\FormImport.Designer.cs">
+    <Compile Include="ViewControllers\Import\FormImport.Designer.cs">
       <DependentUpon>FormImport.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewControllers\FormMain.cs">
@@ -172,7 +173,7 @@
       <SubType>Designer</SubType>
       <DependentUpon>FormCriteriaDetails.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ViewControllers\FormImport.resx">
+    <EmbeddedResource Include="ViewControllers\Import\FormImport.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormImport.cs</DependentUpon>
     </EmbeddedResource>
@@ -217,6 +218,15 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ViewControllers\Import\PreviewPanel.resx">
+      <DependentUpon>PreviewPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ViewControllers\Import\StreamsPanel.resx">
+      <DependentUpon>StreamsPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ViewControllers\Import\ImportingPanel.resx">
+      <DependentUpon>ImportingPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ViewControllers\TimetableControl.resx">
       <SubType>Designer</SubType>
@@ -266,6 +276,24 @@
       <DependentUpon>FormSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\History.cs" />
+    <Compile Include="ViewControllers\Import\PreviewPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ViewControllers\Import\PreviewPanel.Designer.cs">
+      <DependentUpon>PreviewPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Import\StreamsPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ViewControllers\Import\StreamsPanel.Designer.cs">
+      <DependentUpon>StreamsPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Import\ImportingPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ViewControllers\Import\ImportingPanel.Designer.cs">
+      <DependentUpon>ImportingPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="ViewControllers\ListBoxBuffered.cs">
       <SubType>Component</SubType>
     </Compile>
