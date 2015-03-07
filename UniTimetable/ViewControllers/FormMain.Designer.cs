@@ -973,7 +973,7 @@ namespace UniTimetable.ViewControllers
             var type = (Type)listBox.Items[e.Index];
 
             var r = new Rectangle(e.Bounds.X + ListBoxMargin, e.Bounds.Y + ListBoxMargin, e.Bounds.Width - 2 * ListBoxMargin - 1, e.Bounds.Height - 2 * ListBoxMargin - 1);
-            g.FillRectangle(TimetableControl.LinearGradient(r.Location, r.Width, r.Height, type.Subject.Color), r);
+            g.FillRectangle(TimetableControl.LinearGradient(r.Location, r.Width, r.Height, type.Subject.Colour), r);
 
             var format = new StringFormat();
             format.Alignment = StringAlignment.Center;

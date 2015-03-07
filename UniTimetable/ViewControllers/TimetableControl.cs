@@ -597,7 +597,7 @@ namespace UniTimetable.ViewControllers
 
         public Cursor DragCursor(Session s)
         {
-            return DragCursor(s.Length, s.Stream.Type.Subject.Color);
+            return DragCursor(s.Length, s.Stream.Type.Subject.Colour);
         }
 
         public Cursor DragCursor(Unavailability u)
@@ -880,7 +880,7 @@ namespace UniTimetable.ViewControllers
             {
                 foreach (var session in _altStream.Classes)
                 {
-                    DrawTransparentTimeslot(g, session, session.Stream.Type.Subject.Color);
+                    DrawTransparentTimeslot(g, session, session.Stream.Type.Subject.Colour);
                 }
             }
             if (_equivStream != null)
@@ -900,7 +900,7 @@ namespace UniTimetable.ViewControllers
                 {
                     foreach (var session in stream.Classes)
                     {
-                        DrawTransparentTimeslot(g, session, _optionsType.Subject.Color);
+                        DrawTransparentTimeslot(g, session, _optionsType.Subject.Colour);
                     }
                 }
             }
@@ -910,11 +910,11 @@ namespace UniTimetable.ViewControllers
         {
             if (_activeStream == session.Stream)
             {
-                DrawTimeslotActive(g, session, (_grayscale ? Color.DarkGray : session.Stream.Type.Subject.Color));
+                DrawTimeslotActive(g, session, (_grayscale ? Color.DarkGray : session.Stream.Type.Subject.Colour));
             }
             else
             {
-                DrawTimeslot(g, session, (_grayscale ? Color.DarkGray : session.Stream.Type.Subject.Color));
+                DrawTimeslot(g, session, (_grayscale ? Color.DarkGray : session.Stream.Type.Subject.Colour));
             }
 
             if (_showText)

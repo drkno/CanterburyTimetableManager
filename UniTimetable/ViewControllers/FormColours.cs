@@ -42,7 +42,7 @@ namespace UniTimetable.ViewControllers
             listBoxColours.Items.Clear();
             foreach (var subject in _timetable.SubjectList)
             {
-                _colourList.Add(subject.Color);
+                _colourList.Add(subject.Colour);
                 listBoxColours.Items.Add(subject);
             }
             colourSchemes.SelectedIndex = -1;
@@ -67,9 +67,9 @@ namespace UniTimetable.ViewControllers
             // copy the colours back
             for (var i = 0; i < _colourList.Count; i++)
             {
-                if (_timetable.SubjectList[i].Color == _colourList[i]) continue;
+                if (_timetable.SubjectList[i].Colour == _colourList[i]) continue;
                 changed = true;
-                _timetable.SubjectList[i].Color = _colourList[i];
+                _timetable.SubjectList[i].Colour = _colourList[i];
             }
             DialogResult = (changed ? DialogResult.OK : DialogResult.Cancel);
             Close();

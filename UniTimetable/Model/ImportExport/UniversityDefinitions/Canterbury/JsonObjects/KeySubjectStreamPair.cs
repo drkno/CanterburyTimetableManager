@@ -10,5 +10,7 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury.JsonO
 
         [DataMember]
         public SubjectStream Value { get; set; }
+
+        public bool Allocated { get; set; }
     }
 }

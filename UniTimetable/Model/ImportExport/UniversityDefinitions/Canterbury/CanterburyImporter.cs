@@ -31,11 +31,11 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
                 {
                     foreach (var subs in course.SubjectStreams)
                     {
-                        ParseSubjectStream(ref timetable, subs.Value);
+                        ParseSubjectStream(ref timetable, subs.Value, subs.Allocated);
                     }
                 }
 
-                SetColors(timetable);
+                SetColours(timetable);
 
                 return timetable;
             }
@@ -46,11 +46,9 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
         }
 
         #region Parse Subject Stream
-        private void ParseSubjectStream(ref Timetable.Timetable timetable, SubjectStream subs)
+        private void ParseSubjectStream(ref Timetable.Timetable timetable, SubjectStream subs, bool currentlyAllocated)
         {
-            Console.WriteLine(subs.Selectable);
-            Console.WriteLine(subs.Availability);
-            if (!ImportUnselectableStreams && subs.Selectable != "available" && subs.Selectable != "clash")
+            if (!ImportUnselectableStreams && !currentlyAllocated && subs.Selectable == "full")
             {
                 return;
             }
@@ -153,12 +151,12 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
             session.Stream = stream;
         }
 
-        private static void SetColors(Timetable.Timetable timetable)
+        private static void SetColours(Timetable.Timetable timetable)
         {
             var scheme = ColorScheme.Schemes[0];
             for (var i = 0; i < timetable.SubjectList.Count; i++)
             {
-                timetable.SubjectList[i].Color = ((ColorScheme)scheme).Colours[i % ((ColorScheme)scheme).Colours.Count];
+                timetable.SubjectList[i].Colour = ((ColorScheme)scheme).Colours[i % ((ColorScheme)scheme).Colours.Count];
             }
         }
         #endregion
@@ -172,25 +170,19 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
                 foreach (var group in course.Groups)
                 {
                     var stream = GetCourse(group.SubjectCode, group.ActivityGroupCode);
-                    if (!ImportUnselectableStreams)
+                    subjectStreams.Add(stream);
+                    foreach (var subjectStream in stream.SubjectStreams)
                     {
-                        for (var i = 0; i < stream.SubjectStreams.Count; i++)
+                        var sstream = subjectStream;
+                        var r = LoginHandle.Student.AllocatedStreams.FirstOrDefault(a => a.ToString() == sstream.Key);
+                        if (r != null)
                         {
-                            if (stream.SubjectStreams[i].Value.Selectable != "full") continue;
-                            stream.SubjectStreams.RemoveAt(i);
-                            i--;
+                            subjectStream.Allocated = true;
                         }
                     }
-                    subjectStreams.Add(stream);
                 }
             }
-            foreach (var allocatedStream in LoginHandle.Student.AllocatedStreams)
-            {
-                var stream = GetCourse(allocatedStream.SubjectCode, allocatedStream.ActivityGroupCode);
-                subjectStreams.Add(stream);
-            }
 
-            subjectStreams.AddRange(LoginHandle.Student.AllocatedStreams.Select(allocatedStream => GetCourse(allocatedStream.SubjectCode, allocatedStream.ActivityGroupCode)));
             return subjectStreams;
         }
 

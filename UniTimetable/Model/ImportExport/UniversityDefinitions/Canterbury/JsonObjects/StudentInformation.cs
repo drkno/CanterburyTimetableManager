@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
@@ -58,6 +57,11 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury.JsonO
     [DataContract]
     public class AllocatedStream : SubjectStream
     {
+        public override string ToString()
+        {
+            return SubjectCode + "|" + ActivityGroupCode + "|" + ActivityCode;
+        }
+
         [DataMember(Name = "activity_size")]
         public int ActivitySize { get; set; }
         [DataMember(Name = "student_count")]
