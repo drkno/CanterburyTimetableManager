@@ -93,48 +93,26 @@ namespace UniTimetable.ViewControllers.Import
             }
         }
 
+        private void MoveItems(bool right, string contains)
+        {
+            var items = right ? listViewIgnored.Items : listViewRequired.Items;
+            foreach (ListViewItem item in items)
+            {
+                if (!item.Group.ToString().Contains(contains)) continue;
+                item.Selected = true;
+                if (right) { MoveRight(); }
+                else { MoveLeft(); }
+            }
+        }
+
         private void CheckBoxS1CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBoxS1.Checked)
-            {
-                foreach (ListViewItem item in listViewIgnored.Items)
-                {
-                    if (!item.Group.ToString().Contains("S1")) continue;
-                    item.Selected = true;
-                    MoveRight();
-                }
-            }
-            else
-            {
-                foreach (ListViewItem item in listViewRequired.Items)
-                {
-                    if (!item.Group.ToString().Contains("S1")) continue;
-                    item.Selected = true;
-                    MoveLeft();
-                }
-            }
+            MoveItems(checkBoxS1.Checked, "S1");
         }
 
         private void CheckBoxS2CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBoxS2.Checked)
-            {
-                foreach (ListViewItem item in listViewIgnored.Items)
-                {
-                    if (!item.Group.ToString().Contains("S2")) continue;
-                    item.Selected = true;
-                    MoveRight();
-                }
-            }
-            else
-            {
-                foreach (ListViewItem item in listViewRequired.Items)
-                {
-                    if (!item.Group.ToString().Contains("S2")) continue;
-                    item.Selected = true;
-                    MoveLeft();
-                }
-            }
+            MoveItems(checkBoxS2.Checked, "S2");
         }
 
         private void BtnIgnoreClick(object sender, EventArgs e)

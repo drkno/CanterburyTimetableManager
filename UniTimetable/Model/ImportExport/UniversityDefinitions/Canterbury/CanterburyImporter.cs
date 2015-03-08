@@ -31,7 +31,7 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
                 {
                     foreach (var subs in course.SubjectStreams)
                     {
-                        ParseSubjectStream(ref timetable, subs.Value, subs.Allocated);
+                        ParseSubjectStream(ref timetable, subs.Value, subs.Allocated, subs.MultipleAllocationIndex);
                     }
                 }
 
@@ -46,7 +46,7 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
         }
 
         #region Parse Subject Stream
-        private void ParseSubjectStream(ref Timetable.Timetable timetable, SubjectStream subs, bool currentlyAllocated)
+        private void ParseSubjectStream(ref Timetable.Timetable timetable, SubjectStream subs, bool currentlyAllocated, int multipleAllocationIndex)
         {
             if (!ImportUnselectableStreams && !currentlyAllocated && subs.Selectable == "full")
             {
@@ -98,13 +98,18 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
 
             // Set the session type
             Type type;
-            if (subject.Types.Exists(types => types.Code == subs.ActivityGroupCode))
+            if (multipleAllocationIndex == -1 && subject.Types.Exists(types => types.Code == subs.ActivityGroupCode))
             {
                 type = subject.Types.Find(types => types.Code == subs.ActivityGroupCode);
             }
             else // The session type doesn't exist, create it.
             {
-                type = new Type(subs.ActivityType, subs.ActivityGroupCode, subject);
+                var groupCode = subs.ActivityGroupCode;
+                if (multipleAllocationIndex != -1)
+                {
+                    groupCode += " [" + multipleAllocationIndex + "]";
+                }
+                type = new Type(subs.ActivityType, groupCode, subject);
                 switch (subs.ActivityGroupCode)
                 {
                     case "tes":
@@ -169,17 +174,35 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
             {
                 foreach (var group in course.Groups)
                 {
+                    // TODO: Make courses where multiple streams are allocated simaltaneously split them into separate streams
+                    throw new NotImplementedException("Code unfinished here");
+                    bool firstAllocation = false, multipleAllocation = false;
                     var stream = GetCourse(group.SubjectCode, group.ActivityGroupCode);
-                    subjectStreams.Add(stream);
+                    
                     foreach (var subjectStream in stream.SubjectStreams)
                     {
                         var sstream = subjectStream;
                         var r = LoginHandle.Student.AllocatedStreams.FirstOrDefault(a => a.ToString() == sstream.Key);
-                        if (r != null)
+                        if (r == null) continue;
+                        subjectStream.Allocated = true;
+                        if (!firstAllocation)
                         {
-                            subjectStream.Allocated = true;
+                            firstAllocation = true;
+                        }
+                        else
+                        {
+                            multipleAllocation = true;
                         }
                     }
+
+                    if (multipleAllocation)
+                    {
+                        for (var i = 0; i < stream.SubjectStreams.Count; i++)
+                        {
+                            stream.SubjectStreams[i].MultipleAllocationIndex = i;
+                        }
+                    }
+                    subjectStreams.Add(stream);
                 }
             }
 
