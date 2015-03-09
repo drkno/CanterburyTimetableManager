@@ -39,7 +39,7 @@ namespace UniTimetable.Model.Timetable
 
         public bool TypeClashTable(Type type1, Type type2)
         {
-            return _typeClashTable[type1.ID][type2.ID];
+            return _typeClashTable[type1.Id][type2.Id];
         }
 
         /// <summary>
@@ -774,7 +774,7 @@ namespace UniTimetable.Model.Timetable
             _typeClashTable = new bool[TypeList.Count][];
             for (var i = 0; i < TypeList.Count; i++)
             {
-                TypeList[i].ID = i;
+                TypeList[i].Id = i;
                 _typeClashTable[i] = new bool[TypeList.Count];
                 TypeList[i].ClashTable = null;
             }
@@ -792,10 +792,7 @@ namespace UniTimetable.Model.Timetable
             }
         }
 
-        public bool CheckDirectClash(Type a)
-        {
-            return a.Required && TypeList.Where(b => a != b).Where(b => b.Required).Any(a.ClashesWith);
-        }
+        
 
         #endregion
 

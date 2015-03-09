@@ -7,9 +7,6 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury.JsonO
     [DataContract]
     public class SubjectStream
     {
-        private string _startDate;
-        private string _startTime;
-
         [DataMember(Name = "subject_code")]
         public string SubjectCode { get;set; }
 
@@ -26,18 +23,7 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury.JsonO
         public string DayOfWeek { get;set; }
 
         [DataMember(Name = "start_time")]
-        public string StartTime
-        {
-            get { return _startTime; }
-            set
-            {
-                _startTime = value;
-                if (!string.IsNullOrWhiteSpace(StartDate))
-                {
-                    Date = DateTime.Parse(StartDate + " " + value);
-                }
-            }
-        }
+        public string StartTime { get; set; }
 
         [DataMember(Name = "location")]
         public string Location { get;set; }
@@ -76,18 +62,7 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury.JsonO
         public string Message { get;set; }
 
         [DataMember(Name = "start_date")]
-        public string StartDate
-        {
-            get { return _startDate; }
-            set
-            {
-                _startDate = value;
-                if (!string.IsNullOrWhiteSpace(StartTime))
-                {
-                    Date = DateTime.ParseExact(value + " " + StartTime, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
-                }
-            }
-        }
+        public string StartDate { get; set; }
 
         [DataMember(Name = "color")]
         public string Colour { get;set; }
@@ -98,6 +73,12 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury.JsonO
         [DataMember(Name = "lng")]
         public string Longitude { get;set; }
 
-        public DateTime Date { get; set; }
+        public DateTime Date
+        {
+            get
+            {
+                return DateTime.ParseExact(StartDate + " " + StartTime, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+            }
+        }
     }
 }

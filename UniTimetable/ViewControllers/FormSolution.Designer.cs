@@ -28,160 +28,133 @@ namespace UniTimetable.ViewControllers
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSolution));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.lvbSolutions = new System.Windows.Forms.ListView();
-            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.buttonUse = new System.Windows.Forms.Button();
+            this.buttonCancel = new System.Windows.Forms.Button();
+            this.buttonCriteria = new System.Windows.Forms.Button();
+            this.listViewSolutions = new System.Windows.Forms.ListView();
+            this.checkBoxOnlyMarked = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.timetableControl = new TimetableControl();
-            this.btnCancel = new System.Windows.Forms.Button();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.lvbProperties = new System.Windows.Forms.ListView();
-            this.Property = new System.Windows.Forms.ColumnHeader();
-            this.Value = new System.Windows.Forms.ColumnHeader();
-            this.btnCriteria = new System.Windows.Forms.Button();
-            this.btnUse = new System.Windows.Forms.Button();
-            this.btnStar = new System.Windows.Forms.Button();
-            this.chkOnlyStarred = new System.Windows.Forms.CheckBox();
+            this.buttonMark = new System.Windows.Forms.Button();
+            this.listViewProperties = new System.Windows.Forms.ListView();
+            this.Property = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Value = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.timetableControl = new UniTimetable.ViewControllers.TimetableControl();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.lvbSolutions);
+            this.groupBox1.Controls.Add(this.buttonUse);
+            this.groupBox1.Controls.Add(this.buttonCancel);
+            this.groupBox1.Controls.Add(this.buttonCriteria);
+            this.groupBox1.Controls.Add(this.listViewSolutions);
+            this.groupBox1.Controls.Add(this.checkBoxOnlyMarked);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(776, 404);
+            this.groupBox1.Size = new System.Drawing.Size(776, 430);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Solutions";
             // 
-            // lvbSolutions
+            // buttonUse
             // 
-            this.lvbSolutions.FullRowSelect = true;
-            this.lvbSolutions.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.lvbSolutions.HideSelection = false;
-            this.lvbSolutions.Location = new System.Drawing.Point(11, 19);
-            this.lvbSolutions.MultiSelect = false;
-            this.lvbSolutions.Name = "lvbSolutions";
-            this.lvbSolutions.ShowGroups = false;
-            this.lvbSolutions.Size = new System.Drawing.Size(754, 374);
-            this.lvbSolutions.SmallImageList = this.imageList1;
-            this.lvbSolutions.TabIndex = 0;
-            this.lvbSolutions.UseCompatibleStateImageBehavior = false;
-            this.lvbSolutions.View = System.Windows.Forms.View.Details;
-            this.lvbSolutions.SelectedIndexChanged += new System.EventHandler(this.LvbSolutionsSelectedIndexChanged);
+            this.buttonUse.Location = new System.Drawing.Point(11, 399);
+            this.buttonUse.Name = "buttonUse";
+            this.buttonUse.Size = new System.Drawing.Size(157, 23);
+            this.buttonUse.TabIndex = 9;
+            this.buttonUse.Text = "&Use Solution";
+            this.buttonUse.UseVisualStyleBackColor = true;
+            this.buttonUse.Click += new System.EventHandler(this.ButtonUseClick);
             // 
-            // imageList1
+            // buttonCancel
             // 
-            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
-            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageList1.Images.SetKeyName(0, "Starred.gif");
+            this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.buttonCancel.Location = new System.Drawing.Point(608, 399);
+            this.buttonCancel.Name = "buttonCancel";
+            this.buttonCancel.Size = new System.Drawing.Size(157, 23);
+            this.buttonCancel.TabIndex = 10;
+            this.buttonCancel.Text = "&Cancel";
+            this.buttonCancel.UseVisualStyleBackColor = true;
+            // 
+            // buttonCriteria
+            // 
+            this.buttonCriteria.Location = new System.Drawing.Point(445, 399);
+            this.buttonCriteria.Name = "buttonCriteria";
+            this.buttonCriteria.Size = new System.Drawing.Size(157, 23);
+            this.buttonCriteria.TabIndex = 12;
+            this.buttonCriteria.Text = "&Solution Criteria";
+            this.buttonCriteria.UseVisualStyleBackColor = true;
+            this.buttonCriteria.Click += new System.EventHandler(this.ButtonCriteriaClick);
+            // 
+            // listViewSolutions
+            // 
+            this.listViewSolutions.FullRowSelect = true;
+            this.listViewSolutions.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.listViewSolutions.HideSelection = false;
+            this.listViewSolutions.Location = new System.Drawing.Point(11, 19);
+            this.listViewSolutions.MultiSelect = false;
+            this.listViewSolutions.Name = "listViewSolutions";
+            this.listViewSolutions.ShowGroups = false;
+            this.listViewSolutions.Size = new System.Drawing.Size(754, 374);
+            this.listViewSolutions.TabIndex = 0;
+            this.listViewSolutions.UseCompatibleStateImageBehavior = false;
+            this.listViewSolutions.View = System.Windows.Forms.View.Details;
+            this.listViewSolutions.SelectedIndexChanged += new System.EventHandler(this.ListViewSolutionsSelectedIndexChanged);
+            // 
+            // checkBoxOnlyMarked
+            // 
+            this.checkBoxOnlyMarked.AutoSize = true;
+            this.checkBoxOnlyMarked.Location = new System.Drawing.Point(184, 403);
+            this.checkBoxOnlyMarked.Name = "checkBoxOnlyMarked";
+            this.checkBoxOnlyMarked.Size = new System.Drawing.Size(157, 17);
+            this.checkBoxOnlyMarked.TabIndex = 4;
+            this.checkBoxOnlyMarked.Text = "Only show marked solutions";
+            this.checkBoxOnlyMarked.UseVisualStyleBackColor = true;
+            this.checkBoxOnlyMarked.CheckedChanged += new System.EventHandler(this.CheckboxOnlyMarkedCheckedChanged);
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.buttonMark);
+            this.groupBox2.Controls.Add(this.listViewProperties);
             this.groupBox2.Controls.Add(this.timetableControl);
-            this.groupBox2.Location = new System.Drawing.Point(12, 422);
+            this.groupBox2.Location = new System.Drawing.Point(794, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(231, 216);
+            this.groupBox2.Size = new System.Drawing.Size(231, 430);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Preview";
+            this.groupBox2.Text = "Solution Information";
             // 
-            // timetableControl
+            // buttonMark
             // 
-            this.timetableControl.EnableDrag = false;
-            this.timetableControl.Grayscale = false;
-            this.timetableControl.HourEnd = 21;
-            this.timetableControl.HourStart = 8;
-            this.timetableControl.Location = new System.Drawing.Point(12, 19);
-            this.timetableControl.Name = "timetableControl";
-            this.timetableControl.ShowAll = false;
-            this.timetableControl.ShowDays = false;
-            this.timetableControl.ShowDragGhost = true;
-            this.timetableControl.ShowGrayArea = true;
-            this.timetableControl.ShowLocation = false;
-            this.timetableControl.ShowText = false;
-            this.timetableControl.ShowTimes = false;
-            this.timetableControl.ShowWeekend = true;
-            this.timetableControl.Size = new System.Drawing.Size(207, 185);
-            this.timetableControl.TabIndex = 1;
-            this.timetableControl.Timetable = null;
+            this.buttonMark.Location = new System.Drawing.Point(40, 399);
+            this.buttonMark.Name = "buttonMark";
+            this.buttonMark.Size = new System.Drawing.Size(157, 23);
+            this.buttonMark.TabIndex = 11;
+            this.buttonMark.Text = "&Mark Solution";
+            this.buttonMark.UseVisualStyleBackColor = true;
+            this.buttonMark.Click += new System.EventHandler(this.ButtonMarkClick);
             // 
-            // btnCancel
+            // listViewProperties
             // 
-            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Image = global::UniTimetable.Properties.Resources.Symbol_Delete;
-            this.btnCancel.Location = new System.Drawing.Point(696, 547);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(92, 91);
-            this.btnCancel.TabIndex = 8;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnCancel.UseVisualStyleBackColor = true;
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.textBox1);
-            this.groupBox3.Location = new System.Drawing.Point(249, 422);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(122, 216);
-            this.groupBox3.TabIndex = 2;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Streams";
-            // 
-            // textBox1
-            // 
-            this.textBox1.AcceptsReturn = true;
-            this.textBox1.AcceptsTab = true;
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(12, 19);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(98, 185);
-            this.textBox1.TabIndex = 0;
-            this.textBox1.TabStop = false;
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.lvbProperties);
-            this.groupBox4.Location = new System.Drawing.Point(377, 422);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(215, 216);
-            this.groupBox4.TabIndex = 3;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Properties";
-            // 
-            // lvbProperties
-            // 
-            this.lvbProperties.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.lvbProperties.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.listViewProperties.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.listViewProperties.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.Property,
             this.Value});
-            this.lvbProperties.FullRowSelect = true;
-            this.lvbProperties.GridLines = true;
-            this.lvbProperties.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-            this.lvbProperties.HideSelection = false;
-            this.lvbProperties.Location = new System.Drawing.Point(12, 19);
-            this.lvbProperties.Name = "lvbProperties";
-            this.lvbProperties.ShowGroups = false;
-            this.lvbProperties.Size = new System.Drawing.Size(191, 185);
-            this.lvbProperties.TabIndex = 0;
-            this.lvbProperties.TabStop = false;
-            this.lvbProperties.UseCompatibleStateImageBehavior = false;
-            this.lvbProperties.View = System.Windows.Forms.View.Details;
+            this.listViewProperties.FullRowSelect = true;
+            this.listViewProperties.GridLines = true;
+            this.listViewProperties.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.listViewProperties.HideSelection = false;
+            this.listViewProperties.Location = new System.Drawing.Point(12, 197);
+            this.listViewProperties.Name = "listViewProperties";
+            this.listViewProperties.ShowGroups = false;
+            this.listViewProperties.Size = new System.Drawing.Size(207, 196);
+            this.listViewProperties.TabIndex = 0;
+            this.listViewProperties.TabStop = false;
+            this.listViewProperties.UseCompatibleStateImageBehavior = false;
+            this.listViewProperties.View = System.Windows.Forms.View.Details;
             // 
             // Property
             // 
@@ -192,68 +165,39 @@ namespace UniTimetable.ViewControllers
             // 
             this.Value.Text = "Value";
             this.Value.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.Value.Width = 70;
             // 
-            // btnCriteria
+            // timetableControl
             // 
-            this.btnCriteria.Image = global::UniTimetable.Properties.Resources.Config_Tools;
-            this.btnCriteria.Location = new System.Drawing.Point(696, 450);
-            this.btnCriteria.Name = "btnCriteria";
-            this.btnCriteria.Size = new System.Drawing.Size(92, 91);
-            this.btnCriteria.TabIndex = 6;
-            this.btnCriteria.Text = "Solution Criteria";
-            this.btnCriteria.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnCriteria.UseVisualStyleBackColor = true;
-            this.btnCriteria.Click += new System.EventHandler(this.BtnCriteriaClick);
-            // 
-            // btnUse
-            // 
-            this.btnUse.Image = global::UniTimetable.Properties.Resources.Symbol_Check;
-            this.btnUse.Location = new System.Drawing.Point(598, 547);
-            this.btnUse.Name = "btnUse";
-            this.btnUse.Size = new System.Drawing.Size(92, 91);
-            this.btnUse.TabIndex = 7;
-            this.btnUse.Text = "Use Solution";
-            this.btnUse.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnUse.UseVisualStyleBackColor = true;
-            this.btnUse.Click += new System.EventHandler(this.BtnUseClick);
-            // 
-            // btnStar
-            // 
-            this.btnStar.Image = global::UniTimetable.Properties.Resources.Favorites;
-            this.btnStar.Location = new System.Drawing.Point(598, 450);
-            this.btnStar.Name = "btnStar";
-            this.btnStar.Size = new System.Drawing.Size(92, 91);
-            this.btnStar.TabIndex = 5;
-            this.btnStar.Text = "Star It!";
-            this.btnStar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnStar.UseVisualStyleBackColor = true;
-            this.btnStar.Click += new System.EventHandler(this.BtnStarClick);
-            // 
-            // chkOnlyStarred
-            // 
-            this.chkOnlyStarred.AutoSize = true;
-            this.chkOnlyStarred.Location = new System.Drawing.Point(617, 427);
-            this.chkOnlyStarred.Name = "chkOnlyStarred";
-            this.chkOnlyStarred.Size = new System.Drawing.Size(154, 17);
-            this.chkOnlyStarred.TabIndex = 4;
-            this.chkOnlyStarred.Text = "Only show starred solutions";
-            this.chkOnlyStarred.UseVisualStyleBackColor = true;
-            this.chkOnlyStarred.CheckedChanged += new System.EventHandler(this.ChkOnlyStarredCheckedChanged);
+            this.timetableControl.EnableDrag = false;
+            this.timetableControl.Font = new System.Drawing.Font("Arial Narrow", 0.0001196839F);
+            this.timetableControl.Grayscale = false;
+            this.timetableControl.HourEnd = 21;
+            this.timetableControl.HourStart = 8;
+            this.timetableControl.Location = new System.Drawing.Point(12, 19);
+            this.timetableControl.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.timetableControl.Name = "timetableControl";
+            this.timetableControl.OutlineColour = System.Drawing.Color.LightGray;
+            this.timetableControl.ShowAll = false;
+            this.timetableControl.ShowDays = false;
+            this.timetableControl.ShowDragGhost = true;
+            this.timetableControl.ShowGrayArea = true;
+            this.timetableControl.ShowLocation = false;
+            this.timetableControl.ShowText = false;
+            this.timetableControl.ShowTimes = false;
+            this.timetableControl.ShowWeekend = true;
+            this.timetableControl.Size = new System.Drawing.Size(207, 185);
+            this.timetableControl.TabIndex = 1;
+            this.timetableControl.TimeslotUnavalibleColour = System.Drawing.Color.LightGray;
+            this.timetableControl.Timetable = null;
             // 
             // FormSolution
             // 
-            this.AcceptButton = this.btnUse;
+            this.AcceptButton = this.buttonUse;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(800, 650);
-            this.Controls.Add(this.chkOnlyStarred);
-            this.Controls.Add(this.btnUse);
-            this.Controls.Add(this.btnStar);
-            this.Controls.Add(this.btnCriteria);
-            this.Controls.Add(this.groupBox4);
-            this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.btnCancel);
+            this.CancelButton = this.buttonCancel;
+            this.ClientSize = new System.Drawing.Size(1034, 447);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
@@ -265,12 +209,9 @@ namespace UniTimetable.ViewControllers
             this.Text = "Timetable Solver";
             this.Load += new System.EventHandler(this.FormSolutionLoad);
             this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -278,19 +219,15 @@ namespace UniTimetable.ViewControllers
 
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.ListView lvbSolutions;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.ListView lvbProperties;
+        private System.Windows.Forms.ListView listViewSolutions;
+        private System.Windows.Forms.ListView listViewProperties;
         private System.Windows.Forms.ColumnHeader Property;
         private System.Windows.Forms.ColumnHeader Value;
-        private System.Windows.Forms.Button btnCriteria;
-        private System.Windows.Forms.Button btnUse;
-        private System.Windows.Forms.Button btnStar;
-        private System.Windows.Forms.CheckBox chkOnlyStarred;
+        private System.Windows.Forms.CheckBox checkBoxOnlyMarked;
         private TimetableControl timetableControl;
-        private System.Windows.Forms.ImageList imageList1;
+        private System.Windows.Forms.Button buttonUse;
+        private System.Windows.Forms.Button buttonCancel;
+        private System.Windows.Forms.Button buttonMark;
+        private System.Windows.Forms.Button buttonCriteria;
     }
 }

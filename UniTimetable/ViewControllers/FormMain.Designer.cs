@@ -34,7 +34,7 @@ namespace UniTimetable.ViewControllers
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.findClassAtThisTimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.findAlternativeStreamToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewEquivalentStreamsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,7 +59,7 @@ namespace UniTimetable.ViewControllers
             this.removeUnavailableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.BottomToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.TopToolStripPanel = new System.Windows.Forms.ToolStripPanel();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.btnImport = new System.Windows.Forms.ToolStripSplitButton();
             this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importAndMergeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -97,19 +97,19 @@ namespace UniTimetable.ViewControllers
             this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.btnShowHide = new System.Windows.Forms.Button();
-            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.lblRemaining = new System.Windows.Forms.Label();
-            this.lblIgnored = new System.Windows.Forms.Label();
             this.timetableControl = new UniTimetable.ViewControllers.TimetableControl();
-            this.listBox2 = new UniTimetable.ViewControllers.ListBoxBuffered();
-            this.listBox1 = new UniTimetable.ViewControllers.ListBoxBuffered();
-            this.contextMenuStrip1.SuspendLayout();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.buttonShowHide = new System.Windows.Forms.Button();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.listBoxIgnored = new UniTimetable.ViewControllers.ListBoxBuffered();
+            this.listBoxRemaining = new UniTimetable.ViewControllers.ListBoxBuffered();
+            this.labelRemaining = new System.Windows.Forms.Label();
+            this.labelIgnored = new System.Windows.Forms.Label();
+            this.contextMenuStrip.SuspendLayout();
             this.streamMenu.SuspendLayout();
             this.timeMenu.SuspendLayout();
             this.unavailableMenu.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
+            this.toolStrip.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
@@ -118,9 +118,9 @@ namespace UniTimetable.ViewControllers
             this.tableLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
             // 
-            // contextMenuStrip1
+            // contextMenuStrip
             // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.findClassAtThisTimeToolStripMenuItem,
             this.findAlternativeStreamToolStripMenuItem,
             this.viewEquivalentStreamsToolStripMenuItem,
@@ -129,9 +129,9 @@ namespace UniTimetable.ViewControllers
             this.addUnavailableTimeslotToolStripMenuItem1,
             this.editUnavToolStripMenuItem,
             this.removeUnavailableTimeslotToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.contextMenuStrip1.Size = new System.Drawing.Size(231, 164);
+            this.contextMenuStrip.Name = "contextMenuStrip1";
+            this.contextMenuStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.contextMenuStrip.Size = new System.Drawing.Size(231, 164);
             // 
             // findClassAtThisTimeToolStripMenuItem
             // 
@@ -296,11 +296,11 @@ namespace UniTimetable.ViewControllers
             this.TopToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.TopToolStripPanel.Size = new System.Drawing.Size(0, 0);
             // 
-            // toolStrip1
+            // toolStrip
             // 
-            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip1.GripMargin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStrip.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip.GripMargin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnImport,
             this.btnAccept,
             this.toolStripSeparator2,
@@ -316,11 +316,11 @@ namespace UniTimetable.ViewControllers
             this.btnSolver,
             this.btnCriteria,
             this.btnLucky});
-            this.toolStrip1.Location = new System.Drawing.Point(3, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(627, 52);
-            this.toolStrip1.TabIndex = 10;
-            this.toolStrip1.Text = "toolStrip1";
+            this.toolStrip.Location = new System.Drawing.Point(3, 0);
+            this.toolStrip.Name = "toolStrip";
+            this.toolStrip.Size = new System.Drawing.Size(663, 52);
+            this.toolStrip.TabIndex = 10;
+            this.toolStrip.Text = "toolStrip1";
             // 
             // btnImport
             // 
@@ -332,11 +332,12 @@ namespace UniTimetable.ViewControllers
             this.btnImport.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnImport.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnImport.Name = "btnImport";
-            this.btnImport.Size = new System.Drawing.Size(55, 49);
+            this.btnImport.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.btnImport.Size = new System.Drawing.Size(58, 49);
             this.btnImport.Text = "Import";
             this.btnImport.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnImport.ToolTipText = "Import from MyTimetable";
-            this.btnImport.ButtonClick += new System.EventHandler(this.BtnImportClick);
+            this.btnImport.ButtonClick += new System.EventHandler(this.Import);
             // 
             // importToolStripMenuItem
             // 
@@ -344,7 +345,7 @@ namespace UniTimetable.ViewControllers
             this.importToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
             this.importToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
             this.importToolStripMenuItem.Text = "&Import";
-            this.importToolStripMenuItem.Click += new System.EventHandler(this.ImportToolStripMenuItemClick);
+            this.importToolStripMenuItem.Click += new System.EventHandler(this.Import);
             // 
             // importAndMergeToolStripMenuItem
             // 
@@ -372,7 +373,8 @@ namespace UniTimetable.ViewControllers
             this.btnAccept.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnAccept.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnAccept.Name = "btnAccept";
-            this.btnAccept.Size = new System.Drawing.Size(52, 49);
+            this.btnAccept.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.btnAccept.Size = new System.Drawing.Size(55, 49);
             this.btnAccept.Text = "Export";
             this.btnAccept.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnAccept.ToolTipText = "Export to MyTimetable (set your classes to those selected)";
@@ -447,11 +449,12 @@ namespace UniTimetable.ViewControllers
             this.btnOpen.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnOpen.Name = "btnOpen";
-            this.btnOpen.Size = new System.Drawing.Size(40, 49);
+            this.btnOpen.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.btnOpen.Size = new System.Drawing.Size(43, 49);
             this.btnOpen.Text = "Open";
             this.btnOpen.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnOpen.ToolTipText = "Open saved timetable";
-            this.btnOpen.Click += new System.EventHandler(this.BtnOpenClick);
+            this.btnOpen.Click += new System.EventHandler(this.Open);
             // 
             // btnSave
             // 
@@ -463,7 +466,8 @@ namespace UniTimetable.ViewControllers
             this.btnSave.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(43, 49);
+            this.btnSave.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.btnSave.Size = new System.Drawing.Size(46, 49);
             this.btnSave.Text = "Save";
             this.btnSave.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnSave.ToolTipText = "Save timetable to file";
@@ -475,7 +479,7 @@ namespace UniTimetable.ViewControllers
             this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.saveToolStripMenuItem.Text = "&Save";
-            this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItemClick);
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.BtnSaveClick);
             // 
             // saveAsToolStripMenuItem
             // 
@@ -484,7 +488,7 @@ namespace UniTimetable.ViewControllers
             | System.Windows.Forms.Keys.S)));
             this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.saveAsToolStripMenuItem.Text = "Save &As";
-            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.SaveAsToolStripMenuItemClick);
+            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.SaveAs);
             // 
             // btnPrint
             // 
@@ -498,11 +502,12 @@ namespace UniTimetable.ViewControllers
             this.btnPrint.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnPrint.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnPrint.Name = "btnPrint";
-            this.btnPrint.Size = new System.Drawing.Size(44, 49);
+            this.btnPrint.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.btnPrint.Size = new System.Drawing.Size(47, 49);
             this.btnPrint.Text = "Print";
             this.btnPrint.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnPrint.ToolTipText = "Print timetable";
-            this.btnPrint.ButtonClick += new System.EventHandler(this.BtnPrintClick);
+            this.btnPrint.ButtonClick += new System.EventHandler(this.Print);
             // 
             // sToolStripMenuItem
             // 
@@ -512,7 +517,7 @@ namespace UniTimetable.ViewControllers
             this.sToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.sToolStripMenuItem.Text = "&Print";
             this.sToolStripMenuItem.ToolTipText = "Print timetable";
-            this.sToolStripMenuItem.Click += new System.EventHandler(this.PrintToolStripMenuItemClick);
+            this.sToolStripMenuItem.Click += new System.EventHandler(this.Print);
             // 
             // toolStripSeparator7
             // 
@@ -544,11 +549,12 @@ namespace UniTimetable.ViewControllers
             this.btnAddByClass.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnAddByClass.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnAddByClass.Name = "btnAddByClass";
-            this.btnAddByClass.Size = new System.Drawing.Size(49, 49);
+            this.btnAddByClass.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.btnAddByClass.Size = new System.Drawing.Size(52, 49);
             this.btnAddByClass.Text = "Classes";
             this.btnAddByClass.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnAddByClass.ToolTipText = "Show/hide avalible classes";
-            this.btnAddByClass.Click += new System.EventHandler(this.BtnAddByClassClick);
+            this.btnAddByClass.Click += new System.EventHandler(this.AddByClass);
             // 
             // btnNew
             // 
@@ -556,11 +562,12 @@ namespace UniTimetable.ViewControllers
             this.btnNew.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnNew.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnNew.Name = "btnNew";
-            this.btnNew.Size = new System.Drawing.Size(38, 49);
+            this.btnNew.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.btnNew.Size = new System.Drawing.Size(41, 49);
             this.btnNew.Text = "Clear";
             this.btnNew.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnNew.ToolTipText = "Clear timetable";
-            this.btnNew.Click += new System.EventHandler(this.BtnNewClick);
+            this.btnNew.Click += new System.EventHandler(this.New);
             // 
             // btnClear
             // 
@@ -568,11 +575,12 @@ namespace UniTimetable.ViewControllers
             this.btnClear.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnClear.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(39, 49);
+            this.btnClear.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.btnClear.Size = new System.Drawing.Size(42, 49);
             this.btnClear.Text = "Reset";
             this.btnClear.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnClear.ToolTipText = "Reset Canterbury Timetable Manager";
-            this.btnClear.Click += new System.EventHandler(this.BtnClearClick);
+            this.btnClear.Click += new System.EventHandler(this.Clear);
             // 
             // btnPreferences
             // 
@@ -580,7 +588,8 @@ namespace UniTimetable.ViewControllers
             this.btnPreferences.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnPreferences.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnPreferences.Name = "btnPreferences";
-            this.btnPreferences.Size = new System.Drawing.Size(72, 49);
+            this.btnPreferences.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.btnPreferences.Size = new System.Drawing.Size(75, 49);
             this.btnPreferences.Text = "Preferences";
             this.btnPreferences.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnPreferences.Click += new System.EventHandler(this.SettingsToolStripMenuItemClick);
@@ -596,10 +605,11 @@ namespace UniTimetable.ViewControllers
             this.btnSolver.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnSolver.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnSolver.Name = "btnSolver";
-            this.btnSolver.Size = new System.Drawing.Size(60, 49);
+            this.btnSolver.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.btnSolver.Size = new System.Drawing.Size(63, 49);
             this.btnSolver.Text = "Solutions";
             this.btnSolver.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnSolver.Click += new System.EventHandler(this.BtnSolverClick);
+            this.btnSolver.Click += new System.EventHandler(this.FindSolutions);
             // 
             // btnCriteria
             // 
@@ -607,10 +617,11 @@ namespace UniTimetable.ViewControllers
             this.btnCriteria.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnCriteria.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnCriteria.Name = "btnCriteria";
-            this.btnCriteria.Size = new System.Drawing.Size(49, 49);
+            this.btnCriteria.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.btnCriteria.Size = new System.Drawing.Size(52, 49);
             this.btnCriteria.Text = "Criteria";
             this.btnCriteria.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnCriteria.Click += new System.EventHandler(this.BtnCriteriaClick);
+            this.btnCriteria.Click += new System.EventHandler(this.EditCriteria);
             // 
             // btnLucky
             // 
@@ -618,10 +629,11 @@ namespace UniTimetable.ViewControllers
             this.btnLucky.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnLucky.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnLucky.Name = "btnLucky";
-            this.btnLucky.Size = new System.Drawing.Size(56, 49);
+            this.btnLucky.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.btnLucky.Size = new System.Drawing.Size(59, 49);
             this.btnLucky.Text = "Random";
             this.btnLucky.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnLucky.Click += new System.EventHandler(this.BtnLuckyClick);
+            this.btnLucky.Click += new System.EventHandler(this.FeelingLucky);
             // 
             // RightToolStripPanel
             // 
@@ -671,7 +683,7 @@ namespace UniTimetable.ViewControllers
             // 
             // toolStripContainer1.TopToolStripPanel
             // 
-            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip1);
+            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip);
             this.toolStripContainer1.TopToolStripPanel.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             // 
             // tableLayoutPanel2
@@ -693,86 +705,13 @@ namespace UniTimetable.ViewControllers
             this.tableLayoutPanel2.Size = new System.Drawing.Size(992, 599);
             this.tableLayoutPanel2.TabIndex = 13;
             // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Controls.Add(this.btnShowHide, 0, 1);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(822, 0);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(20, 593);
-            this.tableLayoutPanel1.TabIndex = 16;
-            // 
-            // btnShowHide
-            // 
-            this.btnShowHide.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnShowHide.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShowHide.Location = new System.Drawing.Point(0, 246);
-            this.btnShowHide.Margin = new System.Windows.Forms.Padding(0);
-            this.btnShowHide.Name = "btnShowHide";
-            this.btnShowHide.Size = new System.Drawing.Size(20, 100);
-            this.btnShowHide.TabIndex = 15;
-            this.btnShowHide.Text = "«";
-            this.btnShowHide.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnShowHide.UseVisualStyleBackColor = true;
-            this.btnShowHide.Click += new System.EventHandler(this.BtnShowHideClick);
-            // 
-            // tableLayoutPanel3
-            // 
-            this.tableLayoutPanel3.ColumnCount = 1;
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.Controls.Add(this.listBox2, 0, 3);
-            this.tableLayoutPanel3.Controls.Add(this.listBox1, 0, 1);
-            this.tableLayoutPanel3.Controls.Add(this.lblRemaining, 0, 0);
-            this.tableLayoutPanel3.Controls.Add(this.lblIgnored, 0, 2);
-            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(848, 6);
-            this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(6);
-            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 4;
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(132, 581);
-            this.tableLayoutPanel3.TabIndex = 14;
-            // 
-            // lblRemaining
-            // 
-            this.lblRemaining.AutoSize = true;
-            this.lblRemaining.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblRemaining.Location = new System.Drawing.Point(3, 0);
-            this.lblRemaining.Name = "lblRemaining";
-            this.lblRemaining.Size = new System.Drawing.Size(126, 20);
-            this.lblRemaining.TabIndex = 15;
-            this.lblRemaining.Text = "Remaining";
-            this.lblRemaining.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblIgnored
-            // 
-            this.lblIgnored.AutoSize = true;
-            this.lblIgnored.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblIgnored.Location = new System.Drawing.Point(3, 398);
-            this.lblIgnored.Name = "lblIgnored";
-            this.lblIgnored.Size = new System.Drawing.Size(126, 20);
-            this.lblIgnored.TabIndex = 16;
-            this.lblIgnored.Text = "Ignored";
-            this.lblIgnored.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // timetableControl
             // 
             this.timetableControl.AllowDrop = true;
             this.timetableControl.BackColor = System.Drawing.Color.Transparent;
             this.timetableControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.timetableControl.EnableDrag = true;
-            this.timetableControl.Font = new System.Drawing.Font("Arial Narrow", 8.845117F);
+            this.timetableControl.Font = new System.Drawing.Font("Arial Narrow", 9.577994F);
             this.timetableControl.Grayscale = false;
             this.timetableControl.HourEnd = 21;
             this.timetableControl.HourStart = 8;
@@ -794,54 +733,126 @@ namespace UniTimetable.ViewControllers
             this.timetableControl.Timetable = null;
             this.timetableControl.TimetableMouseClick += new UniTimetable.ViewControllers.TimetableEventHandler(this.TimetableControl1TimetableMouseClick);
             this.timetableControl.TimetableMouseDoubleClick += new UniTimetable.ViewControllers.TimetableEventHandler(this.TimetableControl1TimetableMouseClick);
-            this.timetableControl.TimetableMouseDown += new UniTimetable.ViewControllers.TimetableEventHandler(this.TimetableControl1TimetableMouseDoubleClick);
             this.timetableControl.TimetableChanged += new UniTimetable.ViewControllers.TimetableChangedEventHandler(this.TimetableControlTimetableChanged);
-            this.timetableControl.ResizeCell += new UniTimetable.ViewControllers.ResizeCellEventHandler(this.TimetableControl1ResizeCell);
+            this.timetableControl.ResizeCell += new UniTimetable.ViewControllers.ResizeCellEventHandler(this.TimetableControlResizeCell);
             this.timetableControl.BoundsClipped += new UniTimetable.ViewControllers.BoundsClippedEventHandler(this.TimetableControl1BoundsClipped);
-            this.timetableControl.DragDrop += new System.Windows.Forms.DragEventHandler(this.TimetableControl1DragDrop);
-            this.timetableControl.DragOver += new System.Windows.Forms.DragEventHandler(this.TimetableControl1DragOver);
+            this.timetableControl.DragDrop += new System.Windows.Forms.DragEventHandler(this.TimetableControlDragDrop);
+            this.timetableControl.DragOver += new System.Windows.Forms.DragEventHandler(this.TimetableControlDragOver);
             // 
-            // listBox2
+            // tableLayoutPanel1
             // 
-            this.listBox2.AllowDrop = true;
-            this.listBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBox2.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.listBox2.FormattingEnabled = true;
-            this.listBox2.IntegralHeight = false;
-            this.listBox2.ItemHeight = 40;
-            this.listBox2.Location = new System.Drawing.Point(0, 418);
-            this.listBox2.Margin = new System.Windows.Forms.Padding(0);
-            this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(132, 163);
-            this.listBox2.TabIndex = 14;
-            this.listBox2.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBox1_DrawItem);
-            this.listBox2.SelectedIndexChanged += new System.EventHandler(this.ListBox1SelectedIndexChanged);
-            this.listBox2.DragDrop += new System.Windows.Forms.DragEventHandler(this.ListBox2DragDrop);
-            this.listBox2.DragEnter += new System.Windows.Forms.DragEventHandler(this.ListBox1DragEnter);
-            this.listBox2.GiveFeedback += new System.Windows.Forms.GiveFeedbackEventHandler(this.ListBox1GiveFeedback);
-            this.listBox2.Leave += new System.EventHandler(this.ListBox1Leave);
-            this.listBox2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ListBox1MouseDown);
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Controls.Add(this.buttonShowHide, 0, 1);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(822, 0);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 3;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(20, 593);
+            this.tableLayoutPanel1.TabIndex = 16;
             // 
-            // listBox1
+            // buttonShowHide
             // 
-            this.listBox1.AllowDrop = true;
-            this.listBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBox1.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.IntegralHeight = false;
-            this.listBox1.ItemHeight = 40;
-            this.listBox1.Location = new System.Drawing.Point(0, 20);
-            this.listBox1.Margin = new System.Windows.Forms.Padding(0);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(132, 378);
-            this.listBox1.TabIndex = 14;
-            this.listBox1.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBox1_DrawItem);
-            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.ListBox1SelectedIndexChanged);
-            this.listBox1.DragDrop += new System.Windows.Forms.DragEventHandler(this.ListBox1DragDrop);
-            this.listBox1.DragEnter += new System.Windows.Forms.DragEventHandler(this.ListBox1DragEnter);
-            this.listBox1.GiveFeedback += new System.Windows.Forms.GiveFeedbackEventHandler(this.ListBox1GiveFeedback);
-            this.listBox1.Leave += new System.EventHandler(this.ListBox1Leave);
-            this.listBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ListBox1MouseDown);
+            this.buttonShowHide.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonShowHide.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonShowHide.Location = new System.Drawing.Point(0, 246);
+            this.buttonShowHide.Margin = new System.Windows.Forms.Padding(0);
+            this.buttonShowHide.Name = "buttonShowHide";
+            this.buttonShowHide.Size = new System.Drawing.Size(20, 100);
+            this.buttonShowHide.TabIndex = 15;
+            this.buttonShowHide.Text = "«";
+            this.buttonShowHide.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonShowHide.UseVisualStyleBackColor = true;
+            this.buttonShowHide.Click += new System.EventHandler(this.BtnShowHideClick);
+            // 
+            // tableLayoutPanel3
+            // 
+            this.tableLayoutPanel3.ColumnCount = 1;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.Controls.Add(this.listBoxIgnored, 0, 3);
+            this.tableLayoutPanel3.Controls.Add(this.listBoxRemaining, 0, 1);
+            this.tableLayoutPanel3.Controls.Add(this.labelRemaining, 0, 0);
+            this.tableLayoutPanel3.Controls.Add(this.labelIgnored, 0, 2);
+            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(848, 6);
+            this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(6);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 4;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(132, 581);
+            this.tableLayoutPanel3.TabIndex = 14;
+            // 
+            // listBoxIgnored
+            // 
+            this.listBoxIgnored.AllowDrop = true;
+            this.listBoxIgnored.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listBoxIgnored.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.listBoxIgnored.FormattingEnabled = true;
+            this.listBoxIgnored.IntegralHeight = false;
+            this.listBoxIgnored.ItemHeight = 40;
+            this.listBoxIgnored.Location = new System.Drawing.Point(0, 418);
+            this.listBoxIgnored.Margin = new System.Windows.Forms.Padding(0);
+            this.listBoxIgnored.Name = "listBoxIgnored";
+            this.listBoxIgnored.Size = new System.Drawing.Size(132, 163);
+            this.listBoxIgnored.TabIndex = 14;
+            this.listBoxIgnored.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBox1_DrawItem);
+            this.listBoxIgnored.SelectedIndexChanged += new System.EventHandler(this.ListBox1SelectedIndexChanged);
+            this.listBoxIgnored.DragDrop += new System.Windows.Forms.DragEventHandler(this.ListBox2DragDrop);
+            this.listBoxIgnored.DragEnter += new System.Windows.Forms.DragEventHandler(this.ListBox1DragEnter);
+            this.listBoxIgnored.GiveFeedback += new System.Windows.Forms.GiveFeedbackEventHandler(this.ListBox1GiveFeedback);
+            this.listBoxIgnored.Leave += new System.EventHandler(this.ListBox1Leave);
+            this.listBoxIgnored.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ListBox1MouseDown);
+            // 
+            // listBoxRemaining
+            // 
+            this.listBoxRemaining.AllowDrop = true;
+            this.listBoxRemaining.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listBoxRemaining.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.listBoxRemaining.FormattingEnabled = true;
+            this.listBoxRemaining.IntegralHeight = false;
+            this.listBoxRemaining.ItemHeight = 40;
+            this.listBoxRemaining.Location = new System.Drawing.Point(0, 20);
+            this.listBoxRemaining.Margin = new System.Windows.Forms.Padding(0);
+            this.listBoxRemaining.Name = "listBoxRemaining";
+            this.listBoxRemaining.Size = new System.Drawing.Size(132, 378);
+            this.listBoxRemaining.TabIndex = 14;
+            this.listBoxRemaining.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBox1_DrawItem);
+            this.listBoxRemaining.SelectedIndexChanged += new System.EventHandler(this.ListBox1SelectedIndexChanged);
+            this.listBoxRemaining.DragDrop += new System.Windows.Forms.DragEventHandler(this.ListBox1DragDrop);
+            this.listBoxRemaining.DragEnter += new System.Windows.Forms.DragEventHandler(this.ListBox1DragEnter);
+            this.listBoxRemaining.GiveFeedback += new System.Windows.Forms.GiveFeedbackEventHandler(this.ListBox1GiveFeedback);
+            this.listBoxRemaining.Leave += new System.EventHandler(this.ListBox1Leave);
+            this.listBoxRemaining.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ListBox1MouseDown);
+            // 
+            // labelRemaining
+            // 
+            this.labelRemaining.AutoSize = true;
+            this.labelRemaining.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelRemaining.Location = new System.Drawing.Point(3, 0);
+            this.labelRemaining.Name = "labelRemaining";
+            this.labelRemaining.Size = new System.Drawing.Size(126, 20);
+            this.labelRemaining.TabIndex = 15;
+            this.labelRemaining.Text = "Remaining";
+            this.labelRemaining.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // labelIgnored
+            // 
+            this.labelIgnored.AutoSize = true;
+            this.labelIgnored.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelIgnored.Location = new System.Drawing.Point(3, 398);
+            this.labelIgnored.Name = "labelIgnored";
+            this.labelIgnored.Size = new System.Drawing.Size(126, 20);
+            this.labelIgnored.TabIndex = 16;
+            this.labelIgnored.Text = "Ignored";
+            this.labelIgnored.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // FormMain
             // 
@@ -854,14 +865,15 @@ namespace UniTimetable.ViewControllers
             this.KeyPreview = true;
             this.MinimumSize = new System.Drawing.Size(640, 480);
             this.Name = "FormMain";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Canterbury Timetable Manager";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMainFormClosing);
-            this.contextMenuStrip1.ResumeLayout(false);
+            this.contextMenuStrip.ResumeLayout(false);
             this.streamMenu.ResumeLayout(false);
             this.timeMenu.ResumeLayout(false);
             this.unavailableMenu.ResumeLayout(false);
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.toolStrip.ResumeLayout(false);
+            this.toolStrip.PerformLayout();
             this.toolStripContainer1.ContentPanel.ResumeLayout(false);
             this.toolStripContainer1.TopToolStripPanel.ResumeLayout(false);
             this.toolStripContainer1.TopToolStripPanel.PerformLayout();
@@ -877,7 +889,7 @@ namespace UniTimetable.ViewControllers
 
         #endregion
 
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem deleteClassToolStripMenuItem;
         private System.Drawing.Printing.PrintDocument printDocument;
         private System.Windows.Forms.PrintDialog printDialog;
@@ -902,7 +914,7 @@ namespace UniTimetable.ViewControllers
         private System.Windows.Forms.ToolStripMenuItem removeUnavailableToolStripMenuItem;
         private System.Windows.Forms.ToolStripPanel BottomToolStripPanel;
         private System.Windows.Forms.ToolStripPanel TopToolStripPanel;
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripButton btnNew;
         private System.Windows.Forms.ToolStripButton btnOpen;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
@@ -917,14 +929,14 @@ namespace UniTimetable.ViewControllers
         private System.Windows.Forms.ToolStripContentPanel ContentPanel;
         private System.Windows.Forms.ToolStripContainer toolStripContainer1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private ListBoxBuffered listBox1;
-        private ListBoxBuffered listBox2;
+        private ListBoxBuffered listBoxRemaining;
+        private ListBoxBuffered listBoxIgnored;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.Button btnShowHide;
+        private System.Windows.Forms.Button buttonShowHide;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
-        private System.Windows.Forms.Label lblRemaining;
-        private System.Windows.Forms.Label lblIgnored;
+        private System.Windows.Forms.Label labelRemaining;
+        private System.Windows.Forms.Label labelIgnored;
         private System.Windows.Forms.ToolStripSplitButton btnSave;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
@@ -962,12 +974,12 @@ namespace UniTimetable.ViewControllers
             var type = (Type)listBox.Items[e.Index];
 
             var r = new Rectangle(e.Bounds.X + ListBoxMargin, e.Bounds.Y + ListBoxMargin, e.Bounds.Width - 2 * ListBoxMargin - 1, e.Bounds.Height - 2 * ListBoxMargin - 1);
-            g.FillRectangle(TimetableControl.LinearGradient(r.Location, r.Width, r.Height, type.Subject.Color), r);
+            g.FillRectangle(TimetableControl.LinearGradient(r.Location, r.Height, type.Subject.Colour), r);
 
             var format = new StringFormat();
             format.Alignment = StringAlignment.Center;
             format.LineAlignment = StringAlignment.Center;
-            g.DrawString(type.Subject + " " + type.Code, listBox1.Font, Brushes.Black, r, format);
+            g.DrawString(type.Subject + " " + type.Code, listBoxRemaining.Font, Brushes.Black, r, format);
 
             g.DrawRectangle(Pens.Black, r);
         }

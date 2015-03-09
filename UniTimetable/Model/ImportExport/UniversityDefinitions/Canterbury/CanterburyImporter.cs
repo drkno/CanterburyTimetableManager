@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury.JsonObjects;
@@ -12,6 +13,8 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
 {
     public class CanterburyImporter : Canterbury, IImporter
     {
+        public bool ImportUnselectableStreams { get; set; }
+
         public Timetable.Timetable ImportTimetable()
         {
             try
@@ -28,11 +31,11 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
                 {
                     foreach (var subs in course.SubjectStreams)
                     {
-                        ParseSubjectStream(ref timetable, subs.Value);
+                        ParseSubjectStream(ref timetable, subs.Value, subs.Allocated, subs.MultipleAllocationIndex);
                     }
                 }
 
-                SetColors(timetable);
+                SetColours(timetable);
 
                 return timetable;
             }
@@ -43,8 +46,13 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
         }
 
         #region Parse Subject Stream
-        private void ParseSubjectStream(ref Timetable.Timetable timetable, SubjectStream subs)
+        private void ParseSubjectStream(ref Timetable.Timetable timetable, SubjectStream subs, bool currentlyAllocated, int multipleAllocationIndex)
         {
+            if (!ImportUnselectableStreams && !currentlyAllocated && subs.Selectable == "full")
+            {
+                return;
+            }
+
             var endTime = subs.Date.AddMinutes(double.Parse(subs.Duration));
             int currentDay;
             switch (subs.DayOfWeek)
@@ -73,8 +81,9 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
                 default:
                     return;
             }
-            var session = new Session(currentDay, subs.Date.Hour,
-                subs.Date.Minute, endTime.Hour, endTime.Minute, subs.Location);
+            
+            var session = new Session(currentDay, subs.Date.DayOfYear, subs.Date.Hour,
+                subs.Date.Minute, endTime.Hour, endTime.Minute, subs.Location, subs.WeekPattern);
 
             Subject subject;
             if (timetable.SubjectList.Exists(element => element.Name == subs.SubjectCode))
@@ -89,13 +98,18 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
 
             // Set the session type
             Type type;
-            if (subject.Types.Exists(types => types.Code == subs.ActivityGroupCode))
+            if (multipleAllocationIndex == -1 && subject.Types.Exists(types => types.Code == subs.ActivityGroupCode))
             {
                 type = subject.Types.Find(types => types.Code == subs.ActivityGroupCode);
             }
             else // The session type doesn't exist, create it.
             {
-                type = new Type(subs.ActivityType, subs.ActivityGroupCode, subject);
+                var groupCode = subs.ActivityGroupCode;
+                if (multipleAllocationIndex != -1)
+                {
+                    groupCode += " [" + multipleAllocationIndex + "]";
+                }
+                type = new Type(subs.ActivityType, groupCode, subject);
                 switch (subs.ActivityGroupCode)
                 {
                     case "tes":
@@ -142,12 +156,12 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
             session.Stream = stream;
         }
 
-        private static void SetColors(Timetable.Timetable timetable)
+        private static void SetColours(Timetable.Timetable timetable)
         {
             var scheme = ColorScheme.Schemes[0];
             for (var i = 0; i < timetable.SubjectList.Count; i++)
             {
-                timetable.SubjectList[i].Color = ((ColorScheme)scheme).Colours[i % ((ColorScheme)scheme).Colours.Count];
+                timetable.SubjectList[i].Colour = ((ColorScheme)scheme).Colours[i % ((ColorScheme)scheme).Colours.Count];
             }
         }
         #endregion
@@ -156,15 +170,42 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
         private List<EnrolledSubjectStreams> GetCourseData()
         {
             var subjectStreams = new List<EnrolledSubjectStreams>();
-            foreach (var course in LoginHandle.Courses)
+            foreach (var course in LoginHandle.Student.StudentEnrolments)
             {
-                var split = course.Split(new []{"\",\"activity_group_code\":\""}, StringSplitOptions.None);
-                var canterburyData = GetCourse(split[0], split[1]);
-                if (canterburyData != null)
+                foreach (var group in course.Groups)
                 {
-                    subjectStreams.Add(canterburyData);
+                    // TODO: Make courses where multiple streams are allocated simaltaneously split them into separate streams
+                    throw new NotImplementedException("Code unfinished here");
+                    bool firstAllocation = false, multipleAllocation = false;
+                    var stream = GetCourse(group.SubjectCode, group.ActivityGroupCode);
+                    
+                    foreach (var subjectStream in stream.SubjectStreams)
+                    {
+                        var sstream = subjectStream;
+                        var r = LoginHandle.Student.AllocatedStreams.FirstOrDefault(a => a.ToString() == sstream.Key);
+                        if (r == null) continue;
+                        subjectStream.Allocated = true;
+                        if (!firstAllocation)
+                        {
+                            firstAllocation = true;
+                        }
+                        else
+                        {
+                            multipleAllocation = true;
+                        }
+                    }
+
+                    if (multipleAllocation)
+                    {
+                        for (var i = 0; i < stream.SubjectStreams.Count; i++)
+                        {
+                            stream.SubjectStreams[i].MultipleAllocationIndex = i;
+                        }
+                    }
+                    subjectStreams.Add(stream);
                 }
             }
+
             return subjectStreams;
         }
 
@@ -172,7 +213,7 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
         {
             var webRequest =
                 (HttpWebRequest)
-                    WebRequest.Create("https://mytimetable.canterbury.ac.nz/aplus/rest/student/" + LoginHandle.StudentCode +
+                    WebRequest.Create("https://mytimetable.canterbury.ac.nz/aplus/rest/student/" + LoginHandle.Student.StudentCode +
                                       "/subject/" + courseName + "/group/" + activityName + "/activities/?ss=" +
                                       LoginHandle.LoginToken);
             webRequest.UserAgent = LoginHandle.UserAgent;

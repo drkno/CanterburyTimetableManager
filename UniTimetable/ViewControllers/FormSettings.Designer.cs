@@ -29,152 +29,197 @@ namespace UniTimetable.ViewControllers
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSettings));
-            this.btnOK = new System.Windows.Forms.Button();
-            this.btnCancel = new System.Windows.Forms.Button();
             this.tableSettings = new System.Windows.Forms.TableLayoutPanel();
-            this.cbReset = new System.Windows.Forms.CheckBox();
-            this.cbWeekend = new System.Windows.Forms.CheckBox();
-            this.cbGray = new System.Windows.Forms.CheckBox();
-            this.cbLocation = new System.Windows.Forms.CheckBox();
-            this.cbGhost = new System.Windows.Forms.CheckBox();
+            this.checkBoxImportUnsettable = new System.Windows.Forms.CheckBox();
+            this.buttonCriteria = new System.Windows.Forms.Button();
+            this.labelCriteria = new System.Windows.Forms.Label();
+            this.checkBoxReset = new System.Windows.Forms.CheckBox();
+            this.checkBoxWeekend = new System.Windows.Forms.CheckBox();
+            this.checkBoxGray = new System.Windows.Forms.CheckBox();
+            this.checkBoxLocation = new System.Windows.Forms.CheckBox();
+            this.checkBoxGhost = new System.Windows.Forms.CheckBox();
             this.ddEnd = new System.Windows.Forms.ComboBox();
             this.ddStart = new System.Windows.Forms.ComboBox();
-            this.lblStart = new System.Windows.Forms.Label();
-            this.lblEnd = new System.Windows.Forms.Label();
+            this.labelStart = new System.Windows.Forms.Label();
+            this.labelEnd = new System.Windows.Forms.Label();
             this.buttonColours = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.labelColours = new System.Windows.Forms.Label();
+            this.buttonCancel = new System.Windows.Forms.Button();
+            this.buttonOk = new System.Windows.Forms.Button();
             this.tableSettings.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // btnOK
-            // 
-            this.btnOK.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnOK.Location = new System.Drawing.Point(3, 3);
-            this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(125, 23);
-            this.btnOK.TabIndex = 1;
-            this.btnOK.Text = "OK";
-            this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new System.EventHandler(this.BtnOkClick);
-            // 
-            // btnCancel
-            // 
-            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnCancel.Location = new System.Drawing.Point(134, 3);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(125, 23);
-            this.btnCancel.TabIndex = 2;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.BtnCancelClick);
             // 
             // tableSettings
             // 
-            this.tableSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableSettings.AutoSize = true;
             this.tableSettings.ColumnCount = 4;
             this.tableSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableSettings.Controls.Add(this.cbReset, 0, 7);
-            this.tableSettings.Controls.Add(this.cbWeekend, 0, 2);
-            this.tableSettings.Controls.Add(this.cbGray, 0, 3);
-            this.tableSettings.Controls.Add(this.cbLocation, 0, 4);
-            this.tableSettings.Controls.Add(this.cbGhost, 0, 1);
-            this.tableSettings.Controls.Add(this.ddEnd, 1, 6);
-            this.tableSettings.Controls.Add(this.ddStart, 1, 5);
-            this.tableSettings.Controls.Add(this.lblStart, 0, 5);
-            this.tableSettings.Controls.Add(this.lblEnd, 0, 6);
+            this.tableSettings.Controls.Add(this.checkBoxImportUnsettable, 0, 2);
+            this.tableSettings.Controls.Add(this.buttonCriteria, 3, 1);
+            this.tableSettings.Controls.Add(this.labelCriteria, 0, 1);
+            this.tableSettings.Controls.Add(this.checkBoxReset, 0, 9);
+            this.tableSettings.Controls.Add(this.checkBoxWeekend, 0, 4);
+            this.tableSettings.Controls.Add(this.checkBoxGray, 0, 5);
+            this.tableSettings.Controls.Add(this.checkBoxLocation, 0, 6);
+            this.tableSettings.Controls.Add(this.checkBoxGhost, 0, 3);
+            this.tableSettings.Controls.Add(this.ddEnd, 1, 8);
+            this.tableSettings.Controls.Add(this.ddStart, 1, 7);
+            this.tableSettings.Controls.Add(this.labelStart, 0, 7);
+            this.tableSettings.Controls.Add(this.labelEnd, 0, 8);
             this.tableSettings.Controls.Add(this.buttonColours, 3, 0);
-            this.tableSettings.Controls.Add(this.label1, 0, 0);
-            this.tableSettings.Location = new System.Drawing.Point(12, 12);
+            this.tableSettings.Controls.Add(this.labelColours, 0, 0);
+            this.tableSettings.Controls.Add(this.buttonCancel, 3, 10);
+            this.tableSettings.Controls.Add(this.buttonOk, 2, 10);
+            this.tableSettings.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableSettings.Location = new System.Drawing.Point(5, 5);
+            this.tableSettings.Margin = new System.Windows.Forms.Padding(0);
             this.tableSettings.Name = "tableSettings";
-            this.tableSettings.RowCount = 8;
-            this.tableSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
-            this.tableSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
-            this.tableSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
-            this.tableSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
-            this.tableSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
-            this.tableSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
-            this.tableSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
-            this.tableSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
-            this.tableSettings.Size = new System.Drawing.Size(262, 227);
+            this.tableSettings.RowCount = 11;
+            this.tableSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableSettings.Size = new System.Drawing.Size(342, 330);
             this.tableSettings.TabIndex = 4;
             // 
-            // cbReset
+            // checkBoxImportUnsettable
             // 
-            this.cbReset.AutoSize = true;
-            this.tableSettings.SetColumnSpan(this.cbReset, 4);
-            this.cbReset.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbReset.Location = new System.Drawing.Point(3, 199);
-            this.cbReset.Name = "cbReset";
-            this.cbReset.Size = new System.Drawing.Size(256, 25);
-            this.cbReset.TabIndex = 6;
-            this.cbReset.Text = "Reset window dimensions";
-            this.cbReset.UseVisualStyleBackColor = true;
+            this.checkBoxImportUnsettable.AutoSize = true;
+            this.tableSettings.SetColumnSpan(this.checkBoxImportUnsettable, 4);
+            this.checkBoxImportUnsettable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBoxImportUnsettable.Location = new System.Drawing.Point(3, 63);
+            this.checkBoxImportUnsettable.Name = "checkBoxImportUnsettable";
+            this.checkBoxImportUnsettable.Size = new System.Drawing.Size(336, 24);
+            this.checkBoxImportUnsettable.TabIndex = 15;
+            this.checkBoxImportUnsettable.Text = "Import full or unselectable streams";
+            this.checkBoxImportUnsettable.UseVisualStyleBackColor = true;
             // 
-            // cbWeekend
+            // buttonCriteria
             // 
-            this.cbWeekend.AutoSize = true;
-            this.tableSettings.SetColumnSpan(this.cbWeekend, 4);
-            this.cbWeekend.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbWeekend.Location = new System.Drawing.Point(3, 59);
-            this.cbWeekend.Name = "cbWeekend";
-            this.cbWeekend.Size = new System.Drawing.Size(256, 22);
-            this.cbWeekend.TabIndex = 0;
-            this.cbWeekend.Text = "Include weekend in timetable";
-            this.cbWeekend.UseVisualStyleBackColor = true;
+            this.buttonCriteria.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonCriteria.Location = new System.Drawing.Point(258, 33);
+            this.buttonCriteria.Name = "buttonCriteria";
+            this.buttonCriteria.Size = new System.Drawing.Size(81, 24);
+            this.buttonCriteria.TabIndex = 14;
+            this.buttonCriteria.Text = "Criteria...";
+            this.buttonCriteria.UseVisualStyleBackColor = true;
+            this.buttonCriteria.Click += new System.EventHandler(this.ButtonCriteriaClick);
             // 
-            // cbGray
+            // labelCriteria
             // 
-            this.cbGray.AutoSize = true;
-            this.tableSettings.SetColumnSpan(this.cbGray, 4);
-            this.cbGray.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbGray.Location = new System.Drawing.Point(3, 87);
-            this.cbGray.Name = "cbGray";
-            this.cbGray.Size = new System.Drawing.Size(256, 22);
-            this.cbGray.TabIndex = 1;
-            this.cbGray.Text = "Grey out times where there are no classes";
-            this.cbGray.UseVisualStyleBackColor = true;
+            this.labelCriteria.AutoSize = true;
+            this.tableSettings.SetColumnSpan(this.labelCriteria, 3);
+            this.labelCriteria.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelCriteria.Location = new System.Drawing.Point(3, 30);
+            this.labelCriteria.Name = "labelCriteria";
+            this.labelCriteria.Size = new System.Drawing.Size(249, 30);
+            this.labelCriteria.TabIndex = 13;
+            this.labelCriteria.Text = "Set criteria used in the solver:";
+            this.labelCriteria.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // cbLocation
+            // checkBoxReset
             // 
-            this.cbLocation.AutoSize = true;
-            this.tableSettings.SetColumnSpan(this.cbLocation, 4);
-            this.cbLocation.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbLocation.Location = new System.Drawing.Point(3, 115);
-            this.cbLocation.Name = "cbLocation";
-            this.cbLocation.Size = new System.Drawing.Size(256, 22);
-            this.cbLocation.TabIndex = 2;
-            this.cbLocation.Text = "Display class location (building and room)";
-            this.cbLocation.UseVisualStyleBackColor = true;
+            this.checkBoxReset.AutoSize = true;
+            this.tableSettings.SetColumnSpan(this.checkBoxReset, 4);
+            this.checkBoxReset.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBoxReset.Location = new System.Drawing.Point(3, 273);
+            this.checkBoxReset.Name = "checkBoxReset";
+            this.checkBoxReset.Size = new System.Drawing.Size(336, 24);
+            this.checkBoxReset.TabIndex = 6;
+            this.checkBoxReset.Text = "Reset window dimensions";
+            this.checkBoxReset.UseVisualStyleBackColor = true;
             // 
-            // cbGhost
+            // checkBoxWeekend
             // 
-            this.cbGhost.AutoSize = true;
-            this.tableSettings.SetColumnSpan(this.cbGhost, 4);
-            this.cbGhost.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbGhost.Location = new System.Drawing.Point(3, 31);
-            this.cbGhost.Name = "cbGhost";
-            this.cbGhost.Size = new System.Drawing.Size(256, 22);
-            this.cbGhost.TabIndex = 6;
-            this.cbGhost.Text = "Show \"ghost\" when dragging";
-            this.cbGhost.UseVisualStyleBackColor = true;
+            this.checkBoxWeekend.AutoSize = true;
+            this.tableSettings.SetColumnSpan(this.checkBoxWeekend, 4);
+            this.checkBoxWeekend.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBoxWeekend.Location = new System.Drawing.Point(3, 123);
+            this.checkBoxWeekend.Name = "checkBoxWeekend";
+            this.checkBoxWeekend.Size = new System.Drawing.Size(336, 24);
+            this.checkBoxWeekend.TabIndex = 0;
+            this.checkBoxWeekend.Text = "Include weekend in timetable";
+            this.checkBoxWeekend.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxGray
+            // 
+            this.checkBoxGray.AutoSize = true;
+            this.tableSettings.SetColumnSpan(this.checkBoxGray, 4);
+            this.checkBoxGray.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBoxGray.Location = new System.Drawing.Point(3, 153);
+            this.checkBoxGray.Name = "checkBoxGray";
+            this.checkBoxGray.Size = new System.Drawing.Size(336, 24);
+            this.checkBoxGray.TabIndex = 1;
+            this.checkBoxGray.Text = "Grey out times where there are no classes";
+            this.checkBoxGray.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxLocation
+            // 
+            this.checkBoxLocation.AutoSize = true;
+            this.tableSettings.SetColumnSpan(this.checkBoxLocation, 4);
+            this.checkBoxLocation.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBoxLocation.Location = new System.Drawing.Point(3, 183);
+            this.checkBoxLocation.Name = "checkBoxLocation";
+            this.checkBoxLocation.Size = new System.Drawing.Size(336, 24);
+            this.checkBoxLocation.TabIndex = 2;
+            this.checkBoxLocation.Text = "Display class location (building and room)";
+            this.checkBoxLocation.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxGhost
+            // 
+            this.checkBoxGhost.AutoSize = true;
+            this.tableSettings.SetColumnSpan(this.checkBoxGhost, 4);
+            this.checkBoxGhost.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBoxGhost.Location = new System.Drawing.Point(3, 93);
+            this.checkBoxGhost.Name = "checkBoxGhost";
+            this.checkBoxGhost.Size = new System.Drawing.Size(336, 24);
+            this.checkBoxGhost.TabIndex = 6;
+            this.checkBoxGhost.Text = "Show \"ghost\" when dragging";
+            this.checkBoxGhost.UseVisualStyleBackColor = true;
             // 
             // ddEnd
             // 
             this.ddEnd.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ddEnd.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ddEnd.FormattingEnabled = true;
-            this.ddEnd.Location = new System.Drawing.Point(68, 171);
+            this.ddEnd.Items.AddRange(new object[] {
+            "12 am",
+            "1 am",
+            "2 am",
+            "3 am",
+            "4 am",
+            "5 am",
+            "6 am",
+            "7 am",
+            "8 am",
+            "9 am",
+            "10 am",
+            "11 am",
+            "12 pm",
+            "1 pm",
+            "2 pm",
+            "3 pm",
+            "4 pm",
+            "5 pm",
+            "6 pm",
+            "7 pm",
+            "8 pm",
+            "9 pm",
+            "10 pm",
+            "11 pm"});
+            this.ddEnd.Location = new System.Drawing.Point(88, 243);
             this.ddEnd.Name = "ddEnd";
-            this.ddEnd.Size = new System.Drawing.Size(59, 21);
+            this.ddEnd.Size = new System.Drawing.Size(79, 21);
             this.ddEnd.TabIndex = 8;
             // 
             // ddStart
@@ -182,112 +227,147 @@ namespace UniTimetable.ViewControllers
             this.ddStart.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ddStart.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ddStart.FormattingEnabled = true;
-            this.ddStart.Location = new System.Drawing.Point(68, 143);
+            this.ddStart.Items.AddRange(new object[] {
+            "12 am",
+            "1 am",
+            "2 am",
+            "3 am",
+            "4 am",
+            "5 am",
+            "6 am",
+            "7 am",
+            "8 am",
+            "9 am",
+            "10 am",
+            "11 am",
+            "12 pm",
+            "1 pm",
+            "2 pm",
+            "3 pm",
+            "4 pm",
+            "5 pm",
+            "6 pm",
+            "7 pm",
+            "8 pm",
+            "9 pm",
+            "10 pm",
+            "11 pm"});
+            this.ddStart.Location = new System.Drawing.Point(88, 213);
             this.ddStart.Name = "ddStart";
-            this.ddStart.Size = new System.Drawing.Size(59, 21);
+            this.ddStart.Size = new System.Drawing.Size(79, 21);
             this.ddStart.TabIndex = 7;
             // 
-            // lblStart
+            // labelStart
             // 
-            this.lblStart.AutoSize = true;
-            this.lblStart.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblStart.Location = new System.Drawing.Point(3, 140);
-            this.lblStart.Name = "lblStart";
-            this.lblStart.Size = new System.Drawing.Size(59, 28);
-            this.lblStart.TabIndex = 10;
-            this.lblStart.Text = "Start";
-            this.lblStart.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.labelStart.AutoSize = true;
+            this.labelStart.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelStart.Location = new System.Drawing.Point(3, 210);
+            this.labelStart.Name = "labelStart";
+            this.labelStart.Size = new System.Drawing.Size(79, 30);
+            this.labelStart.TabIndex = 10;
+            this.labelStart.Text = "Start";
+            this.labelStart.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // lblEnd
+            // labelEnd
             // 
-            this.lblEnd.AutoSize = true;
-            this.lblEnd.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblEnd.Location = new System.Drawing.Point(3, 168);
-            this.lblEnd.Name = "lblEnd";
-            this.lblEnd.Size = new System.Drawing.Size(59, 28);
-            this.lblEnd.TabIndex = 11;
-            this.lblEnd.Text = "End";
-            this.lblEnd.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.labelEnd.AutoSize = true;
+            this.labelEnd.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelEnd.Location = new System.Drawing.Point(3, 240);
+            this.labelEnd.Name = "labelEnd";
+            this.labelEnd.Size = new System.Drawing.Size(79, 30);
+            this.labelEnd.TabIndex = 11;
+            this.labelEnd.Text = "End";
+            this.labelEnd.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // buttonColours
             // 
-            this.buttonColours.Location = new System.Drawing.Point(198, 3);
+            this.buttonColours.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonColours.Location = new System.Drawing.Point(258, 3);
             this.buttonColours.Name = "buttonColours";
-            this.buttonColours.Size = new System.Drawing.Size(61, 22);
+            this.buttonColours.Size = new System.Drawing.Size(81, 24);
             this.buttonColours.TabIndex = 6;
             this.buttonColours.Text = "Colours...";
             this.buttonColours.UseVisualStyleBackColor = true;
             this.buttonColours.Click += new System.EventHandler(this.ButtonColoursClick);
             // 
-            // label1
+            // labelColours
             // 
-            this.label1.AutoSize = true;
-            this.tableSettings.SetColumnSpan(this.label1, 3);
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(3, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(189, 28);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "Set colours used in timetable:";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.labelColours.AutoSize = true;
+            this.tableSettings.SetColumnSpan(this.labelColours, 3);
+            this.labelColours.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelColours.Location = new System.Drawing.Point(3, 0);
+            this.labelColours.Name = "labelColours";
+            this.labelColours.Size = new System.Drawing.Size(249, 30);
+            this.labelColours.TabIndex = 6;
+            this.labelColours.Text = "Set colours used in timetable:";
+            this.labelColours.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // tableLayoutPanel1
+            // buttonCancel
             // 
-            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.btnOK, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.btnCancel, 1, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 245);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 1;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(262, 29);
-            this.tableLayoutPanel1.TabIndex = 5;
+            this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.buttonCancel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonCancel.Location = new System.Drawing.Point(258, 303);
+            this.buttonCancel.Name = "buttonCancel";
+            this.buttonCancel.Size = new System.Drawing.Size(81, 24);
+            this.buttonCancel.TabIndex = 5;
+            this.buttonCancel.Text = "Cancel";
+            this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Click += new System.EventHandler(this.ButtonCancelClick);
+            // 
+            // buttonOk
+            // 
+            this.buttonOk.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonOk.Location = new System.Drawing.Point(173, 303);
+            this.buttonOk.Name = "buttonOk";
+            this.buttonOk.Size = new System.Drawing.Size(79, 24);
+            this.buttonOk.TabIndex = 12;
+            this.buttonOk.Text = "OK";
+            this.buttonOk.UseVisualStyleBackColor = true;
+            this.buttonOk.Click += new System.EventHandler(this.ButtonOkClick);
             // 
             // FormSettings
             // 
-            this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(286, 286);
-            this.Controls.Add(this.tableLayoutPanel1);
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(352, 340);
             this.Controls.Add(this.tableSettings);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormSettings";
+            this.Padding = new System.Windows.Forms.Padding(5);
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Settings";
             this.Load += new System.EventHandler(this.FormSettingsLoad);
             this.tableSettings.ResumeLayout(false);
             this.tableSettings.PerformLayout();
-            this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Button btnOK;
-        private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.TableLayoutPanel tableSettings;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.ComboBox ddEnd;
         private System.Windows.Forms.ComboBox ddStart;
-        private System.Windows.Forms.CheckBox cbReset;
-        private System.Windows.Forms.CheckBox cbWeekend;
-        private System.Windows.Forms.CheckBox cbGray;
-        private System.Windows.Forms.CheckBox cbLocation;
-        private System.Windows.Forms.CheckBox cbGhost;
-        private System.Windows.Forms.Label lblStart;
-        private System.Windows.Forms.Label lblEnd;
+        private System.Windows.Forms.CheckBox checkBoxReset;
+        private System.Windows.Forms.CheckBox checkBoxWeekend;
+        private System.Windows.Forms.CheckBox checkBoxGray;
+        private System.Windows.Forms.CheckBox checkBoxLocation;
+        private System.Windows.Forms.CheckBox checkBoxGhost;
+        private System.Windows.Forms.CheckBox checkBoxImportUnsettable;
+        private System.Windows.Forms.Label labelStart;
+        private System.Windows.Forms.Label labelEnd;
+        private System.Windows.Forms.Label labelColours;
+        private System.Windows.Forms.Label labelCriteria;
         private System.Windows.Forms.Button buttonColours;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button buttonCriteria;
+        private System.Windows.Forms.Button buttonCancel;
+        private System.Windows.Forms.Button buttonOk;
 
     }
 }

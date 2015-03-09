@@ -74,7 +74,7 @@ namespace UniTimetable.Model.Timetable
         }
 
         [XmlIgnore]
-        public Color Color
+        public Color Colour
         {
             get { return _color; }
             set { _color = value; }

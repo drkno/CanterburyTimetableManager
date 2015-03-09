@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using UniTimetable.Model.Timetable;
 
 #endregion
@@ -10,17 +11,17 @@ namespace UniTimetable.Model.Solver
 {
     public partial class Solver
     {
-        private readonly int MaxResults_ = 250;
-        private readonly List<Solution> Solutions_ = new List<Solution>();
-        private int NumberValidSolutions_;
-        private HeapWithComparer<Solution> SolutionHeap_;
+        private const int MaxResults = 250;
+        private readonly List<Solution> _solutions = new List<Solution>();
+        private int _numberValidSolutions;
+        private HeapWithComparer<Solution> _solutionHeap;
         // mid-calculation stuff
-        private List<List<Stream>> StreamSets_ = new List<List<Stream>>();
-        private Solution[] UnorderedSolutions_;
+        private List<List<Stream>> _streamSets = new List<List<Stream>>();
+        private Solution[] _unorderedSolutions;
 
         public void Default()
         {
-            LoadPreset(Presets[0]);
+            LoadPreset((Preset)Presets[0]);
         }
 
         public void LoadPreset(Preset preset)
@@ -42,29 +43,6 @@ namespace UniTimetable.Model.Solver
             Default();
         }
 
-        public Solver(Timetable.Timetable timetable, Solver other)
-        {
-            Timetable = timetable;
-
-            Comparer = other.Comparer.Clone();
-            Filters = new List<Filter>(other.Filters);
-
-            Solutions_ = new List<Solution>(Solutions_);
-            MaxResults_ = other.MaxResults_;
-
-            // other variables are initiated during solving
-        }
-
-        public Solver Clone(Timetable.Timetable timetable)
-        {
-            return new Solver(timetable, this);
-        }
-
-        public Solver Clone()
-        {
-            return new Solver(Timetable.DeepCopy(), this);
-        }
-
         #endregion
 
         #region Accessors
@@ -73,7 +51,7 @@ namespace UniTimetable.Model.Solver
 
         public List<Solution> Solutions
         {
-            get { return Solutions_; }
+            get { return _solutions; }
         }
 
         public SolutionComparer Comparer { get; private set; }
@@ -91,23 +69,25 @@ namespace UniTimetable.Model.Solver
                 return SolverResult.NoTimetable;
             }
 
-            Solutions_.Clear();
-            StreamSets_.Clear();
+            _solutions.Clear();
+            _streamSets.Clear();
 
             long totalSolutions = 1;
-            SolutionHeap_ = null;
-            UnorderedSolutions_ = new Solution[MaxResults_];
+            _solutionHeap = null;
+            _unorderedSolutions = new Solution[MaxResults];
 
             #region Build lists of stream options
 
-            foreach (Type type in Timetable.TypeList)
+            foreach (var type in Timetable.TypeList)
             {
                 // if the stream type is ignored, skip
                 if (!type.Required)
+                {
                     continue;
+                }
 
                 // create a list of streams for each type
-                List<Stream> streams = new List<Stream>();
+                var streams = new List<Stream>();
 
                 // stream already enabled? only one option
                 if (type.SelectedStream != null)
@@ -117,14 +97,8 @@ namespace UniTimetable.Model.Solver
                 else
                 {
                     // for each stream in the current type
-                    foreach (Stream stream in type.UniqueStreams)
-                    {
-                        // if stream can't be selected, skip it
-                        if (!Timetable.Fits(stream))
-                            continue;
-
-                        streams.Add(stream);
-                    }
+                    // if stream can't be selected, skip it
+                    streams.AddRange(type.UniqueStreams.Where(stream => Timetable.Fits(stream)));
                     // no streams made it - skip
                     if (streams.Count == 0)
                     {
@@ -133,7 +107,7 @@ namespace UniTimetable.Model.Solver
                 }
 
                 // add streams to list
-                StreamSets_.Add(streams);
+                _streamSets.Add(streams);
 
                 // update the complexity of the solution
                 totalSolutions *= streams.Count;
@@ -145,38 +119,29 @@ namespace UniTimetable.Model.Solver
 
             // order determined greedily on basis of maximum clashes
 
-            float[,] clashChance = new float[StreamSets_.Count, StreamSets_.Count];
+            var clashChance = new float[_streamSets.Count, _streamSets.Count];
 
             // build 2D clash probability table
-            for (int i = 0; i < StreamSets_.Count; i++)
+            for (var i = 0; i < _streamSets.Count; i++)
             {
-                List<Stream> set = StreamSets_[i];
-                for (int j = i + 1; j < StreamSets_.Count; j++)
+                var set = _streamSets[i];
+                for (var j = i + 1; j < _streamSets.Count; j++)
                 {
-                    List<Stream> otherSet = StreamSets_[j];
-
-                    int total = set.Count*otherSet.Count;
-                    int clash = 0;
-                    foreach (Stream stream in set)
-                    {
-                        foreach (Stream otherStream in otherSet)
-                        {
-                            if (stream.ClashesWith(otherStream))
-                                clash++;
-                        }
-                    }
-                    float chance = clash/(float) total;
+                    var otherSet = _streamSets[j];
+                    var total = set.Count*otherSet.Count;
+                    var clash = set.Sum(stream => otherSet.Count(stream.ClashesWith));
+                    var chance = clash/(float) total;
                     clashChance[i, j] = chance;
                     clashChance[j, i] = chance;
                 }
             }
 
             // build index lists, extract sets of only one stream
-            List<int> ordered = new List<int>();
-            List<int> remaining = new List<int>();
-            for (int i = 0; i < StreamSets_.Count; i++)
+            var ordered = new List<int>();
+            var remaining = new List<int>();
+            for (var i = 0; i < _streamSets.Count; i++)
             {
-                if (StreamSets_[i].Count == 1)
+                if (_streamSets[i].Count == 1)
                 {
                     ordered.Add(i);
                 }
@@ -186,59 +151,25 @@ namespace UniTimetable.Model.Solver
                 }
             }
 
-
-            // get probability for single-option sets
-            foreach (int i in ordered)
-            {
-                float chance = 1f;
-                foreach (int j in ordered)
-                {
-                    // reached same index - compared to all preceding
-                    if (j == i)
-                        break;
-                    chance *= 1f - clashChance[i, j];
-                }
-                chance = 1f - chance;
-            }
-
             // order by probability of clash with previously selected items
             while (remaining.Count > 0)
             {
                 float maxChance = 0;
                 float maxFuture = 0;
-                int maxIndex = -1;
+                var maxIndex = -1;
 
-                foreach (int i in remaining)
+                foreach (var i in remaining)
                 {
-                    float chance = 1f;
-                    float future = 1f;
-                    foreach (int j in ordered)
-                    {
-                        // find chance of not successively not clashing
-                        chance *= 1f - clashChance[i, j];
-                    }
-                    foreach (int j in remaining)
-                    {
-                        if (i == j)
-                            continue;
-                        // chance of clashing with remaining options
-                        future *= 1f - clashChance[i, j];
-                    }
+                    var chance = ordered.Aggregate(1f, (current, j) => current*(1f - clashChance[i, j]));
+                    // find chance of not successively not clashing
+                    // chance of clashing with remaining options
+                    var future = remaining.Where(j => i != j).Aggregate(1f, (current, j) => current*(1f - clashChance[i, j]));
                     // chance of clashing
                     chance = 1f - chance;
                     future = 1f - future;
 
                     // check if there's a pair which is more likely to clash
-                    float pairMax = 0f;
-                    foreach (int j in remaining)
-                    {
-                        if (i == j)
-                            continue;
-                        if (clashChance[i, j] > pairMax)
-                        {
-                            pairMax = clashChance[i, j];
-                        }
-                    }
+                    var pairMax = (from j in remaining where i != j select clashChance[i, j]).Concat(new[] {0f}).Max();
                     if (pairMax > chance)
                     {
                         chance = pairMax;
@@ -246,120 +177,51 @@ namespace UniTimetable.Model.Solver
                         future = -1;
                     }
 
-                    if (maxIndex < 0 || chance > maxChance || (chance == maxChance && future > maxFuture))
+                    if (maxIndex >= 0 && !(chance > maxChance) && (chance != maxChance || !(future > maxFuture)))
                     {
-                        maxIndex = i;
-                        maxChance = chance;
-                        maxFuture = future;
-                    }
-                }
-
-                remaining.Remove(maxIndex);
-                ordered.Add(maxIndex);
-            }
-
-            /*
-            // do specialised selection sort to bring most incompatible streams to the front
-
-            // first find single worst instance of incompatibility
-            float maxValue = -1;
-            int maxIndex = -1;
-            // look for worst incompatibility between a set of streams
-            foreach (int i in remaining)
-            {
-                if (StreamSets_[i].Count == 1)
-                {
-                    maxIndex = i;
-                    break;
-                }
-                // and all sets of streams which follow
-                foreach (int j in remaining)
-                {
-                    if (i == j)
                         continue;
-                    if (clashChance[i, j] > maxValue)
-                    {
-                        maxValue = clashChance[i, j];
-                        maxIndex = i;
                     }
-                }
-            }
-
-            remaining.Remove(maxIndex);
-            ordered.Add(maxIndex);
-
-            // selection sort the rest of the list
-            while (remaining.Count > 0)
-            {
-                // TODO: initialisation required?
-                maxValue = -1;
-                maxIndex = -1;
-                // find maximum from all remaining sets of streams
-                foreach (int j in remaining)
-                {
-                    if (StreamSets_[j].Count == 1)
-                    {
-                        maxIndex = j;
-                        break;
-                    }
-
-                    float currentMaxValue = -1;
-                    // to find the maximum for a set, find its worst match from the already selected streams
-                    foreach (int k in ordered)
-                    {
-                        // if found new max for current stream list
-                        if (clashChance[j, k] > currentMaxValue)
-                        {
-                            currentMaxValue = clashChance[j, k];
-                        }
-                    }
-                    // if found new max for all stream lists
-                    if (currentMaxValue > maxValue)
-                    {
-                        maxValue = currentMaxValue;
-                        maxIndex = j;
-                    }
+                    maxIndex = i;
+                    maxChance = chance;
+                    maxFuture = future;
                 }
 
                 remaining.Remove(maxIndex);
                 ordered.Add(maxIndex);
-            }*/
-
-            List<List<Stream>> final = new List<List<Stream>>();
-            foreach (int index in ordered)
-            {
-                final.Add(StreamSets_[index]);
             }
-            StreamSets_ = final;
+
+            var final = ordered.Select(index => _streamSets[index]).ToList();
+            _streamSets = final;
 
             #endregion
 
             #region Stack-based algorithm
 
-            Stack<Solution> solutionStack = new Stack<Solution>(StreamSets_.Count);
+            var solutionStack = new Stack<Solution>(_streamSets.Count);
             solutionStack.Push(new Solution());
-            Solution solution = new Solution();
+            var solution = new Solution();
 
-            NumberValidSolutions_ = 0;
+            _numberValidSolutions = 0;
             long progress = 0;
-            int progressPercent = 0;
-            long numLoops = 0;
+            var progressPercent = 0;
 
             // create an array such that the value at an index gives the number
             // of complete solutions "down that alley" when processing is cut
             // short at that index into the unique streams list
-            long[] cumulativeProduct = new long[StreamSets_.Count];
+            var cumulativeProduct = new long[_streamSets.Count];
             cumulativeProduct[cumulativeProduct.Length - 1] = 1;
-            for (int i = cumulativeProduct.Length - 2; i >= 0; i--)
+            for (var i = cumulativeProduct.Length - 2; i >= 0; i--)
             {
-                cumulativeProduct[i] = cumulativeProduct[i + 1]*StreamSets_[i + 1].Count;
+                cumulativeProduct[i] = cumulativeProduct[i + 1]*_streamSets[i + 1].Count;
             }
 
             // setIndex represents from which set of streams the next stream is being selected
-            int setIndex = 0;
-            int[] streamIndices = new int[StreamSets_.Count];
-            for (int i = 0; i < streamIndices.Length; i++)
+            var setIndex = 0;
+            var streamIndices = new int[_streamSets.Count];
+            for (var i = 0; i < streamIndices.Length; i++)
+            {
                 streamIndices[i] = 0;
+            }
 
             //while (true)
             while (true)
@@ -371,11 +233,9 @@ namespace UniTimetable.Model.Solver
                     return SolverResult.UserCancel;
                 }
 
-                numLoops++;
-
                 // check if the stream index is out of range
                 // (done all options for current set of streams)
-                if (streamIndices[setIndex] == StreamSets_[setIndex].Count)
+                if (streamIndices[setIndex] == _streamSets[setIndex].Count)
                 {
                     // if we're back at the start
                     if (setIndex == 0)
@@ -397,11 +257,11 @@ namespace UniTimetable.Model.Solver
                 }
 
                 // attempt to add the current stream to the solution
-                if (!solution.AddStream(StreamSets_[setIndex][streamIndices[setIndex]]))
+                if (!solution.AddStream(_streamSets[setIndex][streamIndices[setIndex]]))
                 {
                     // add to progress the number of solutions just skipped
                     progress += cumulativeProduct[setIndex];
-                    int percent = (int) ((float) progress/totalSolutions*100);
+                    var percent = (int) ((float) progress/totalSolutions*100);
                     if (percent > progressPercent)
                     {
                         worker.ReportProgress(percent);
@@ -416,47 +276,38 @@ namespace UniTimetable.Model.Solver
                 // found stream that fits!
 
                 // if we have a complete solution
-                if (setIndex == StreamSets_.Count - 1)
+                if (setIndex == _streamSets.Count - 1)
                 {
                     // increment progress
                     progress++;
-                    int percent = (int) ((float) progress/totalSolutions*100);
+                    var percent = (int) ((float) progress/totalSolutions*100);
                     if (percent > progressPercent)
                     {
                         worker.ReportProgress(percent);
                         progressPercent = percent;
                     }
 
-                    bool filteredOut = false;
-                    foreach (Filter filter in Filters)
-                    {
-                        // failed on a filter?
-                        if (!filter.Pass(solution))
-                        {
-                            filteredOut = true;
-                            break;
-                        }
-                    }
+                    var filteredOut = Filters.Any(filter => !filter.Pass(solution));
 
                     if (!filteredOut)
                     {
-                        NumberValidSolutions_++;
+                        _numberValidSolutions++;
 
                         // if the solution list is full to capacity
-                        if (NumberValidSolutions_ > MaxResults_)
+                        if (_numberValidSolutions > MaxResults)
                         {
                             // if the solution is in the top so far, take the place of the worst solution
-                            SolutionHeap_.CompareReplaceMaximum(solution);
+                            _solutionHeap.CompareReplaceMaximum(solution);
                         }
                         else
                         {
                             // append the solution to the array
-                            UnorderedSolutions_[NumberValidSolutions_ - 1] = solution;
+                            _unorderedSolutions[_numberValidSolutions - 1] = solution;
                             // if the unordered list just filled up
-                            if (NumberValidSolutions_ == MaxResults_)
+                            if (_numberValidSolutions == MaxResults)
                             {
                                 // build the heap from the array
-                                SolutionHeap_ = new HeapWithComparer<Solution>(MaxResults_, UnorderedSolutions_,
+                                _solutionHeap = new HeapWithComparer<Solution>(MaxResults, _unorderedSolutions,
                                     Comparer);
                             }
                         }
@@ -538,11 +389,11 @@ namespace UniTimetable.Model.Solver
         private void SortFinalResults()
         {
             // if the best list didn't fill up
-            if (NumberValidSolutions_ < MaxResults_)
-                SolutionHeap_ = new HeapWithComparer<Solution>(MaxResults_, UnorderedSolutions_, Comparer);
+            if (_numberValidSolutions < MaxResults)
+                _solutionHeap = new HeapWithComparer<Solution>(MaxResults, _unorderedSolutions, Comparer);
 
             // run heapsort on the top solutions, copy into solution list
-            Solutions_.AddRange(SolutionHeap_.GetSorted());
+            _solutions.AddRange(_solutionHeap.GetSorted());
         }
 
         #endregion

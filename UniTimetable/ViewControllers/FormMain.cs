@@ -15,6 +15,8 @@ using UniTimetable.Model;
 using UniTimetable.Model.Solver;
 using UniTimetable.Model.Time;
 using UniTimetable.Model.Timetable;
+using UniTimetable.ViewControllers.CriteriaFilters;
+using UniTimetable.ViewControllers.Import;
 using Stream = UniTimetable.Model.Timetable.Stream;
 using Type = UniTimetable.Model.Timetable.Type;
 
@@ -28,7 +30,7 @@ namespace UniTimetable.ViewControllers
         private readonly Size _defaultSize;
         private readonly TimetableControl _export = new TimetableControl();
         private readonly FormSettings _formSettings = new FormSettings();
-        private readonly FormUnavailability _formUnavail = new FormUnavailability();
+
         private readonly History<Timetable> _history = new History<Timetable>(50);
         private readonly Size _imageSize = new Size(1024, 768);
         private readonly OpenFileDialog _openDialogXml = new OpenFileDialog();
@@ -37,7 +39,6 @@ namespace UniTimetable.ViewControllers
         private readonly SaveFileDialog _saveDialogVector = new SaveFileDialog();
         private readonly SaveFileDialog _saveDialogWallpaper = new SaveFileDialog();
         private readonly SaveFileDialog _saveDialogXml = new SaveFileDialog();
-        private readonly Solver _solver;
         private int _changes;
         private Session _clickSession;
         private TimeOfWeek _clickTime;
@@ -46,11 +47,12 @@ namespace UniTimetable.ViewControllers
         private Settings _settings = new Settings();
         private bool _sidePaneEnabled = true;
         public Timetable Timetable;
+        public readonly Solver Solver;
 
         public FormMain()
         {
             Timetable = null;
-            _solver = new Solver(null);
+            Solver = new Solver(null);
 
             InitializeComponent();
 
@@ -130,30 +132,28 @@ namespace UniTimetable.ViewControllers
         private bool AreYouSure(string caption)
         {
             if (Timetable == null || _changes == 0)
+            {
                 return true;
-            var choice = MessageBox.Show(
-                "Would you like to save the changes?",
-                caption,
-                MessageBoxButtons.YesNoCancel,
-                MessageBoxIcon.Question,
-                MessageBoxDefaultButton.Button3);
-            if (choice == DialogResult.Cancel)
-                return false;
-            if (choice == DialogResult.No)
-                return true;
-
+            }
+            var choice = MessageBox.Show("Would you like to save the changes?", caption,
+                MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button3);
+            switch (choice)
+            {
+                case DialogResult.Cancel: return false;
+                case DialogResult.No: return true;
+            }
             choice = Save();
             return (choice == DialogResult.OK);
         }
 
-        private void TimetableControl1ResizeCell(object sender)
+        private void TimetableControlResizeCell(object sender)
         {
             if (timetableControl.CellSize.Height == 0) return;
-            listBox1.ItemHeight =
-                listBox2.ItemHeight = Math.Min(timetableControl.CellSize.Height + 2*ListBoxMargin, 255);
-            listBox1.Font = listBox2.Font = timetableControl.Font;
-            listBox1.Invalidate();
-            listBox2.Invalidate();
+            listBoxRemaining.ItemHeight =
+                listBoxIgnored.ItemHeight = Math.Min(timetableControl.CellSize.Height + 2*ListBoxMargin, 255);
+            listBoxRemaining.Font = listBoxIgnored.Font = timetableControl.Font;
+            listBoxRemaining.Invalidate();
+            listBoxIgnored.Invalidate();
         }
 
         private void ResetWindow()
@@ -195,13 +195,13 @@ namespace UniTimetable.ViewControllers
         {
             if (_sidePaneEnabled)
             {
-                btnShowHide.Text = "»";
+                buttonShowHide.Text = "»";
                 btnAddByClass.Checked = false;
                 HideSidePane();
             }
             else
             {
-                btnShowHide.Text = "«";
+                buttonShowHide.Text = "«";
                 btnAddByClass.Checked = true;
                 ShowSidePane();
             }
@@ -228,8 +228,8 @@ namespace UniTimetable.ViewControllers
             Width = Width - old + next;
             tableLayoutPanel2.ColumnCount = 3;
 
-            listBox1.TabStop = true;
-            listBox2.TabStop = true;
+            listBoxRemaining.TabStop = true;
+            listBoxIgnored.TabStop = true;
         }
 
         private void HideSidePane()
@@ -248,8 +248,8 @@ namespace UniTimetable.ViewControllers
             tableLayoutPanel2.ColumnCount = 2;
             Width = Width - panel;
 
-            listBox1.TabStop = false;
-            listBox2.TabStop = false;
+            listBoxRemaining.TabStop = false;
+            listBoxIgnored.TabStop = false;
         }
 
         #endregion
@@ -334,7 +334,7 @@ namespace UniTimetable.ViewControllers
             UpdateRemaining();
         }
 
-        private void TimetableControl1DragOver(object sender, DragEventArgs e)
+        private void TimetableControlDragOver(object sender, DragEventArgs e)
         {
             var type = (Type) e.Data.GetData(typeof (Type));
             var time = timetableControl.FindClickTime(timetableControl.PointToClient(new Point(e.X, e.Y)));
@@ -350,7 +350,7 @@ namespace UniTimetable.ViewControllers
             }
         }
 
-        private void TimetableControl1DragDrop(object sender, DragEventArgs e)
+        private void TimetableControlDragDrop(object sender, DragEventArgs e)
         {
             var type = (Type) e.Data.GetData(typeof (Type));
             var time = timetableControl.FindClickTime(timetableControl.PointToClient(new Point(e.X, e.Y)));
@@ -362,7 +362,7 @@ namespace UniTimetable.ViewControllers
                 MadeChanges(true);
         }
 
-        private Stream FindStream(Type type, TimeOfWeek time)
+        private static Stream FindStream(Type type, TimeOfWeek time)
         {
             return Timetable.From(type).FindClassAt(time, false).Stream;
         }
@@ -371,15 +371,13 @@ namespace UniTimetable.ViewControllers
         {
             if (Timetable == null)
             {
-                listBox1.Items.Clear();
-                listBox2.Items.Clear();
-                //groupBox2.Text = "Remaining";
-                //groupBox3.Text = "Ignored";
+                listBoxRemaining.Items.Clear();
+                listBoxIgnored.Items.Clear();
                 return;
             }
 
-            var remaining = new List<Type>();
-            var ignored = new List<Type>();
+            var remaining = new List<object>();
+            var ignored = new List<object>();
             foreach (
                 var type in
                     Timetable.SubjectList.SelectMany(subject => subject.Types.Where(type => type.SelectedStream == null))
@@ -394,16 +392,13 @@ namespace UniTimetable.ViewControllers
                     remaining.Add(type);
                 }
             }
-            listBox1.Items.Clear();
-            listBox1.Items.AddRange(remaining.ToArray());
-            listBox2.Items.Clear();
-            listBox2.Items.AddRange(ignored.ToArray());
+            listBoxRemaining.Items.Clear();
+            listBoxRemaining.Items.AddRange(remaining.ToArray());
+            listBoxIgnored.Items.Clear();
+            listBoxIgnored.Items.AddRange(ignored.ToArray());
 
             timetableControl.EndPreviewStream();
             timetableControl.EndPreviewOptions();
-
-            //groupBox2.Text = "Remaining (" + remaining.Count.ToString() + ")";
-            //groupBox3.Text = "Ignored (" + ignored.Count.ToString() + ")";
         }
 
         #endregion
@@ -412,7 +407,7 @@ namespace UniTimetable.ViewControllers
 
         #region Saving and opening
 
-        private void New()
+        private void New(object sender, EventArgs e)
         {
             if (!AreYouSure("Clear Timetable"))
                 return;
@@ -423,7 +418,7 @@ namespace UniTimetable.ViewControllers
             ClearHistory();
         }
 
-        private void SaveToolStripMenuItemClick(object sender, EventArgs e)
+        private void BtnSaveClick(object sender, EventArgs e)
         {
             Save();
         }
@@ -444,12 +439,7 @@ namespace UniTimetable.ViewControllers
             return DialogResult.OK;
         }
 
-        private void SaveAsToolStripMenuItemClick(object sender, EventArgs e)
-        {
-            SaveAs();
-        }
-
-        private void SaveAs()
+        private void SaveAs(object sender, EventArgs e)
         {
             if (Timetable == null)
                 return;
@@ -472,7 +462,7 @@ namespace UniTimetable.ViewControllers
             _changes = 0;
         }
 
-        private void Open()
+        private void Open(object sender, EventArgs e)
         {
             if (!AreYouSure("Open Timetable"))
                 return;
@@ -574,17 +564,6 @@ namespace UniTimetable.ViewControllers
 
         private void WallpaperToolStripMenuItemClick(object sender, EventArgs e)
         {
-            /*if (SaveDialogWallpaper_.ShowDialog() != DialogResult.OK)
-                return;
-
-            int end = SaveDialogWallpaper_.FileName.LastIndexOf('.');
-            string fileName;
-            if (end == -1)
-                fileName = SaveDialogWallpaper_.FileName;
-            else
-                fileName = SaveDialogWallpaper_.FileName.Substring(0, end);
-            fileName += ".bmp";*/
-
             const float opacity = 0.75f;
 
             var screen = Screen.GetBounds(this);
@@ -721,12 +700,7 @@ namespace UniTimetable.ViewControllers
 
         #region Printing
 
-        private void PrintToolStripMenuItemClick(object sender, EventArgs e)
-        {
-            Print();
-        }
-
-        private void Print()
+        private void Print(object sender, EventArgs e)
         {
             if (printDialog.ShowDialog() != DialogResult.OK) return;
             var keepTrying = true;
@@ -785,17 +759,12 @@ namespace UniTimetable.ViewControllers
 
         #region Importing
 
-        private void ImportToolStripMenuItemClick(object sender, EventArgs e)
-        {
-            Import();
-        }
-
-        private void Import()
+        private void Import(object sender, EventArgs e)
         {
             if (!AreYouSure("Import Timetable"))
                 return;
 
-            var importForm = new FormImport();
+            var importForm = new FormImport(_settings.ImportUnselectable);
             if (importForm.DialogResult == DialogResult.Cancel)
             {
                 return;
@@ -816,7 +785,7 @@ namespace UniTimetable.ViewControllers
         private void ImportAndMergeToolStripMenuItemClick(object sender, EventArgs e)
         {
             // run the import wizard
-            var importForm = new FormImport();
+            var importForm = new FormImport(_settings.ImportUnselectable);
             if (importForm.DialogResult == DialogResult.Cancel)
             {
                 return;
@@ -878,7 +847,6 @@ namespace UniTimetable.ViewControllers
 
         private void UpdateSettings()
         {
-            UpdateToolstrip();
             timetableControl.ShowDragGhost = _settings.ShowGhost;
             timetableControl.ShowWeekend = _settings.ShowWeekend;
             timetableControl.ShowGrayArea = _settings.ShowGray;
@@ -895,7 +863,7 @@ namespace UniTimetable.ViewControllers
 
         #region Solver
 
-        private void FindSolutions()
+        private void FindSolutions(object sender, EventArgs e)
         {
             if (Timetable == null)
                 return;
@@ -907,26 +875,30 @@ namespace UniTimetable.ViewControllers
                 return;
             }
 
-            _solver.Timetable = Timetable;
+            Solver.Timetable = Timetable;
             var formProgress = new FormProgress();
-            if (formProgress.ShowDialog(_solver) != DialogResult.OK)
+            if (formProgress.ShowDialog(Solver) != DialogResult.OK)
                 return;
 
             var formSolution = new FormSolution();
-            if (formSolution.ShowDialog(_solver) != DialogResult.OK)
+            if (formSolution.ShowDialog(Solver) != DialogResult.OK)
                 return;
 
             MadeChanges(true);
         }
 
-        private void EditCriteria()
+        private void EditCriteria(object sender, EventArgs e)
         {
             if (Timetable == null)
+            {
                 return;
+            }
 
             var formCriteria = new FormCriteria();
-            if (formCriteria.ShowDialog(_solver) != DialogResult.OK)
+            if (formCriteria.ShowDialog(Solver) != DialogResult.OK)
+            {
                 return;
+            }
             Timetable.RecomputeSolutions = true;
         }
 
@@ -945,65 +917,7 @@ namespace UniTimetable.ViewControllers
             btnAccept.Enabled = enable;
         }
 
-        private void UpdateToolstrip()
-        {
-            for (var i = 0; i < toolStrip1.Items.Count; i++)
-            {
-                ToolStripButton item;
-                try
-                {
-                    item = (ToolStripButton) toolStrip1.Items[i];
-                }
-                catch
-                {
-                    continue;
-                }
-
-                item.Padding = new Padding(3, item.Padding.Top, 3, item.Padding.Bottom);
-            }
-        }
-
-        private void BtnNewClick(object sender, EventArgs e)
-        {
-            New();
-        }
-
-        private void BtnImportClick(object sender, EventArgs e)
-        {
-            Import();
-        }
-
-        private void BtnOpenClick(object sender, EventArgs e)
-        {
-            Open();
-        }
-
-        private void BtnSaveClick(object sender, EventArgs e)
-        {
-            Save();
-        }
-
-        private void BtnPrintClick(object sender, EventArgs e)
-        {
-            Print();
-        }
-
-        private void BtnCriteriaClick(object sender, EventArgs e)
-        {
-            EditCriteria();
-        }
-
-        private void BtnSolverClick(object sender, EventArgs e)
-        {
-            FindSolutions();
-        }
-
-        private void BtnLuckyClick(object sender, EventArgs e)
-        {
-            FeelingLucky();
-        }
-
-        private void FeelingLucky()
+        private void FeelingLucky(object sender, EventArgs e)
         {
             if (Timetable == null)
                 return;
@@ -1011,22 +925,22 @@ namespace UniTimetable.ViewControllers
             if (Timetable.IsFull())
                 Timetable.RevertToBaseStreams();
 
-            _solver.Timetable = Timetable;
+            Solver.Timetable = Timetable;
             var formProgress = new FormProgress();
-            if (formProgress.ShowDialog(_solver) != DialogResult.OK)
+            if (formProgress.ShowDialog(Solver) != DialogResult.OK)
                 return;
 
-            var index = _random.Next(Math.Min(100, _solver.Solutions.Count));
-            Timetable.LoadSolution(_solver.Solutions[index]);
+            var index = _random.Next(Math.Min(100, Solver.Solutions.Count));
+            Timetable.LoadSolution(Solver.Solutions[index]);
             MadeChanges(true);
         }
 
-        private void BtnAddByClassClick(object sender, EventArgs e)
+        private void AddByClass(object sender, EventArgs e)
         {
             ToggleSidePane();
         }
 
-        private void BtnClearClick(object sender, EventArgs e)
+        private void Clear(object sender, EventArgs e)
         {
             if (!Timetable.RevertToBaseStreams()) return;
             timetableControl.EndPreviewStream();
@@ -1073,8 +987,8 @@ namespace UniTimetable.ViewControllers
                         findClassHereToolStripMenuItem.DropDownItems.Clear();
 
                         // populate list of options at this time
-                        var required = new List<ToolStripMenuItem>();
-                        var ignored = new List<ToolStripMenuItem>();
+                        var required = new List<ToolStripItem>();
+                        var ignored = new List<ToolStripItem>();
                         foreach (var subject in Timetable.SubjectList)
                         {
                             foreach (var type in subject.Types)
@@ -1204,24 +1118,17 @@ namespace UniTimetable.ViewControllers
 
         private void UnavailabilityToolStripMenuItemClick(object sender, EventArgs e)
         {
-            if (
-                _formUnavail.ShowDialog(Timetable,
-                    new Timeslot(_clickTime.Day, _clickTime.Hour, 0, _clickTime.Hour + 1, 0), timetableControl.HourStart,
-                    timetableControl.HourEnd) == DialogResult.Cancel)
-                return;
+            var formUnavail = new FormUnavailability();
+            var result = formUnavail.ShowDialog(Timetable,
+                new Timeslot(_clickTime.Day, -1, _clickTime.Hour, 0, _clickTime.Hour + 1, 0),
+                timetableControl.HourStart, timetableControl.HourEnd);
+            if (result == DialogResult.Cancel) return;
             MadeChanges(true);
         }
 
         private void StreamMenuClosed(object sender, ToolStripDropDownClosedEventArgs e)
         {
             timetableControl.ClearActive();
-        }
-
-        private void TimetableControl1TimetableMouseDoubleClick(object sender, TimetableEventArgs e)
-        {
-            // disable doucle click edit for now - conflicts with internal mouseup for dragging
-            //FindClickDetails(e);
-            //EditUnavailable();
         }
 
         private void EditUnavailableToolStripMenuItemClick(object sender, EventArgs e)
@@ -1232,23 +1139,19 @@ namespace UniTimetable.ViewControllers
 
         private void EditUnavailable()
         {
-            if (_clickUnavail != null)
-            {
-                if (
-                    _formUnavail.ShowDialog(Timetable, _clickUnavail, timetableControl.HourStart,
-                        timetableControl.HourEnd) == DialogResult.Cancel)
-                    return;
-                MadeChanges(true);
-            }
+            if (_clickUnavail == null) return;
+            var formUnavail = new FormUnavailability();
+            if (formUnavail.ShowDialog(Timetable, _clickUnavail, timetableControl.HourStart,
+                    timetableControl.HourEnd) == DialogResult.Cancel)
+                return;
+            MadeChanges(true);
         }
 
         private void RemoveUnavailableToolStripMenuItemClick(object sender, EventArgs e)
         {
-            if (_clickUnavail != null)
-            {
-                Timetable.UnavailableList.Remove(_clickUnavail);
-                MadeChanges(true);
-            }
+            if (_clickUnavail == null) return;
+            Timetable.UnavailableList.Remove(_clickUnavail);
+            MadeChanges(true);
         }
 
         private void UnavailableMenuClosed(object sender, ToolStripDropDownClosedEventArgs e)

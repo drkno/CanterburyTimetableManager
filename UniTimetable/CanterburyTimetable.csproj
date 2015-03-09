@@ -55,6 +55,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
@@ -76,10 +77,18 @@
     <Compile Include="Model\ImportExport\UniversityDefinitions\Canterbury\JsonObjects\CommonRequest.cs" />
     <Compile Include="Model\ImportExport\UniversityDefinitions\Canterbury\JsonObjects\EnrolledSubjectStreams.cs" />
     <Compile Include="Model\ImportExport\UniversityDefinitions\Canterbury\JsonObjects\KeySubjectStreamPair.cs" />
+    <Compile Include="Model\ImportExport\UniversityDefinitions\Canterbury\JsonObjects\StudentInformation.cs" />
     <Compile Include="Model\ImportExport\UniversityDefinitions\Canterbury\JsonObjects\SubjectStream.cs" />
-    <Compile Include="Model\ImportExport\UniversityDefinitions\Canterbury\JsonObjects\SubjectStreamContainer.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\Resources.cs" />
     <Compile Include="Model\ColorScheme.cs" />
+    <Compile Include="ViewControllers\CriteriaFilters\CriteriaListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ViewControllers\EtchedLine.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -105,10 +114,10 @@
       <DependentUpon>FormSetStreams.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\Solver\Solver.Filter.cs" />
-    <Compile Include="ViewControllers\FormImport.cs">
+    <Compile Include="ViewControllers\Import\FormImport.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ViewControllers\FormImport.Designer.cs">
+    <Compile Include="ViewControllers\Import\FormImport.Designer.cs">
       <DependentUpon>FormImport.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewControllers\FormMain.cs">
@@ -117,10 +126,10 @@
     <Compile Include="ViewControllers\FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewControllers\FormFilterDetails.cs">
+    <Compile Include="ViewControllers\CriteriaFilters\FormFilterDetails.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ViewControllers\FormFilterDetails.Designer.cs">
+    <Compile Include="ViewControllers\CriteriaFilters\FormFilterDetails.Designer.cs">
       <DependentUpon>FormFilterDetails.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewControllers\FormProgress.cs">
@@ -135,11 +144,11 @@
     <Compile Include="ViewControllers\FormSolution.Designer.cs">
       <DependentUpon>FormSolution.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewControllers\FormStyle.cs">
+    <Compile Include="ViewControllers\FormColours.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ViewControllers\FormStyle.Designer.cs">
-      <DependentUpon>FormStyle.cs</DependentUpon>
+    <Compile Include="ViewControllers\FormColours.Designer.cs">
+      <DependentUpon>FormColours.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewControllers\FormUnavailability.cs">
       <SubType>Form</SubType>
@@ -156,15 +165,15 @@
       <SubType>Designer</SubType>
       <DependentUpon>EtchedLine.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ViewControllers\FormCriteria.resx">
+    <EmbeddedResource Include="ViewControllers\CriteriaFilters\FormCriteria.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormCriteria.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ViewControllers\FormCriteriaDetails.resx">
+    <EmbeddedResource Include="ViewControllers\CriteriaFilters\FormCriteriaDetails.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormCriteriaDetails.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ViewControllers\FormImport.resx">
+    <EmbeddedResource Include="ViewControllers\Import\FormImport.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormImport.cs</DependentUpon>
     </EmbeddedResource>
@@ -172,7 +181,7 @@
       <SubType>Designer</SubType>
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ViewControllers\FormFilterDetails.resx">
+    <EmbeddedResource Include="ViewControllers\CriteriaFilters\FormFilterDetails.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormFilterDetails.cs</DependentUpon>
     </EmbeddedResource>
@@ -194,9 +203,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>FormSolution.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ViewControllers\FormStyle.resx">
+    <EmbeddedResource Include="ViewControllers\FormColours.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>FormStyle.cs</DependentUpon>
+      <DependentUpon>FormColours.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ViewControllers\FormUnavailability.resx">
       <SubType>Designer</SubType>
@@ -207,18 +216,22 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ViewControllers\Import\PreviewPanel.resx">
+      <DependentUpon>PreviewPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ViewControllers\Import\StreamsPanel.resx">
+      <DependentUpon>StreamsPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ViewControllers\Import\ImportingPanel.resx">
+      <DependentUpon>ImportingPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ViewControllers\TimetableControl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>TimetableControl.cs</DependentUpon>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -243,30 +256,17 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Resources\Alarm.png" />
-    <None Include="Resources\Redo.png" />
-    <None Include="Resources\Config-Tools.png" />
     <None Include="Resources\Find.png" />
-    <None Include="Resources\Document.png" />
-    <EmbeddedResource Include="Resources\Favorites.png" />
-    <None Include="Resources\Symbol-Add.png" />
-    <None Include="Resources\Symbol-Add-Stream.png" />
-    <None Include="Resources\Symbol-Add-Time.png" />
-    <None Include="Resources\Dice.png" />
-    <None Include="Resources\TimeTable.ico" />
-    <None Include="Resources\Symbol-Check.png" />
-    <None Include="Resources\Symbol-Delete.png" />
-    <EmbeddedResource Include="Resources\DeStar.png" />
-    <Compile Include="ViewControllers\FormCriteria.cs">
+    <Compile Include="ViewControllers\CriteriaFilters\FormCriteria.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ViewControllers\FormCriteria.Designer.cs">
+    <Compile Include="ViewControllers\CriteriaFilters\FormCriteria.Designer.cs">
       <DependentUpon>FormCriteria.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewControllers\FormCriteriaDetails.cs">
+    <Compile Include="ViewControllers\CriteriaFilters\FormCriteriaDetails.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ViewControllers\FormCriteriaDetails.Designer.cs">
+    <Compile Include="ViewControllers\CriteriaFilters\FormCriteriaDetails.Designer.cs">
       <DependentUpon>FormCriteriaDetails.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewControllers\FormSettings.cs">
@@ -276,6 +276,24 @@
       <DependentUpon>FormSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\History.cs" />
+    <Compile Include="ViewControllers\Import\PreviewPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ViewControllers\Import\PreviewPanel.Designer.cs">
+      <DependentUpon>PreviewPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Import\StreamsPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ViewControllers\Import\StreamsPanel.Designer.cs">
+      <DependentUpon>StreamsPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\Import\ImportingPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ViewControllers\Import\ImportingPanel.Designer.cs">
+      <DependentUpon>ImportingPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="ViewControllers\ListBoxBuffered.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -289,32 +307,8 @@
     <Compile Include="ViewControllers\TimetableControl.Designer.cs">
       <DependentUpon>TimetableControl.cs</DependentUpon>
     </Compile>
-    <None Include="Resources\Unknown.png" />
-    <None Include="Resources\Undo.png" />
-    <None Include="Resources\Copy.png" />
-    <None Include="Resources\Folder.png" />
-    <None Include="Resources\My-Documents.png" />
     <None Include="Resources\Save.png" />
     <None Include="Resources\Printer.png" />
-    <None Include="Resources\Redo16.png" />
-    <None Include="Resources\Save16.png" />
-    <None Include="Resources\Symbol-Add-Stream16.png" />
-    <None Include="Resources\Symbol-Add-Time16.png" />
-    <None Include="Resources\Symbol-Add16.png" />
-    <None Include="Resources\Symbol-Check16.png" />
-    <None Include="Resources\Symbol-Delete16.png" />
-    <None Include="Resources\Undo16.png" />
-    <None Include="Resources\Config-Tools16.png" />
-    <None Include="Resources\Copy16.png" />
-    <None Include="Resources\Dice16.png" />
-    <None Include="Resources\Document16.png" />
-    <None Include="Resources\My-Documents16.png" />
-    <None Include="Resources\Help.png" />
-    <None Include="Resources\Color-palette.png" />
-    <None Include="Resources\Color-picker.png" />
-    <None Include="Resources\Colors.png" />
-    <None Include="Resources\Color-Settings.png" />
-    <None Include="Resources\Color-picker16.png" />
     <None Include="Resources\Criteria.png" />
     <None Include="Resources\Clear.png" />
     <Content Include="Resources\Export.png" />

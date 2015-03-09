@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 
 #endregion
@@ -10,18 +11,11 @@ namespace UniTimetable.Model.Timetable
 {
     public class Type : IComparable<Type>
     {
-        private string Code_ = "?";
-        private int ID_ = -1;
-        private string Name_ = "";
-        private bool Required_ = true;
-        private List<Stream> Streams_ = new List<Stream>();
-        private List<Stream> UniqueStreams_ = new List<Stream>();
-
         #region IComparable<Type> Members
 
         public int CompareTo(Type other)
         {
-            return Name_.CompareTo(other.Name_);
+            return string.CompareOrdinal(Name, other.Name);
         }
 
         #endregion
@@ -30,45 +24,41 @@ namespace UniTimetable.Model.Timetable
 
         public override string ToString()
         {
-            return Name_ + " (" + Code_ + ")";
+            return Name + " (" + Code + ")";
         }
 
         #endregion
 
         #region Constructors
 
-        public Type()
+        private Type()
         {
+            UniqueStreams = new List<Stream>();
+            Streams = new List<Stream>();
+            Required = true;
+            Code = "?";
+            Id = -1;
             ClashTable = null;
-            Subject = null;
         }
 
-        public Type(string name, string code)
+        public Type(string name, string code, Subject subject) : this()
         {
-            ClashTable = null;
-            Subject = null;
-            Name_ = name;
-            Code_ = code;
-        }
-
-        public Type(string name, string code, Subject subject)
-        {
-            ClashTable = null;
-            Name_ = name;
-            Code_ = code;
+            Name = name;
+            Code = code;
             Subject = subject;
+            Required = true;
+            Streams = new List<Stream>();
+            UniqueStreams = new List<Stream>();
         }
 
-        public Type(Type other)
+        public Type(Type other) : this()
         {
-            ClashTable = null;
-            Name_ = other.Name_;
-            Code_ = other.Code_;
-            Required_ = other.Required_;
+            Name = other.Name;
+            Code = other.Code;
+            Required = other.Required;
             Subject = other.Subject;
-            Streams_ = new List<Stream>(other.Streams_);
-            //this.State_ = other.State_;
-            UniqueStreams_ = new List<Stream>(other.UniqueStreams_);
+            Streams = new List<Stream>(other.Streams);
+            UniqueStreams = new List<Stream>(other.UniqueStreams);
         }
 
         public Type Clone()
@@ -81,108 +71,45 @@ namespace UniTimetable.Model.Timetable
         #region Accessors
 
         [XmlIgnore]
-        public int ID
-        {
-            get { return ID_; }
-            set { ID_ = value; }
-        }
+        public int Id { get; set; }
 
         [XmlAttribute("name")]
-        public string Name
-        {
-            get { return Name_; }
-            set { Name_ = value; }
-        }
+        public string Name { get; set; }
 
         [XmlAttribute("code")]
-        public string Code
-        {
-            get { return Code_; }
-            set { Code_ = value; }
-        }
+        public string Code { get; set; }
 
         [XmlAttribute("required")]
-        public bool Required
-        {
-            get { return Required_; }
-            set { Required_ = value; }
-        }
-
-        /*public TypeState State
-        {
-            get
-            {
-                return State_;
-            }
-            set
-            {
-                State_ = value;
-            }
-        }*/
+        public bool Required { get; set; }
 
         [XmlIgnore]
         public Subject Subject { get; set; }
 
         [XmlArray("streams"), XmlArrayItem("stream", typeof (Stream))]
-        public List<Stream> Streams
-        {
-            get { return Streams_; }
-            set { Streams_ = value; }
-        }
+        public List<Stream> Streams { get; set; }
 
         [XmlIgnore]
         public bool[] ClashTable { get; set; }
 
         [XmlIgnore]
-        public List<Stream> UniqueStreams
-        {
-            get { return UniqueStreams_; }
-            set { UniqueStreams_ = value; }
-        }
+        public List<Stream> UniqueStreams { get; set; }
 
-        [XmlIgnore]
         /// <summary>
         /// Gets the enabled stream in the type.
         /// </summary>
+        [XmlIgnore]
         public Stream SelectedStream
         {
             get
             {
-                foreach (Stream stream in Streams_)
-                {
-                    if (stream.Selected)
-                        return stream;
-                }
-                return null;
-            }
-        }
-
-        [XmlIgnore]
-        /// <summary>
-        /// Gets the number of available streams in the type.
-        /// </summary>
-        public int NumberAvailable
-        {
-            get
-            {
-                /*int count = 0;
-                foreach (Stream stream in Streams_)
-                {
-                    // increment counter for each available stream
-                    if (stream.IsAvailable())
-                    {
-                        count++;
-                    }
-                }
-                return count;*/
-                return Streams_.Count;
+                return Streams.FirstOrDefault(stream => stream.Selected);
             }
         }
 
         public Session FindShortestSession()
         {
             Session min = null;
-            foreach (Stream stream in Streams_)
+            foreach (Stream stream in Streams)
             {
                 foreach (Session session in stream.Classes)
                 {
@@ -200,7 +127,7 @@ namespace UniTimetable.Model.Timetable
         public bool ClashesWith(Type other)
         {
             if (ClashTable != null)
-                return ClashTable[other.ID_];
+                return ClashTable[other.Id];
 
             // if there exists a stream in type a and a stream in type b that don't clash, the types are compatible
             foreach (Stream a in Streams)
@@ -217,7 +144,7 @@ namespace UniTimetable.Model.Timetable
         public void BuildEquivalency()
         {
             // clear unique streams list
-            UniqueStreams_.Clear();
+            UniqueStreams.Clear();
 
             // fill the lookup list with -1
             int[] lookup = new int[Streams.Count];
@@ -232,7 +159,7 @@ namespace UniTimetable.Model.Timetable
                 if (lookup[i] == -1)
                 {
                     // first stream to be examined in the set of equivalents
-                    UniqueStreams_.Add(Streams_[i]);
+                    UniqueStreams.Add(Streams[i]);
                     // for all streams not yet examined in the current type
                     for (int j = i + 1; j < lookup.Length; j++)
                     {

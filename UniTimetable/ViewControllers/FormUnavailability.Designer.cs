@@ -29,110 +29,166 @@ namespace UniTimetable.ViewControllers
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormUnavailability));
-            this.btnCancel = new System.Windows.Forms.Button();
-            this.btnOK = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.timeStart = new System.Windows.Forms.DateTimePicker();
-            this.timeEnd = new System.Windows.Forms.DateTimePicker();
-            this.txtName = new System.Windows.Forms.TextBox();
-            this.ddDay = new System.Windows.Forms.ComboBox();
-            this.etchedLine1 = new EtchedLine();
+            this.buttonCancel = new System.Windows.Forms.Button();
+            this.buttonOK = new System.Windows.Forms.Button();
+            this.labelEnd = new System.Windows.Forms.Label();
+            this.labelStart = new System.Windows.Forms.Label();
+            this.labelName = new System.Windows.Forms.Label();
+            this.textBoxName = new System.Windows.Forms.TextBox();
+            this.dateTimePickerStart = new System.Windows.Forms.DateTimePicker();
+            this.dateTimePickerEnd = new System.Windows.Forms.DateTimePicker();
+            this.tableLayoutPanelContainer = new System.Windows.Forms.TableLayoutPanel();
+            this.etchedLine1 = new UniTimetable.ViewControllers.EtchedLine();
+            this.labelDay = new System.Windows.Forms.Label();
+            this.comboBoxDay = new System.Windows.Forms.ComboBox();
+            this.tableLayoutPanelContainer.SuspendLayout();
             this.SuspendLayout();
             // 
-            // btnCancel
+            // buttonCancel
             // 
-            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(268, 83);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(100, 23);
-            this.btnCancel.TabIndex = 2;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            this.buttonCancel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.buttonCancel.Location = new System.Drawing.Point(175, 108);
+            this.buttonCancel.Name = "buttonCancel";
+            this.buttonCancel.Size = new System.Drawing.Size(100, 23);
+            this.buttonCancel.TabIndex = 6;
+            this.buttonCancel.Text = "Cancel";
+            this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Click += new System.EventHandler(this.ButtonCancelClick);
             // 
-            // btnOK
+            // buttonOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(156, 83);
-            this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(100, 23);
-            this.btnOK.TabIndex = 1;
-            this.btnOK.Text = "OK";
-            this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+            this.buttonOK.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.buttonOK.Location = new System.Drawing.Point(65, 108);
+            this.buttonOK.Name = "buttonOK";
+            this.buttonOK.Size = new System.Drawing.Size(100, 23);
+            this.buttonOK.TabIndex = 5;
+            this.buttonOK.Text = "OK";
+            this.buttonOK.UseVisualStyleBackColor = true;
+            this.buttonOK.Click += new System.EventHandler(this.ButtonOkClick);
             // 
-            // label4
+            // labelEnd
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(256, 41);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(26, 13);
-            this.label4.TabIndex = 14;
-            this.label4.Text = "End";
+            this.labelEnd.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.labelEnd.AutoSize = true;
+            this.labelEnd.Location = new System.Drawing.Point(31, 81);
+            this.labelEnd.Name = "labelEnd";
+            this.labelEnd.Size = new System.Drawing.Size(26, 13);
+            this.labelEnd.TabIndex = 14;
+            this.labelEnd.Text = "End";
             // 
-            // label2
+            // labelStart
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(21, 41);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(26, 13);
-            this.label2.TabIndex = 10;
-            this.label2.Text = "Day";
+            this.labelStart.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.labelStart.AutoSize = true;
+            this.labelStart.Location = new System.Drawing.Point(28, 56);
+            this.labelStart.Name = "labelStart";
+            this.labelStart.Size = new System.Drawing.Size(29, 13);
+            this.labelStart.TabIndex = 12;
+            this.labelStart.Text = "Start";
             // 
-            // label3
+            // labelName
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(253, 15);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(29, 13);
-            this.label3.TabIndex = 12;
-            this.label3.Text = "Start";
+            this.labelName.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.labelName.AutoSize = true;
+            this.labelName.Location = new System.Drawing.Point(22, 6);
+            this.labelName.Name = "labelName";
+            this.labelName.Size = new System.Drawing.Size(35, 13);
+            this.labelName.TabIndex = 8;
+            this.labelName.Text = "Name";
             // 
-            // label1
+            // textBoxName
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 15);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 8;
-            this.label1.Text = "Name";
+            this.tableLayoutPanelContainer.SetColumnSpan(this.textBoxName, 2);
+            this.textBoxName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxName.Location = new System.Drawing.Point(63, 3);
+            this.textBoxName.Name = "textBoxName";
+            this.textBoxName.Size = new System.Drawing.Size(214, 20);
+            this.textBoxName.TabIndex = 1;
             // 
-            // timeStart
+            // dateTimePickerStart
             // 
-            this.timeStart.CustomFormat = "h:mm tt";
-            this.timeStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.timeStart.Location = new System.Drawing.Point(288, 12);
-            this.timeStart.Name = "timeStart";
-            this.timeStart.ShowUpDown = true;
-            this.timeStart.Size = new System.Drawing.Size(80, 20);
-            this.timeStart.TabIndex = 13;
-            this.timeStart.Value = new System.DateTime(2007, 3, 25, 0, 0, 0, 0);
+            this.tableLayoutPanelContainer.SetColumnSpan(this.dateTimePickerStart, 2);
+            this.dateTimePickerStart.CustomFormat = "hh:mm tt";
+            this.dateTimePickerStart.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dateTimePickerStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateTimePickerStart.Location = new System.Drawing.Point(63, 53);
+            this.dateTimePickerStart.Name = "dateTimePickerStart";
+            this.dateTimePickerStart.ShowUpDown = true;
+            this.dateTimePickerStart.Size = new System.Drawing.Size(214, 20);
+            this.dateTimePickerStart.TabIndex = 3;
+            this.dateTimePickerStart.Value = new System.DateTime(2015, 1, 1, 0, 0, 0, 0);
             // 
-            // timeEnd
+            // dateTimePickerEnd
             // 
-            this.timeEnd.CustomFormat = "h:mm tt";
-            this.timeEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.timeEnd.Location = new System.Drawing.Point(288, 39);
-            this.timeEnd.Name = "timeEnd";
-            this.timeEnd.ShowUpDown = true;
-            this.timeEnd.Size = new System.Drawing.Size(80, 20);
-            this.timeEnd.TabIndex = 15;
-            this.timeEnd.Value = new System.DateTime(2007, 3, 25, 0, 0, 0, 0);
+            this.tableLayoutPanelContainer.SetColumnSpan(this.dateTimePickerEnd, 2);
+            this.dateTimePickerEnd.CustomFormat = "hh:mm tt";
+            this.dateTimePickerEnd.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dateTimePickerEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateTimePickerEnd.Location = new System.Drawing.Point(63, 78);
+            this.dateTimePickerEnd.Name = "dateTimePickerEnd";
+            this.dateTimePickerEnd.ShowUpDown = true;
+            this.dateTimePickerEnd.Size = new System.Drawing.Size(214, 20);
+            this.dateTimePickerEnd.TabIndex = 4;
+            this.dateTimePickerEnd.Value = new System.DateTime(2015, 1, 1, 0, 0, 0, 0);
             // 
-            // txtName
+            // tableLayoutPanelContainer
             // 
-            this.txtName.Location = new System.Drawing.Point(53, 12);
-            this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(150, 20);
-            this.txtName.TabIndex = 9;
+            this.tableLayoutPanelContainer.AutoSize = true;
+            this.tableLayoutPanelContainer.ColumnCount = 3;
+            this.tableLayoutPanelContainer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tableLayoutPanelContainer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 110F));
+            this.tableLayoutPanelContainer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 110F));
+            this.tableLayoutPanelContainer.Controls.Add(this.labelName, 0, 0);
+            this.tableLayoutPanelContainer.Controls.Add(this.labelEnd, 0, 3);
+            this.tableLayoutPanelContainer.Controls.Add(this.dateTimePickerEnd, 1, 3);
+            this.tableLayoutPanelContainer.Controls.Add(this.buttonCancel, 2, 5);
+            this.tableLayoutPanelContainer.Controls.Add(this.labelStart, 0, 2);
+            this.tableLayoutPanelContainer.Controls.Add(this.dateTimePickerStart, 1, 2);
+            this.tableLayoutPanelContainer.Controls.Add(this.buttonOK, 1, 5);
+            this.tableLayoutPanelContainer.Controls.Add(this.etchedLine1, 0, 4);
+            this.tableLayoutPanelContainer.Controls.Add(this.textBoxName, 1, 0);
+            this.tableLayoutPanelContainer.Controls.Add(this.labelDay, 0, 1);
+            this.tableLayoutPanelContainer.Controls.Add(this.comboBoxDay, 1, 1);
+            this.tableLayoutPanelContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanelContainer.Location = new System.Drawing.Point(5, 5);
+            this.tableLayoutPanelContainer.Name = "tableLayoutPanelContainer";
+            this.tableLayoutPanelContainer.RowCount = 6;
+            this.tableLayoutPanelContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanelContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanelContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanelContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanelContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 5F));
+            this.tableLayoutPanelContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanelContainer.Size = new System.Drawing.Size(280, 135);
+            this.tableLayoutPanelContainer.TabIndex = 19;
             // 
-            // ddDay
+            // etchedLine1
             // 
-            this.ddDay.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ddDay.FormattingEnabled = true;
-            this.ddDay.Items.AddRange(new object[] {
+            this.tableLayoutPanelContainer.SetColumnSpan(this.etchedLine1, 3);
+            this.etchedLine1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.etchedLine1.Location = new System.Drawing.Point(3, 103);
+            this.etchedLine1.Name = "etchedLine1";
+            this.etchedLine1.Size = new System.Drawing.Size(274, 1);
+            this.etchedLine1.TabIndex = 16;
+            // 
+            // labelDay
+            // 
+            this.labelDay.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.labelDay.AutoSize = true;
+            this.labelDay.Location = new System.Drawing.Point(31, 31);
+            this.labelDay.Name = "labelDay";
+            this.labelDay.Size = new System.Drawing.Size(26, 13);
+            this.labelDay.TabIndex = 19;
+            this.labelDay.Text = "Day";
+            // 
+            // comboBoxDay
+            // 
+            this.tableLayoutPanelContainer.SetColumnSpan(this.comboBoxDay, 2);
+            this.comboBoxDay.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboBoxDay.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxDay.FormattingEnabled = true;
+            this.comboBoxDay.Items.AddRange(new object[] {
             "Sunday",
             "Monday",
             "Tuesday",
@@ -140,44 +196,32 @@ namespace UniTimetable.ViewControllers
             "Thursday",
             "Friday",
             "Saturday"});
-            this.ddDay.Location = new System.Drawing.Point(53, 38);
-            this.ddDay.Name = "ddDay";
-            this.ddDay.Size = new System.Drawing.Size(150, 21);
-            this.ddDay.TabIndex = 11;
-            // 
-            // etchedLine1
-            // 
-            this.etchedLine1.Location = new System.Drawing.Point(1, 71);
-            this.etchedLine1.Name = "etchedLine1";
-            this.etchedLine1.Size = new System.Drawing.Size(378, 10);
-            this.etchedLine1.TabIndex = 16;
+            this.comboBoxDay.Location = new System.Drawing.Point(63, 28);
+            this.comboBoxDay.Name = "comboBoxDay";
+            this.comboBoxDay.Size = new System.Drawing.Size(214, 21);
+            this.comboBoxDay.TabIndex = 2;
             // 
             // FormUnavailability
             // 
-            this.AcceptButton = this.btnOK;
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(380, 118);
-            this.Controls.Add(this.etchedLine1);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.timeStart);
-            this.Controls.Add(this.timeEnd);
-            this.Controls.Add(this.txtName);
-            this.Controls.Add(this.ddDay);
-            this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.btnOK);
+            this.AcceptButton = this.buttonOK;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
+            this.CancelButton = this.buttonCancel;
+            this.ClientSize = new System.Drawing.Size(290, 145);
+            this.Controls.Add(this.tableLayoutPanelContainer);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormUnavailability";
+            this.Padding = new System.Windows.Forms.Padding(5);
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Unavailability Details";
-            this.Load += new System.EventHandler(this.FormUnavailability_Load);
+            this.Load += new System.EventHandler(this.FormUnavailabilityLoad);
+            this.tableLayoutPanelContainer.ResumeLayout(false);
+            this.tableLayoutPanelContainer.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -185,16 +229,17 @@ namespace UniTimetable.ViewControllers
 
         #endregion
 
-        private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.Button btnOK;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.DateTimePicker timeStart;
-        private System.Windows.Forms.DateTimePicker timeEnd;
-        private System.Windows.Forms.TextBox txtName;
-        private System.Windows.Forms.ComboBox ddDay;
+        private System.Windows.Forms.Button buttonCancel;
+        private System.Windows.Forms.Button buttonOK;
+        private System.Windows.Forms.Label labelEnd;
+        private System.Windows.Forms.Label labelStart;
+        private System.Windows.Forms.Label labelName;
+        private System.Windows.Forms.TextBox textBoxName;
         private EtchedLine etchedLine1;
+        private System.Windows.Forms.DateTimePicker dateTimePickerStart;
+        private System.Windows.Forms.DateTimePicker dateTimePickerEnd;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelContainer;
+        private System.Windows.Forms.Label labelDay;
+        private System.Windows.Forms.ComboBox comboBoxDay;
     }
 }

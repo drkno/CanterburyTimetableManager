@@ -46,8 +46,8 @@ namespace UniTimetable.Model.Timetable
             Name = name;
         }
 
-        public Unavailability(string name, int day, int startHour, int startMinute, int endHour, int endMinute)
-            : base(day, startHour, startMinute, endHour, endMinute)
+        public Unavailability(string name, int day, int startYearDay, int startHour, int startMinute, int endHour, int endMinute)
+            : base(day, startYearDay, startHour, startMinute, endHour, endMinute)
         {
             Name = name;
         }

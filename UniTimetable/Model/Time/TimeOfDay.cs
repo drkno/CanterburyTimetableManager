@@ -9,8 +9,8 @@ namespace UniTimetable.Model.Time
 {
     public class TimeOfDay : IComparable<TimeOfDay>
     {
-        protected int Hour_;
-        protected int Minute_;
+        protected int _hour;
+        protected int _minute;
 
         public static TimeOfDay Minimum
         {
@@ -45,14 +45,14 @@ namespace UniTimetable.Model.Time
 
         public TimeOfDay()
         {
-            Hour_ = 0;
-            Minute_ = 0;
+            _hour = 0;
+            _minute = 0;
         }
 
         public TimeOfDay(TimeOfDay other)
         {
-            Hour_ = other.Hour_;
-            Minute_ = other.Minute_;
+            _hour = other._hour;
+            _minute = other._minute;
         }
 
         public TimeOfDay(int hour, int minute)
@@ -70,54 +70,54 @@ namespace UniTimetable.Model.Time
 
         #region Accessors
 
-        [XmlIgnore]
         /// <summary>
         /// Gets or sets the hour.
         /// </summary>
+        [XmlIgnore]
         public int Hour
         {
-            get { return Hour_; }
+            get { return _hour; }
             set
             {
                 if (value < 0 || value > 23)
                 {
                     throw new Exception("Hour specified outside range (0-23).");
                 }
-                Hour_ = value;
+                _hour = value;
             }
         }
 
-        [XmlIgnore]
         /// <summary>
         /// Gets or sets the minute.
         /// </summary>
+        [XmlIgnore]
         public int Minute
         {
-            get { return Minute_; }
+            get { return _minute; }
             set
             {
                 if (value < 0 || value > 59)
                 {
                     throw new Exception("Minute specified outside range (0-59).");
                 }
-                Minute_ = value;
+                _minute = value;
             }
         }
 
-        [XmlAttribute("time")]
         /// <summary>
         /// Gets or sets the total number of minutes.
         /// </summary>
+        [XmlAttribute("time")]
         public int DayMinutes
         {
-            get { return 60*Hour_ + Minute_; }
+            get { return 60*_hour + _minute; }
             set
             {
                 if (value < 0 || value >= 60*24)
                 {
                     throw new Exception("Number of minutes is not within range of a single day.");
                 }
-                Hour_ = value/60;
+                _hour = value/60;
                 Minute = value%60;
             }
         }
@@ -147,9 +147,8 @@ namespace UniTimetable.Model.Time
 
         public void RoundToNearestHour()
         {
-            if (Minute_ >= 30)
-                Hour_++;
-            Minute_ = 0;
+            if (_minute >= 30) _hour++;
+            _minute = 0;
         }
 
         #endregion
@@ -216,21 +215,14 @@ namespace UniTimetable.Model.Time
 
         public override int GetHashCode()
         {
-            return Minute_;
+            return _minute;
         }
 
         public override string ToString()
         {
-            string time;
-            if (Hour_ <= 12)
-                time = Hour_.ToString();
-            else
-                time = (Hour_ - 12).ToString();
-            time += ":" + Minute_.ToString("00");
-            if (Hour_ >= 12)
-                time += "pm";
-            else
-                time += "am";
+            var time = _hour <= 12 ? _hour.ToString() : (_hour - 12).ToString();
+            time += ":" + _minute.ToString("00");
+            time += _hour >= 12 ? "pm" : "am";
             return time;
         }
 

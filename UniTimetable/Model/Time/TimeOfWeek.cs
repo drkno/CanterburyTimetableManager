@@ -8,7 +8,7 @@ namespace UniTimetable.Model.Time
 {
     public class TimeOfWeek : TimeOfDay, IComparable<TimeOfWeek>
     {
-        protected int Day_;
+        private int _day;
 
         #region IComparable<TimeOfWeek> Members
 
@@ -23,31 +23,31 @@ namespace UniTimetable.Model.Time
 
         public TimeOfWeek()
         {
-            Day_ = 0;
+            _day = 0;
         }
 
         public TimeOfWeek(TimeOfWeek other)
             : base(other)
         {
-            Day_ = other.Day_;
+            _day = other._day;
         }
 
         public TimeOfWeek(int day, TimeOfDay time)
             : base(time)
         {
-            Day_ = day;
+            _day = day;
         }
 
         public TimeOfWeek(int day, int hour, int minute)
             : base(hour, minute)
         {
-            Day_ = day;
+            _day = day;
         }
 
         public TimeOfWeek(int weekMinutes)
             : base(weekMinutes%(24*60))
         {
-            Day_ = (weekMinutes/(24*60))%7;
+            _day = (weekMinutes/(24*60))%7;
         }
 
         #endregion
@@ -56,26 +56,26 @@ namespace UniTimetable.Model.Time
 
         public int Day
         {
-            get { return Day_; }
+            get { return _day; }
             set
             {
-                Day_ = value;
-                if (Day_ < 0)
-                    Day_ = 0;
-                if (Day_ > 6)
-                    Day_ = 6;
+                _day = value;
+                if (_day < 0)
+                    _day = 0;
+                if (_day > 6)
+                    _day = 6;
             }
         }
 
         public DayOfWeek DayOfWeek
         {
-            get { return (DayOfWeek) Day_; }
-            set { Day_ = (int) value; }
+            get { return (DayOfWeek) _day; }
+            set { _day = (int) value; }
         }
 
         public int WeekMinutes
         {
-            get { return Day_*24*60 + DayMinutes; }
+            get { return _day*24*60 + DayMinutes; }
         }
 
         #endregion
@@ -142,7 +142,7 @@ namespace UniTimetable.Model.Time
 
         public override int GetHashCode()
         {
-            return Minute_;
+            return _minute;
         }
 
         public override string ToString()
