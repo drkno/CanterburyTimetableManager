@@ -1,7 +1,6 @@
 #region
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -21,13 +20,6 @@ namespace UniTimetable.ViewControllers
     public sealed partial class TimetableControl : UserControl
     {
         private const float TextAspect = 2.5f; // rough width:height ratio of text
-
-        private static readonly string[] Days =
-        {
-            "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
-            "Saturday"
-        };
-
         private Stream _activeStream;
         private Unavailability _activeUnavail;
         private Stream _altStream;
@@ -219,12 +211,10 @@ namespace UniTimetable.ViewControllers
         {
             set
             {
-                if (CellSize != value)
-                {
-                    CellSize = value;
-                    if (ResizeCell != null)
-                        ResizeCell(this);
-                }
+                if (CellSize == value) return;
+                CellSize = value;
+                if (ResizeCell != null)
+                    ResizeCell(this);
             }
         }
 
@@ -244,7 +234,7 @@ namespace UniTimetable.ViewControllers
             ValidateBounds();
         }
 
-        public void ValidateBounds()
+        private void ValidateBounds()
         {
             if (_timetable == null)
                 return;
@@ -254,14 +244,12 @@ namespace UniTimetable.ViewControllers
             var minHourEnd = minEnd.Hour;
             if (minEnd.Minute > 0)
                 minHourEnd++;
-            if (_hourStart > maxHourStart || _hourEnd < minHourEnd)
+            if (_hourStart <= maxHourStart && _hourEnd >= minHourEnd) return;
+            _hourStart = Math.Min(maxHourStart, _hourStart);
+            _hourEnd = Math.Max(minHourEnd, _hourEnd);
+            if (BoundsClipped != null)
             {
-                _hourStart = Math.Min(maxHourStart, _hourStart);
-                _hourEnd = Math.Max(minHourEnd, _hourEnd);
-                if (BoundsClipped != null)
-                {
-                    BoundsClipped(this);
-                }
+                BoundsClipped(this);
             }
         }
 
@@ -520,7 +508,7 @@ namespace UniTimetable.ViewControllers
                 start.RoundToNearestHour();
                 start += offset;
 
-                _hoverUnavail = new Timeslot(start.Day, start, (TimeOfDay) start + dragUnavail.Length);
+                _hoverUnavail = new Timeslot(start.Day, start, (start as TimeOfDay) + dragUnavail.Length);
                 if (_hoverUnavail.StartTime < new TimeOfDay(_hourStart, 0) ||
                     _hoverUnavail.EndTime > new TimeOfDay(_hourEnd, 0))
                 {
@@ -539,38 +527,34 @@ namespace UniTimetable.ViewControllers
             }
         }
 
-        protected override void OnDragDrop(DragEventArgs drgevent)
+        protected override void OnDragDrop(DragEventArgs dragEvent)
         {
-            var time = FindClickTime(PointToClient(new Point(drgevent.X, drgevent.Y)));
+            var time = FindClickTime(PointToClient(new Point(dragEvent.X, dragEvent.Y)));
 
-            if (drgevent.Data.GetDataPresent(typeof (Stream)))
+            if (dragEvent.Data.GetDataPresent(typeof (Stream)))
             {
-                var dragSession = (Session) drgevent.Data.GetData(typeof (Session));
+                var dragSession = (Session) dragEvent.Data.GetData(typeof (Session));
                 var dropSession = Timetable.From(dragSession.Stream.Type).FindClassAt(time, false);
                 if (dropSession != null && dropSession.Stream != dragSession.Stream)
                 {
-                    if (_timetable.SelectStream(dropSession.Stream))
-                        TimetableChanged(this);
+                    if (_timetable.SelectStream(dropSession.Stream) && TimetableChanged != null) TimetableChanged(this);
                 }
             }
-            if (drgevent.Data.GetDataPresent(typeof (Type)))
+            if (dragEvent.Data.GetDataPresent(typeof (Type)))
             {
-                var dragType = (Type) drgevent.Data.GetData(typeof (Type));
+                var dragType = (Type) dragEvent.Data.GetData(typeof (Type));
                 var dropSession = Timetable.From(dragType).FindClassAt(time, false);
-                if (dropSession != null)
-                {
-                    if (_timetable.SelectStream(dropSession.Stream))
-                        TimetableChanged(this);
-                }
+                if (dropSession == null) return;
+                if (_timetable.SelectStream(dropSession.Stream) && TimetableChanged != null) TimetableChanged(this);
             }
-            else if (drgevent.Data.GetDataPresent(typeof (Unavailability)))
+            else if (dragEvent.Data.GetDataPresent(typeof (Unavailability)))
             {
-                var dragUnavail = (Unavailability) drgevent.Data.GetData(typeof (Unavailability));
+                var dragUnavail = (Unavailability) dragEvent.Data.GetData(typeof (Unavailability));
                 _timetable.UnavailableList.Remove(dragUnavail);
                 if (_hoverUnavail != null && _timetable.FreeDuring(_hoverUnavail, true))
                 {
                     _timetable.UnavailableList.Add(new Unavailability(dragUnavail.Name, _hoverUnavail));
-                    TimetableChanged(this);
+                    if (TimetableChanged != null) TimetableChanged(this);
                 }
                 else
                 {
@@ -579,7 +563,7 @@ namespace UniTimetable.ViewControllers
             }
             else
             {
-                base.OnDragDrop(drgevent);
+                base.OnDragDrop(dragEvent);
             }
         }
 
@@ -600,12 +584,12 @@ namespace UniTimetable.ViewControllers
             return DragCursor(s.Length, s.Stream.Type.Subject.Colour);
         }
 
-        public Cursor DragCursor(Unavailability u)
+        private Cursor DragCursor(Unavailability u)
         {
             return DragCursor(u.Length, Color.DarkGray);
         }
 
-        public Cursor DragCursor(TimeLength length, Color color)
+        private Cursor DragCursor(TimeLength length, Color color)
         {
             // draw cursor bitmap
             var r = TimeLengthRectangle(length);
@@ -627,7 +611,7 @@ namespace UniTimetable.ViewControllers
             base.OnGiveFeedback(gfbevent);
         }
 
-        public TimeOfWeek FindClickTime(MouseEventArgs e)
+        private TimeOfWeek FindClickTime(MouseEventArgs e)
         {
             return FindClickTime(e.Location);
         }
@@ -659,14 +643,13 @@ namespace UniTimetable.ViewControllers
             get
             {
                 var scale = Math.Min(CellSize.Width, CellSize.Height*TextAspect)/100f;
-                if (scale == 0f)
-                    scale = 1f;
+                scale = scale <= 0.0f ? 1f : scale;
                 return new Font(base.Font.FontFamily, base.Font.Size*scale);
             }
             set { base.Font = value; }
         }
 
-        public Font FontHeading
+        private Font FontHeading
         {
             get { return new Font(base.Font.FontFamily, Font.Size*1.25f, FontStyle.Bold); }
         }
@@ -689,12 +672,9 @@ namespace UniTimetable.ViewControllers
 
             DrawBackground(g);
 
-            if (_showDays)
-                DrawDays(g);
-            if (_showTimes)
-                DrawTimes(g);
-            if (_showGrayArea)
-                DrawGrayArea(g);
+            if (_showDays) DrawDays(g);
+            if (_showTimes) DrawTimes(g);
+            if (_showGrayArea) DrawGrayArea(g);
 
             DrawOutline(g);
 
@@ -767,7 +747,7 @@ namespace UniTimetable.ViewControllers
 
             for (var i = (_showWeekend ? 0 : 1); i < (_showWeekend ? 7 : 6); i++)
             {
-                g.DrawString(Days[i], FontHeading, Brushes.Black, r, format);
+                g.DrawString(((DayOfWeek) i).ToString(), FontHeading, Brushes.Black, r, format);
                 r.Offset(cell.Width, 0);
             }
         }
@@ -831,37 +811,29 @@ namespace UniTimetable.ViewControllers
 
             foreach (var u in _timetable.UnavailableList)
             {
-                if (_activeUnavail == u)
-                {
-                    DrawTimeslotActive(g, u, Color.DarkGray);
-                }
-                else
-                {
-                    DrawTimeslot(g, u, Color.DarkGray);
-                }
+                DrawTimeslot(g, u, Color.DarkGray, _activeUnavail == u);
                 if (_showText)
                 {
-                    DrawTimeslotText(g, u);
+                    DrawTimeslotText(g, u, u.Name);
                 }
             }
         }
 
         private void DrawClasses(Graphics g)
         {
-            if (_timetable == null)
-                return;
+            if (_timetable == null) return;
 
-            foreach (var s in _timetable.ClassList)
+            foreach (var s in from s in _timetable.ClassList
+                where _showAll ||
+                      s.Stream.Selected
+                where !_enableDrag || _dragSession == null ||
+                      s.Stream.Type != _dragSession.Stream.Type
+                where _altStream == null ||
+                      s.Stream.Type != _altStream.Type
+                where _equivStream == null ||
+                      s.Stream.Type != _equivStream.Type
+                select s)
             {
-                if (!_showAll && !s.Stream.Selected)
-                    continue;
-                if (_enableDrag && _dragSession != null && s.Stream.Type == _dragSession.Stream.Type)
-                    continue;
-                if (_altStream != null && s.Stream.Type == _altStream.Type)
-                    continue;
-                if (_equivStream != null && s.Stream.Type == _equivStream.Type)
-                    continue;
-
                 DrawSession(g, s);
             }
         }
@@ -883,39 +855,30 @@ namespace UniTimetable.ViewControllers
                     DrawTransparentTimeslot(g, session, session.Stream.Type.Subject.Colour);
                 }
             }
-            if (_equivStream != null)
+            if (_equivStream == null) return;
+            foreach (var session in _equivStream.Classes)
             {
-                foreach (var session in _equivStream.Classes)
-                {
-                    DrawSession(g, session);
-                }
+                DrawSession(g, session);
             }
         }
 
         private void DrawOptions(Graphics g)
         {
-            if (_optionsType != null)
+            if (_optionsType == null) return;
+            foreach (var session in _optionsType.UniqueStreams.SelectMany(stream => stream.Classes))
             {
-                foreach (var stream in _optionsType.UniqueStreams)
-                {
-                    foreach (var session in stream.Classes)
-                    {
-                        DrawTransparentTimeslot(g, session, _optionsType.Subject.Colour);
-                    }
-                }
+                DrawTransparentTimeslot(g, session, _optionsType.Subject.Colour);
             }
         }
 
         private void DrawSession(Graphics g, Session session)
         {
-            if (_activeStream == session.Stream)
-            {
-                DrawTimeslotActive(g, session, (_grayscale ? Color.DarkGray : session.Stream.Type.Subject.Colour));
-            }
-            else
-            {
-                DrawTimeslot(g, session, (_grayscale ? Color.DarkGray : session.Stream.Type.Subject.Colour));
-            }
+            //TODO: find clashes
+            ClashRectangle clashRectangle = ClashRectangle.None;
+
+            //FindClickTime()
+
+            DrawTimeslot(g, session, (_grayscale ? Color.DarkGray : session.Stream.Type.Subject.Colour), _activeStream == session.Stream, clashRectangle);
 
             if (_showText)
             {
@@ -923,58 +886,25 @@ namespace UniTimetable.ViewControllers
             }
         }
 
-        private void DrawTimeslot(Graphics g, Timeslot t, Color color)
+        private void DrawTimeslot(Graphics g, Timeslot t, Color colour, bool active = false, ClashRectangle cr = ClashRectangle.None)
         {
-            var r = TimeslotRectangle(t);
-
+            var r = TimeslotRectangle(t, cr);
+            var b = LinearGradient(r.Location, CellSize.Height, colour, active);
             // solid color
-            g.FillRectangle(new SolidBrush(color), r);
-            // gradient
-            var brush = LinearGradient(r.Location, CellSize.Width, CellSize.Height, color);
-
+            g.FillRectangle(new SolidBrush(colour), r);
             var q = new Rectangle(r.X, r.Y, r.Width, r.Height);
-
-            if (r.Height > CellSize.Height*2)
-                r.Height = CellSize.Height*2;
-            g.FillRectangle(brush, r);
-
+            if (r.Height > CellSize.Height*2) r.Height = CellSize.Height*2;
+            g.FillRectangle(b, r);
             g.DrawRectangle(Pens.Black, q);
         }
 
-        private void DrawTimeslotActive(Graphics g, Timeslot t, Color color)
-        {
-            var r = TimeslotRectangle(t);
-
-            // solid color
-            g.FillRectangle(new SolidBrush(color), r);
-            // gradient
-            var brush = LinearGradientActive(r.Location, CellSize.Width, CellSize.Height, color);
-
-            var q = new Rectangle(r.X, r.Y, r.Width, r.Height);
-
-            if (r.Height > CellSize.Height*2)
-                r.Height = CellSize.Height*2;
-            g.FillRectangle(brush, r);
-
-            g.DrawRectangle(Pens.Black, q);
-        }
-
-        public static LinearGradientBrush LinearGradient(Point offset, int unitWidth, int unitHeight, Color color)
+        public static LinearGradientBrush LinearGradient(Point offset, int unitHeight, Color colour, bool active = false)
         {
             return new LinearGradientBrush(
                 new Point(offset.X, offset.Y - unitHeight*4),
                 new Point(offset.X, offset.Y + unitHeight*2),
-                Color.White,
-                color);
-        }
-
-        public static LinearGradientBrush LinearGradientActive(Point offset, int unitWidth, int unitHeight, Color color)
-        {
-            return new LinearGradientBrush(
-                new Point(offset.X, offset.Y - unitHeight*4),
-                new Point(offset.X, offset.Y + unitHeight*2),
-                Color.Black,
-                color);
+                active ? Color.Black : Color.White,
+                colour);
         }
 
         private void DrawTimeslotText(Graphics g, Session s)
@@ -983,11 +913,6 @@ namespace UniTimetable.ViewControllers
             if (_showLocation)
                 text += "\n" + s.Location;
             DrawTimeslotText(g, s, text);
-        }
-
-        private void DrawTimeslotText(Graphics g, Unavailability u)
-        {
-            DrawTimeslotText(g, u, u.Name);
         }
 
         private void DrawTimeslotText(Graphics g, Timeslot t, String text)
@@ -1008,16 +933,32 @@ namespace UniTimetable.ViewControllers
             g.DrawRectangle(new Pen(color, 3f), r);
         }
 
-        public Rectangle TimeslotRectangle(Timeslot t)
+        private Rectangle TimeslotRectangle(Timeslot t, ClashRectangle clashRectangle = ClashRectangle.None)
         {
             var r = new Rectangle(_table.Location, CellSize);
+
+            switch (clashRectangle)
+            {
+                case ClashRectangle.Left:
+                {
+                    r.Width /= 2;
+                    break;
+                }
+                case ClashRectangle.Right:
+                {
+                    r.Width /= 2;
+                    r.Offset(r.Width, 0);
+                    break;
+                }
+            }
+
             r.Offset(CellSize.Width*(t.Day - (_showWeekend ? 0 : 1)),
                 CellSize.Height*(t.Start.DayMinutes - HourStart*60)/60);
             r.Height = (int) Math.Ceiling(t.TotalMinutes/60f*CellSize.Height);
             return r;
         }
 
-        public Rectangle TimeLengthRectangle(TimeLength t)
+        private Rectangle TimeLengthRectangle(TimeLength t)
         {
             return new Rectangle(0, 0, CellSize.Width, (int) (t.TotalMinutes/60.0f*CellSize.Height));
         }
@@ -1031,7 +972,7 @@ namespace UniTimetable.ViewControllers
             SaveRaster(fileName, Size, new Point(0, 0));
         }
 
-        public void SaveRaster(string fileName, Size size, Point offset)
+        private void SaveRaster(string fileName, Size size, Point offset)
         {
             var b = new Bitmap(size.Width, size.Height, PixelFormat.Format32bppArgb);
             var g = Graphics.FromImage(b);
@@ -1066,7 +1007,7 @@ namespace UniTimetable.ViewControllers
                 return;
             }
 
-            if (format != ImageFormat.Jpeg)
+            if (!Equals(format, ImageFormat.Jpeg))
             {
                 b.Save(fileName, format);
                 return;
@@ -1121,6 +1062,13 @@ namespace UniTimetable.ViewControllers
         }
 
         #endregion
+
+        public enum ClashRectangle
+        {
+            None,
+            Left,
+            Right
+        }
     }
 
     public delegate void TimetableEventHandler(object sender, TimetableEventArgs e);

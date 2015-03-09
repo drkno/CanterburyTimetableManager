@@ -96,7 +96,7 @@ namespace UniTimetable.ViewControllers
 
             var r = new Rectangle(e.Bounds.X + margin, e.Bounds.Y + margin, e.Bounds.Width - 2*margin - 1,
                 e.Bounds.Height - 2*margin - 1);
-            g.FillRectangle(TimetableControl.LinearGradient(r.Location, r.Width, r.Height, _colourList[e.Index]), r);
+            g.FillRectangle(TimetableControl.LinearGradient(r.Location, r.Height, _colourList[e.Index]), r);
 
             var format = new StringFormat
                                   {

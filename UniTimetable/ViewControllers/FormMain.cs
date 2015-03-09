@@ -149,11 +149,11 @@ namespace UniTimetable.ViewControllers
         private void TimetableControlResizeCell(object sender)
         {
             if (timetableControl.CellSize.Height == 0) return;
-            listBox1.ItemHeight =
-                listBox2.ItemHeight = Math.Min(timetableControl.CellSize.Height + 2*ListBoxMargin, 255);
-            listBox1.Font = listBox2.Font = timetableControl.Font;
-            listBox1.Invalidate();
-            listBox2.Invalidate();
+            listBoxRemaining.ItemHeight =
+                listBoxIgnored.ItemHeight = Math.Min(timetableControl.CellSize.Height + 2*ListBoxMargin, 255);
+            listBoxRemaining.Font = listBoxIgnored.Font = timetableControl.Font;
+            listBoxRemaining.Invalidate();
+            listBoxIgnored.Invalidate();
         }
 
         private void ResetWindow()
@@ -195,13 +195,13 @@ namespace UniTimetable.ViewControllers
         {
             if (_sidePaneEnabled)
             {
-                btnShowHide.Text = "»";
+                buttonShowHide.Text = "»";
                 btnAddByClass.Checked = false;
                 HideSidePane();
             }
             else
             {
-                btnShowHide.Text = "«";
+                buttonShowHide.Text = "«";
                 btnAddByClass.Checked = true;
                 ShowSidePane();
             }
@@ -228,8 +228,8 @@ namespace UniTimetable.ViewControllers
             Width = Width - old + next;
             tableLayoutPanel2.ColumnCount = 3;
 
-            listBox1.TabStop = true;
-            listBox2.TabStop = true;
+            listBoxRemaining.TabStop = true;
+            listBoxIgnored.TabStop = true;
         }
 
         private void HideSidePane()
@@ -248,8 +248,8 @@ namespace UniTimetable.ViewControllers
             tableLayoutPanel2.ColumnCount = 2;
             Width = Width - panel;
 
-            listBox1.TabStop = false;
-            listBox2.TabStop = false;
+            listBoxRemaining.TabStop = false;
+            listBoxIgnored.TabStop = false;
         }
 
         #endregion
@@ -371,8 +371,8 @@ namespace UniTimetable.ViewControllers
         {
             if (Timetable == null)
             {
-                listBox1.Items.Clear();
-                listBox2.Items.Clear();
+                listBoxRemaining.Items.Clear();
+                listBoxIgnored.Items.Clear();
                 return;
             }
 
@@ -392,10 +392,10 @@ namespace UniTimetable.ViewControllers
                     remaining.Add(type);
                 }
             }
-            listBox1.Items.Clear();
-            listBox1.Items.AddRange(remaining.ToArray());
-            listBox2.Items.Clear();
-            listBox2.Items.AddRange(ignored.ToArray());
+            listBoxRemaining.Items.Clear();
+            listBoxRemaining.Items.AddRange(remaining.ToArray());
+            listBoxIgnored.Items.Clear();
+            listBoxIgnored.Items.AddRange(ignored.ToArray());
 
             timetableControl.EndPreviewStream();
             timetableControl.EndPreviewOptions();

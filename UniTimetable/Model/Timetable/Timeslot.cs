@@ -42,6 +42,8 @@ namespace UniTimetable.Model.Timetable
                         // or start/end times are either side
                         || (_start <= other._start && End >= other._end)));
 
+            return initialCheck;
+            //TODO:
             if (!initialCheck || StartYearDay == -1)
             {
                 return initialCheck;
