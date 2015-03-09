@@ -22,6 +22,7 @@ namespace UniTimetable.ViewControllers
 
         private void FormSettingsLoad(object sender, EventArgs e)
         {
+            checkBoxImportUnsettable.Checked = _settings.ImportUnselectable;
             checkBoxGhost.Checked = _settings.ShowGhost;
             checkBoxWeekend.Checked = _settings.ShowWeekend;
             checkBoxGray.Checked = _settings.ShowGray;
