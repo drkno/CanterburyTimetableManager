@@ -7,10 +7,10 @@ Designed for University of Canterbury students to select the best possible timet
 
 Latest Stable Release
 ----------------------
-[Download Binary 1.2.3.40068 (09/03/15)](https://github.com/mrkno/CanterburyTimetableManager/releases/download/v1.2.3.40068/CanterburyTimetable.exe)<br/>
-[Download Source 1.2.3.40068 (09/03/15)](https://github.com/mrkno/CanterburyTimetableManager/archive/v1.2.3.40068.zip)
+[Download Binary 1.2.3.40068b (07/07/15)](https://github.com/mrkno/CanterburyTimetableManager/releases/download/v1.2.3.40068/CanterburyTimetableb.exe)<br/>
+[Download Source 1.2.3.40068b (07/07/15)](https://github.com/mrkno/CanterburyTimetableManager/archive/v1.2.3.40068b.zip)
 
-Version 1.2.3.40068
+Version 1.2.3.40068/b
 -----------------
 * Sections of the program that were under the old UI style were updated to the new style.
 * A new, non entirely screen scraping method was introduced for extracting the student number. This is so that course clashes can be delt with in future.
