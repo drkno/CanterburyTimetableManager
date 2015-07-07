@@ -69,27 +69,12 @@ namespace UniTimetable.ViewControllers.Import
 
         private void CheckBoxTestCheckedChanged(object sender, EventArgs e)
         {
-            if (checkBoxTest.Checked)
+            var listView = checkBoxTest.Checked ? listViewIgnored : listViewRequired;
+            foreach (var item in listView.Items.Cast<ListViewItem>()
+                    .Where(item => item.SubItems[1].Text.Contains("Test")))
             {
-                foreach (
-                    var item in
-                        listViewIgnored.Items.Cast<ListViewItem>().Where(item => item.SubItems[1].Text.Contains("Test"))
-                    )
-                {
-                    item.Selected = true;
-                    MoveRight();
-                }
-            }
-            else
-            {
-                foreach (
-                    var item in
-                        listViewRequired.Items.Cast<ListViewItem>()
-                            .Where(item => item.SubItems[1].Text.Contains("Test")))
-                {
-                    item.Selected = true;
-                    MoveLeft();
-                }
+                item.Selected = true;
+                MoveItems(!checkBoxTest.Checked);
             }
         }
 
@@ -100,114 +85,141 @@ namespace UniTimetable.ViewControllers.Import
             {
                 if (!item.Group.ToString().Contains(contains)) continue;
                 item.Selected = true;
-                if (right) { MoveRight(); }
-                else { MoveLeft(); }
+                MoveItems(!right);
             }
         }
 
         private void CheckBoxS1CheckedChanged(object sender, EventArgs e)
         {
             MoveItems(checkBoxS1.Checked, "S1");
+
+            var listView = checkBoxS1.Checked ? listViewIgnored : listViewRequired;
+            foreach (ListViewItem item in listView.Items)
+            {
+                var type = item.Tag as Type;
+                if (type == null) continue;
+                var once = false;
+                foreach (var stream in type.Streams)
+                {
+                    foreach (var session in stream.Classes)
+                    {
+                        var index = session.WeekPattern.LastIndexOf('1');
+                        if (index < 0) continue;
+                        var day = (session.StartYearDay + index * 7) % 365;
+                        if (day > 182) continue;
+                        once = true;
+                        break;
+                    }
+                    if (once)
+                    {
+                        break;
+                    }
+                }
+                if (once)
+                {
+                    item.Selected = true;
+                }
+            }
+            MoveItems(!checkBoxS1.Checked);
         }
 
         private void CheckBoxS2CheckedChanged(object sender, EventArgs e)
         {
             MoveItems(checkBoxS2.Checked, "S2");
+
+            var listView = checkBoxS2.Checked ? listViewIgnored : listViewRequired;
+            foreach (ListViewItem item in listView.Items)
+            {
+                var type = item.Tag as Type;
+                if (type == null) continue;
+                var once = false;
+                foreach (var stream in type.Streams)
+                {
+                    foreach (var session in stream.Classes)
+                    {
+                        var index = session.WeekPattern.IndexOf('1');
+                        if (index < 0) continue;
+                        var day = (session.StartYearDay + index * 7) % 365;
+                        if (day <= 182) continue;
+                        once = true;
+                        break;
+                    }
+                    if (once)
+                    {
+                        break;
+                    }
+                }
+                if (once)
+                {
+                    item.Selected = true;
+                }
+            }
+            MoveItems(!checkBoxS2.Checked);
         }
 
-        private void BtnIgnoreClick(object sender, EventArgs e)
+        private void ButtonIgnoreClick(object sender, EventArgs e)
         {
-            MoveLeft();
+            MoveItems(true);
         }
 
-        private void BtnRequireClick(object sender, EventArgs e)
+        private void ButtonRequireClick(object sender, EventArgs e)
         {
-            MoveRight();
+            MoveItems(false);
         }
 
         private void ListViewRequiredMouseDoubleClick(object sender, MouseEventArgs e)
         {
-            MoveLeft();
+            MoveItems(true);
         }
 
         private void ListViewIgnoredMouseDoubleClick(object sender, MouseEventArgs e)
         {
-            MoveRight();
+            MoveItems(false);
         }
 
-        private void MoveLeft()
+        private void MoveItems(bool left)
         {
-            if (listViewRequired.SelectedItems.Count == 0 || listViewRequired.SelectedItems[0] == null)
+            ListView origional, next;
+            if (left)
+            {
+                origional = listViewRequired;
+                next = listViewIgnored;
+            }
+            else
+            {
+                origional = listViewIgnored;
+                next = listViewRequired;
+            }
+
+            if (origional.SelectedItems.Count == 0 || origional.SelectedItems[0] == null)
                 return;
 
-            var item = listViewRequired.SelectedItems[0];
+            var item = origional.SelectedItems[0];
             item.BackColor = SystemColors.Window;
             var type = (Type)item.Tag;
             type.Required = false;
             _timetable.BuildCompatibility();
 
-            var index = listViewRequired.SelectedIndices[0];
-            listViewRequired.Items.RemoveAt(index);
+            var index = origional.SelectedIndices[0];
+            origional.Items.RemoveAt(index);
 
             // look through each subject group in the ignored list
-            foreach (ListViewGroup group in listViewIgnored.Groups)
+            foreach (ListViewGroup group in next.Groups)
             {
                 // if we've found the subject group
                 if (@group.Tag != type.Subject) continue;
                 // set group and add to list
                 item.Group = @group;
-                listViewIgnored.Items.Add(item);
+                next.Items.Add(item);
                 break;
             }
 
             // select the next item in the list
-            if (index == listViewRequired.Items.Count)
-                index--;
+            if (index == origional.Items.Count) index--;
             if (index >= 0)
             {
-                listViewRequired.Items[index].Selected = true;
-                listViewRequired.Select();
-            }
-            else
-            {
-                buttonRequire.Enabled = false;
-                buttonIgnore.Enabled = false;
-            }
-
-            UpdateClashHighlight();
-        }
-
-        private void MoveRight()
-        {
-            if (listViewIgnored.SelectedItems.Count == 0 || listViewIgnored.SelectedItems[0] == null)
-                return;
-
-            var item = listViewIgnored.SelectedItems[0];
-            var type = (Type)item.Tag;
-            type.Required = true;
-            _timetable.BuildCompatibility();
-
-            var index = listViewIgnored.SelectedIndices[0];
-            listViewIgnored.Items.RemoveAt(index);
-
-            // look through each subject group in the required list
-            foreach (ListViewGroup group in listViewRequired.Groups)
-            {
-                // if we've found the subject group
-                if (@group.Tag != type.Subject) continue;
-                // set group and add to list
-                item.Group = @group;
-                listViewRequired.Items.Add(item);
-                break;
-            }
-
-            // select the next item in the list
-            if (index == listViewIgnored.Items.Count)
-                index--;
-            if (index >= 0)
-            {
-                listViewIgnored.Items[index].Selected = true;
-                listViewIgnored.Select();
+                origional.Items[index].Selected = true;
+                origional.Select();
             }
             else
             {
@@ -288,6 +300,23 @@ namespace UniTimetable.ViewControllers.Import
             CheckBoxS1CheckedChanged(null, null);
             CheckBoxS2CheckedChanged(null, null);
             CheckBoxTestCheckedChanged(null, null);
+        }
+
+        private void CheckBoxOnceOffsCheckedChanged(object sender, EventArgs e)
+        {
+            var listView = checkBoxOnceOffs.Checked ? listViewIgnored : listViewRequired;
+            foreach (ListViewItem item in listView.Items)
+            {
+                var type = item.Tag as Type;
+                if (type == null) continue;
+                var once = type.Streams.Aggregate(true, (current, stream) =>
+                    current && stream.Classes.All(aClass => aClass.OccursOnce()));
+                if (once)
+                {
+                    item.Selected = true;
+                }
+            }
+            MoveItems(!checkBoxTest.Checked);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace UniTimetable.Model.Solver
 
         public class Criteria
         {
-            private static readonly string[][] fieldPrefs =
+            private static readonly string[][] FieldPrefs =
             {
                 // TimeOfDay
                 new[] {"None", "Early", "Late"},
@@ -22,11 +22,9 @@ namespace UniTimetable.Model.Solver
                 new[] {"None", "Less", "More"}
             };
 
-            public static string FieldSpecificPreference(FieldType field, Preference preference)
+            private static string FieldSpecificPreference(FieldType field, Preference preference)
             {
-                if (field == FieldType.Unknown)
-                    return "";
-                return fieldPrefs[(int) field][(int) preference];
+                return field == FieldType.Unknown ? "" : FieldPrefs[(int) field][(int) preference];
             }
 
             public static string FieldSpecificPreference(Criteria criteria)
@@ -38,7 +36,7 @@ namespace UniTimetable.Model.Solver
             {
                 if (field == FieldType.Unknown)
                     return new string[] {};
-                return fieldPrefs[(int) field];
+                return FieldPrefs[(int) field];
             }
 
             public static string[] FieldSpecificPreferences(Criteria criteria)

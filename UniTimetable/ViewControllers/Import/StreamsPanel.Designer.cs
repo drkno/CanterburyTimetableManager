@@ -43,6 +43,7 @@
             this.listViewIgnored = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.checkBoxOnceOffs = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // checkBoxS2
@@ -50,7 +51,7 @@
             this.checkBoxS2.AutoSize = true;
             this.checkBoxS2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxS2.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxS2.Location = new System.Drawing.Point(246, 177);
+            this.checkBoxS2.Location = new System.Drawing.Point(246, 157);
             this.checkBoxS2.Name = "checkBoxS2";
             this.checkBoxS2.Size = new System.Drawing.Size(36, 18);
             this.checkBoxS2.TabIndex = 26;
@@ -63,7 +64,7 @@
             this.checkBoxS1.AutoSize = true;
             this.checkBoxS1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxS1.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxS1.Location = new System.Drawing.Point(246, 154);
+            this.checkBoxS1.Location = new System.Drawing.Point(246, 134);
             this.checkBoxS1.Name = "checkBoxS1";
             this.checkBoxS1.Size = new System.Drawing.Size(36, 18);
             this.checkBoxS1.TabIndex = 25;
@@ -76,7 +77,7 @@
             this.checkBoxTest.AutoSize = true;
             this.checkBoxTest.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxTest.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxTest.Location = new System.Drawing.Point(246, 200);
+            this.checkBoxTest.Location = new System.Drawing.Point(246, 180);
             this.checkBoxTest.Name = "checkBoxTest";
             this.checkBoxTest.Size = new System.Drawing.Size(49, 18);
             this.checkBoxTest.TabIndex = 24;
@@ -156,25 +157,25 @@
             // 
             this.buttonRequire.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonRequire.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonRequire.Location = new System.Drawing.Point(240, 223);
+            this.buttonRequire.Location = new System.Drawing.Point(240, 229);
             this.buttonRequire.Name = "buttonRequire";
             this.buttonRequire.Size = new System.Drawing.Size(64, 23);
             this.buttonRequire.TabIndex = 21;
             this.buttonRequire.Text = ">>>>";
             this.buttonRequire.UseVisualStyleBackColor = true;
-            this.buttonRequire.Click += new System.EventHandler(this.BtnRequireClick);
+            this.buttonRequire.Click += new System.EventHandler(this.ButtonRequireClick);
             // 
             // buttonIgnore
             // 
             this.buttonIgnore.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonIgnore.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonIgnore.Location = new System.Drawing.Point(240, 253);
+            this.buttonIgnore.Location = new System.Drawing.Point(240, 259);
             this.buttonIgnore.Name = "buttonIgnore";
             this.buttonIgnore.Size = new System.Drawing.Size(64, 23);
             this.buttonIgnore.TabIndex = 22;
             this.buttonIgnore.Text = "<<<<";
             this.buttonIgnore.UseVisualStyleBackColor = true;
-            this.buttonIgnore.Click += new System.EventHandler(this.BtnIgnoreClick);
+            this.buttonIgnore.Click += new System.EventHandler(this.ButtonIgnoreClick);
             // 
             // listViewIgnored
             // 
@@ -205,10 +206,24 @@
             this.columnHeader2.Text = "Type";
             this.columnHeader2.Width = 160;
             // 
+            // checkBoxOnceOffs
+            // 
+            this.checkBoxOnceOffs.AutoSize = true;
+            this.checkBoxOnceOffs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBoxOnceOffs.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxOnceOffs.Location = new System.Drawing.Point(246, 204);
+            this.checkBoxOnceOffs.Name = "checkBoxOnceOffs";
+            this.checkBoxOnceOffs.Size = new System.Drawing.Size(49, 18);
+            this.checkBoxOnceOffs.TabIndex = 27;
+            this.checkBoxOnceOffs.Text = "Once";
+            this.checkBoxOnceOffs.UseVisualStyleBackColor = true;
+            this.checkBoxOnceOffs.CheckedChanged += new System.EventHandler(this.CheckBoxOnceOffsCheckedChanged);
+            // 
             // StreamsPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.checkBoxOnceOffs);
             this.Controls.Add(this.checkBoxS2);
             this.Controls.Add(this.checkBoxS1);
             this.Controls.Add(this.checkBoxTest);
@@ -246,6 +261,7 @@
         private System.Windows.Forms.ListView listViewIgnored;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.CheckBox checkBoxOnceOffs;
 
     }
 }

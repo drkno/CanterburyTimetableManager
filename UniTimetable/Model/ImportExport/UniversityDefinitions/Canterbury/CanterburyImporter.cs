@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury.JsonObjects;
 using UniTimetable.Model.Timetable;
 using Stream = System.IO.Stream;
@@ -105,10 +106,6 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
             else // The session type doesn't exist, create it.
             {
                 var groupCode = subs.ActivityGroupCode;
-                if (multipleAllocationIndex != -1)
-                {
-                    groupCode += " [" + multipleAllocationIndex + "]";
-                }
                 type = new Type(subs.ActivityType, groupCode, subject);
                 switch (subs.ActivityGroupCode)
                 {
@@ -174,38 +171,19 @@ namespace UniTimetable.Model.ImportExport.UniversityDefinitions.Canterbury
             {
                 foreach (var group in course.Groups)
                 {
-                    // TODO: Make courses where multiple streams are allocated simaltaneously split them into separate streams
-                    throw new NotImplementedException("Code unfinished here");
-                    bool firstAllocation = false, multipleAllocation = false;
-                    var stream = GetCourse(group.SubjectCode, group.ActivityGroupCode);
-                    
+                    var stream = GetCourse(group.SubjectCode, group.ActivityGroupCode);   
                     foreach (var subjectStream in stream.SubjectStreams)
                     {
                         var sstream = subjectStream;
+                        var match = Regex.Match(sstream.Value.ActivityCode, "(?<=(^[0-9]+-P))[0-9]+$");
+                        sstream.MultipleAllocationIndex = match.Success ? int.Parse(match.Value) : -1;
                         var r = LoginHandle.Student.AllocatedStreams.FirstOrDefault(a => a.ToString() == sstream.Key);
                         if (r == null) continue;
                         subjectStream.Allocated = true;
-                        if (!firstAllocation)
-                        {
-                            firstAllocation = true;
-                        }
-                        else
-                        {
-                            multipleAllocation = true;
-                        }
-                    }
-
-                    if (multipleAllocation)
-                    {
-                        for (var i = 0; i < stream.SubjectStreams.Count; i++)
-                        {
-                            stream.SubjectStreams[i].MultipleAllocationIndex = i;
-                        }
                     }
                     subjectStreams.Add(stream);
                 }
             }
-
             return subjectStreams;
         }
 

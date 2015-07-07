@@ -1,6 +1,7 @@
 #region
 
 using System;
+using System.Linq;
 using System.Xml.Serialization;
 using UniTimetable.Model.Time;
 
@@ -42,8 +43,6 @@ namespace UniTimetable.Model.Timetable
                         // or start/end times are either side
                         || (_start <= other._start && End >= other._end)));
 
-            return initialCheck;
-            //TODO:
             if (!initialCheck || StartYearDay == -1)
             {
                 return initialCheck;
@@ -81,6 +80,11 @@ namespace UniTimetable.Model.Timetable
             return (Day == other.Day
                     && _start == other._start
                     && _end == other._end);
+        }
+
+        public bool OccursOnce()
+        {
+            return WeekPattern.Count(s => s == WeekInstance) == 1;
         }
 
         #region Base methods
