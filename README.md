@@ -10,6 +10,11 @@ Latest Stable Release
 [Download Binary 1.2.3.40068b (07/07/15)](https://github.com/mrkno/CanterburyTimetableManager/releases/download/v1.2.3.40068/CanterburyTimetableb.exe)<br/>
 [Download Source 1.2.3.40068b (07/07/15)](https://github.com/mrkno/CanterburyTimetableManager/archive/v1.2.3.40068b.zip)
 
+Minimum System Requirements
+-------------------------
+* Microsoft .NET 4.5+, Mono 4.0+ or Mono 3.x + very good bash scripting skills.
+* Any OS that supports windowing (*nix, OSX, Windows)
+
 Version 1.2.3.40068/b
 -----------------
 * Sections of the program that were under the old UI style were updated to the new style.
