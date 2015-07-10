@@ -7,7 +7,7 @@ Designed for University of Canterbury students to select the best possible timet
 
 Latest Stable Release
 ----------------------
-[Download Binary 1.2.3.40068b (07/07/15)](https://github.com/mrkno/CanterburyTimetableManager/releases/download/v1.2.3.40068/CanterburyTimetableb.exe)<br/>
+[Download Binary 1.2.3.40068b (07/07/15)](https://github.com/mrkno/CanterburyTimetableManager/releases/download/v1.2.3.40068b/CanterburyTimetable.exe)<br/>
 [Download Source 1.2.3.40068b (07/07/15)](https://github.com/mrkno/CanterburyTimetableManager/archive/v1.2.3.40068b.zip)
 
 Minimum System Requirements
@@ -15,7 +15,13 @@ Minimum System Requirements
 * Microsoft .NET 4.5+, Mono 4.0+ or Mono 3.x + very good bash scripting skills.
 * Any OS that supports windowing (*nix, OSX, Windows)
 
-Version 1.2.3.40068/b
+Version 1.2.3.40063b
+-----------------
+* Lots of changes from months ago. God only knows what they do (the diff contains 3/4 of the app) except they seem to fix importing Semester 2 2015 timetables.
+* Known Bug: during importing sometimes the S2 checkbox doesn't do what you think it will
+* Known Bug: you can drag conflicting items into the same timetable slot
+
+Version 1.2.3.40068
 -----------------
 * Sections of the program that were under the old UI style were updated to the new style.
 * A new, non entirely screen scraping method was introduced for extracting the student number. This is so that course clashes can be delt with in future.
